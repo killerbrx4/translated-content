@@ -1,0 +1,681 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>ZENTURY EP.01 · Empresa A vs Empresa B</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/Inter-400-latin.woff2") format("woff2");
+        font-weight: 400;
+      }
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/Inter-700-latin.woff2") format("woff2");
+        font-weight: 700;
+      }
+      :root {
+        --z-black: #0b0b0c;
+        --z-line: #2a2a2e;
+        --z-white: #f5f3ee;
+        --z-mute: #9a968f;
+        --z-gold: #d4a842;
+        --z-gold-soft: #e9c977;
+        --z-gold-deep: #8a6a1f;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--z-black);
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: var(--z-black);
+        font-family: "Inter", sans-serif;
+        color: var(--z-white);
+      }
+
+      /* ===== CÂMERA: wrapper sem tempo; os cortes são os <video> dentro ===== */
+      #cam {
+        position: absolute;
+        inset: 0;
+        transform-origin: 520px 1020px;
+      }
+      .shot {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1920px;
+        object-fit: cover;
+      }
+
+      /* ===== GRADE / VINHETA (escurece parede clara e topo para os cards) ===== */
+      #grade {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to bottom, rgba(8, 8, 9, 0.72) 0%, rgba(8, 8, 9, 0.35) 30%, rgba(8, 8, 9, 0) 46%, rgba(8, 8, 9, 0) 62%, rgba(8, 8, 9, 0.62) 100%),
+          radial-gradient(ellipse at 50% 52%, rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0.6) 100%);
+      }
+      #flash {
+        position: absolute;
+        inset: 0;
+        background: #fff;
+        opacity: 0;
+      }
+
+      /* ===== FX: palco 3D ===== */
+      #fx {
+        position: absolute;
+        inset: 0;
+        perspective: 1500px;
+        perspective-origin: 50% 30%;
+      }
+      .co-card {
+        position: absolute;
+        top: 290px;
+        width: 400px;
+        height: 340px;
+        padding: 30px 32px;
+        border-radius: 28px;
+        background: linear-gradient(160deg, rgba(32, 32, 35, 0.94) 0%, rgba(14, 14, 16, 0.96) 100%);
+        border: 1px solid var(--z-line);
+        box-shadow: 0 40px 90px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+      }
+      #card-a {
+        left: 60px;
+      }
+      #card-b {
+        left: 620px;
+        border-color: var(--z-gold-deep);
+      }
+      .co-kicker {
+        display: block;
+        font-size: 22px;
+        letter-spacing: 0.32em;
+        color: var(--z-mute);
+      }
+      .co-name {
+        display: block;
+        margin-top: 6px;
+        font-size: 110px;
+        font-weight: 700;
+        letter-spacing: -0.05em;
+        line-height: 1;
+      }
+      #card-b .co-name {
+        color: var(--z-gold);
+      }
+      .check {
+        position: absolute;
+        left: 32px;
+        right: 32px;
+        height: 52px;
+        border-top: 1px solid var(--z-line);
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        line-height: 52px;
+      }
+      .check b {
+        position: absolute;
+        right: 0;
+        top: 0;
+        color: var(--z-gold);
+      }
+      .chk-prod {
+        top: 196px;
+      }
+      .chk-price {
+        top: 252px;
+      }
+      #spark-a,
+      #spark-b {
+        position: absolute;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: radial-gradient(circle, #fff3c9 0%, var(--z-gold) 45%, rgba(212, 168, 66, 0) 72%);
+      }
+      #spark-a {
+        left: 187px;
+        top: 1767px;
+      }
+      #spark-b {
+        left: 807px;
+        top: 1687px;
+      }
+
+      /* Congelamento */
+      #freeze {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1920px;
+        object-fit: cover;
+      }
+      #vis {
+        position: absolute;
+        left: 60px;
+        right: 60px;
+        top: 300px;
+        height: 400px;
+      }
+      #eye {
+        position: absolute;
+        left: 400px;
+        top: 0;
+        width: 160px;
+        height: 110px;
+      }
+      #eye path,
+      #eye circle {
+        fill: none;
+        stroke: var(--z-gold);
+        stroke-width: 5;
+        stroke-linecap: round;
+      }
+      #vis-word {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 140px;
+        text-align: center;
+        font-size: 108px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+      }
+      #vis-rule {
+        position: absolute;
+        left: 330px;
+        top: 290px;
+        width: 300px;
+        height: 4px;
+        background: var(--z-gold);
+      }
+
+      /* Empresa B em todo lugar */
+      .sat {
+        position: absolute;
+        border-radius: 22px;
+        background: rgba(18, 18, 20, 0.95);
+        border: 1px solid var(--z-gold-deep);
+        box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6);
+        padding: 18px 20px;
+      }
+      .sat-k {
+        display: block;
+        font-size: 18px;
+        letter-spacing: 0.22em;
+        color: var(--z-gold-soft);
+      }
+      .sat-t {
+        display: block;
+        margin-top: 8px;
+        font-size: 30px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+      .sat-m {
+        display: block;
+        margin-top: 6px;
+        font-size: 22px;
+        color: var(--z-mute);
+      }
+      #s-ig {
+        left: 40px;
+        top: 150px;
+        width: 300px;
+        height: 330px;
+      }
+      #s-ig-img {
+        position: absolute;
+        left: 20px;
+        right: 20px;
+        top: 70px;
+        height: 170px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #3a2c0c 0%, #d4a842 60%, #f3dc9a 100%);
+      }
+      #s-ig .sat-m {
+        position: absolute;
+        left: 20px;
+        bottom: 18px;
+      }
+      #s-google {
+        left: 380px;
+        top: 130px;
+        width: 660px;
+        height: 150px;
+      }
+      #s-bill {
+        left: 380px;
+        top: 320px;
+        width: 660px;
+        height: 230px;
+        background: linear-gradient(150deg, #2a2210 0%, #0f0e0c 100%);
+        border: 2px solid var(--z-gold);
+      }
+      #s-bill .sat-t {
+        font-size: 64px;
+        letter-spacing: -0.03em;
+        margin-top: 14px;
+      }
+      #s-notif {
+        left: 40px;
+        top: 540px;
+        width: 320px;
+        height: 130px;
+      }
+      #s-map {
+        left: 740px;
+        top: 860px;
+        width: 300px;
+        height: 150px;
+      }
+      #s-ad {
+        left: 740px;
+        top: 1060px;
+        width: 300px;
+        height: 150px;
+      }
+      #a-alone {
+        position: absolute;
+        left: 40px;
+        top: 860px;
+        width: 290px;
+        height: 200px;
+        padding: 22px 24px;
+        border-radius: 24px;
+        border: 2px dashed #46454a;
+        background: rgba(14, 14, 16, 0.85);
+      }
+      #a-alone .co-name {
+        font-size: 84px;
+        color: #6d6b70;
+      }
+      #a-alone .co-kicker {
+        color: #6d6b70;
+      }
+
+      /* Preto final */
+      #black {
+        background: #000;
+      }
+      #why {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 820px;
+        text-align: center;
+        font-size: 150px;
+        font-weight: 700;
+        letter-spacing: -0.04em;
+      }
+      #why-q {
+        color: var(--z-gold);
+      }
+      #ep2 {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 1040px;
+        text-align: center;
+        font-size: 30px;
+        letter-spacing: 0.34em;
+        color: var(--z-gold-soft);
+      }
+      #wordmark {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 1380px;
+        text-align: center;
+        font-size: 64px;
+        font-weight: 700;
+        letter-spacing: 0.3em;
+        padding-left: 0.3em;
+      }
+      #wm-rule {
+        position: absolute;
+        left: 465px;
+        top: 1470px;
+        width: 150px;
+        height: 3px;
+        background: var(--z-gold);
+      }
+
+      /* Legendas: no peito (abaixo do queixo, acima das mãos e da UI do Reels) */
+      #captions {
+        position: absolute;
+        left: 60px;
+        right: 120px;
+        top: 1290px;
+        height: 140px;
+      }
+      .cap {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        text-align: center;
+        font-size: 54px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1.12;
+        text-shadow: 0 3px 18px rgba(0, 0, 0, 0.95), 0 0 2px rgba(0, 0, 0, 0.9);
+      }
+      .cap em {
+        font-style: normal;
+        color: var(--z-gold-soft);
+      }
+      #cap-out {
+        position: absolute;
+        left: 60px;
+        right: 120px;
+        top: 1180px;
+        text-align: center;
+        font-size: 40px;
+        color: var(--z-mute);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="26.4"
+      data-fps="30"
+      data-width="1080"
+      data-height="1920"
+    >
+      <!-- ================= CÂMERA (EDL: cortes secos nos silêncios) ================= -->
+      <div id="cam">
+        <video id="v1" class="shot" src="assets/footage/presenter.mp4" muted data-start="0" data-duration="1.70" data-media-start="0.42" data-track-index="0"></video>
+        <video id="v2" class="shot" src="assets/footage/presenter.mp4" muted data-start="1.70" data-duration="1.56" data-media-start="2.92" data-track-index="1"></video>
+        <video id="v3" class="shot" src="assets/footage/presenter.mp4" muted data-start="3.26" data-duration="2.03" data-media-start="4.72" data-track-index="0"></video>
+        <video id="v4" class="shot" src="assets/footage/presenter.mp4" muted data-start="5.29" data-duration="3.53" data-media-start="7.02" data-track-index="1"></video>
+        <video id="v5" class="shot" src="assets/footage/presenter.mp4" muted data-start="8.82" data-duration="2.23" data-media-start="11.22" data-track-index="0"></video>
+        <video id="v6" class="shot" src="assets/footage/presenter.mp4" muted data-start="11.05" data-duration="0.50" data-media-start="13.92" data-track-index="1"></video>
+        <video id="v7" class="shot" src="assets/footage/presenter.mp4" muted data-start="11.55" data-duration="3.15" data-media-start="15.00" data-track-index="0"></video>
+        <img id="freeze" class="clip" src="assets/img/freeze.jpg" alt="" data-start="14.70" data-duration="1.15" data-track-index="1" />
+        <video id="v8" class="shot" src="assets/footage/presenter.mp4" muted data-start="15.85" data-duration="2.13" data-media-start="19.22" data-track-index="0"></video>
+        <video id="v9" class="shot" src="assets/footage/presenter.mp4" muted data-start="17.98" data-duration="2.23" data-media-start="21.92" data-track-index="1"></video>
+        <video id="v10" class="shot" src="assets/footage/presenter.mp4" muted data-start="20.21" data-duration="2.30" data-media-start="24.82" data-track-index="0"></video>
+      </div>
+      <div id="grade" data-layout-ignore></div>
+
+      <!-- ================= FX 3D ================= -->
+      <div id="fx">
+        <!-- A e B nascem da palma da mão e sobem -->
+        <div id="ab" class="clip" data-start="1.9" data-duration="12.8" data-track-index="3">
+          <div id="spark-a"></div>
+          <div id="spark-b"></div>
+          <div id="card-a" class="co-card">
+            <span class="co-kicker">EMPRESA</span>
+            <span class="co-name">A</span>
+            <div class="check chk-prod" id="a-prod">PRODUTO <b>✓</b></div>
+            <div class="check chk-price" id="a-price">PREÇO <b>✓</b></div>
+          </div>
+          <div id="card-b" class="co-card">
+            <span class="co-kicker">EMPRESA</span>
+            <span class="co-name">B</span>
+            <div class="check chk-prod" id="b-prod">PRODUTO <b>✓</b></div>
+            <div class="check chk-price" id="b-price">PREÇO <b>✓</b></div>
+          </div>
+        </div>
+
+        <!-- Congela: VISIBILIDADE -->
+        <div id="vis" class="clip" data-start="14.70" data-duration="1.15" data-track-index="4">
+          <svg id="eye" viewBox="0 0 160 110" aria-hidden="true">
+            <path id="eye-lid" d="M8 55 C40 8 120 8 152 55 C120 102 40 102 8 55 Z" />
+            <circle id="eye-pupil" cx="80" cy="55" r="20" />
+          </svg>
+          <div id="vis-word">VISIBILIDADE</div>
+          <div id="vis-rule"></div>
+        </div>
+
+        <!-- B em todo lugar · A sozinha -->
+        <div id="everywhere" class="clip" data-start="15.85" data-duration="4.4" data-track-index="5">
+          <div id="s-ig" class="sat">
+            <span class="sat-k">INSTAGRAM</span>
+            <div id="s-ig-img"></div>
+            <span class="sat-m">empresa.b · patrocinado</span>
+          </div>
+          <div id="s-google" class="sat">
+            <span class="sat-k">GOOGLE</span>
+            <span class="sat-t">Empresa B — perto de você</span>
+            <span class="sat-m">★★★★★ 4,9 · aberto agora</span>
+          </div>
+          <div id="s-bill" class="sat">
+            <span class="sat-k">OUTDOOR · AV. PRINCIPAL</span>
+            <span class="sat-t">EMPRESA B</span>
+          </div>
+          <div id="s-notif" class="sat">
+            <span class="sat-k">CELULAR</span>
+            <span class="sat-t">Empresa B</span>
+            <span class="sat-m">Separamos isso pra você</span>
+          </div>
+          <div id="s-map" class="sat">
+            <span class="sat-k">MAPS</span>
+            <span class="sat-t">Empresa B</span>
+            <span class="sat-m">a 800 m</span>
+          </div>
+          <div id="s-ad" class="sat">
+            <span class="sat-k">YOUTUBE</span>
+            <span class="sat-t">Empresa B</span>
+            <span class="sat-m">anúncio · 0:05</span>
+          </div>
+          <div id="a-alone">
+            <span class="co-kicker">EMPRESA</span>
+            <span class="co-name">A</span>
+          </div>
+        </div>
+      </div>
+      <div id="flash" data-layout-ignore></div>
+
+      <!-- ================= LEGENDAS (texto fiel à fala) ================= -->
+      <div id="captions">
+        <div id="k1" class="cap clip" data-start="0.05" data-duration="1.65" data-track-index="8">Olha essas duas <em>empresas</em> aqui.</div>
+        <div id="k2" class="cap clip" data-start="1.78" data-duration="1.48" data-track-index="8">Essa daqui é a <em>empresa A.</em></div>
+        <div id="k3" class="cap clip" data-start="3.39" data-duration="1.85" data-track-index="8">Essa daqui é a <em>empresa B.</em></div>
+        <div id="k4" class="cap clip" data-start="5.35" data-duration="1.50" data-track-index="8">As duas empresas vendem</div>
+        <div id="k5" class="cap clip" data-start="6.85" data-duration="1.97" data-track-index="8">basicamente a <em>mesma coisa.</em></div>
+        <div id="k6" class="cap clip" data-start="8.90" data-duration="1.30" data-track-index="8">O mesmo <em>produto.</em></div>
+        <div id="k7" class="cap clip" data-start="10.20" data-duration="0.85" data-track-index="8">O mesmo <em>preço.</em></div>
+        <div id="k8" class="cap clip" data-start="11.10" data-duration="1.90" data-track-index="8">Porém, essa daqui…</div>
+        <div id="k9" class="cap clip" data-start="13.05" data-duration="1.65" data-track-index="8">tem uma <em>diferença.</em></div>
+        <div id="k10" class="cap clip" data-start="15.93" data-duration="2.05" data-track-index="8">Essa daqui você <em>já viu.</em></div>
+        <div id="k11" class="cap clip" data-start="18.06" data-duration="2.15" data-track-index="8">Essa daqui… provavelmente <em>não.</em></div>
+        <div id="k12" class="cap clip" data-start="20.29" data-duration="1.45" data-track-index="8">E a pergunta que fica é…</div>
+      </div>
+
+      <!-- ================= CORTE SECO → PRETO ================= -->
+      <div id="black" class="clip" data-start="22.51" data-duration="3.89" data-track-index="9">
+        <div id="why">POR QUÊ<span id="why-q">?</span></div>
+        <div id="ep2">EP. 02 · EM BREVE</div>
+        <div id="cap-out">Isso eu te mostro no próximo vídeo.</div>
+        <div id="wordmark">ZENTURY</div>
+        <div id="wm-rule"></div>
+      </div>
+
+      <!-- ================= VOZ (mesma EDL do vídeo) ================= -->
+      <audio id="a1" src="assets/audio/voice.m4a" data-start="0" data-duration="1.70" data-media-start="0.42" data-track-index="20"></audio>
+      <audio id="a2" src="assets/audio/voice.m4a" data-start="1.70" data-duration="1.56" data-media-start="2.92" data-track-index="21"></audio>
+      <audio id="a3" src="assets/audio/voice.m4a" data-start="3.26" data-duration="2.03" data-media-start="4.72" data-track-index="20"></audio>
+      <audio id="a4" src="assets/audio/voice.m4a" data-start="5.29" data-duration="3.53" data-media-start="7.02" data-track-index="21"></audio>
+      <audio id="a5" src="assets/audio/voice.m4a" data-start="8.82" data-duration="2.23" data-media-start="11.22" data-track-index="20"></audio>
+      <audio id="a6" src="assets/audio/voice.m4a" data-start="11.05" data-duration="0.50" data-media-start="13.92" data-track-index="21"></audio>
+      <audio id="a7" src="assets/audio/voice.m4a" data-start="11.55" data-duration="3.15" data-media-start="15.00" data-track-index="20"></audio>
+      <audio id="a8" src="assets/audio/voice.m4a" data-start="15.85" data-duration="2.13" data-media-start="19.22" data-track-index="21"></audio>
+      <audio id="a9" src="assets/audio/voice.m4a" data-start="17.98" data-duration="2.23" data-media-start="21.92" data-track-index="20"></audio>
+      <audio id="a10" src="assets/audio/voice.m4a" data-start="20.21" data-duration="2.30" data-media-start="24.82" data-track-index="21"></audio>
+      <audio id="a11" src="assets/audio/voice.m4a" data-start="23.41" data-duration="2.23" data-media-start="28.12" data-track-index="20"></audio>
+
+      <!-- ================= TRILHA (pausa no "diferença", volta no "já viu", some no preto) ================= -->
+      <audio id="bed1" src="assets/audio/bed.m4a" data-start="0" data-duration="13.45" data-media-start="0" data-track-index="22" data-volume="0.22"></audio>
+      <audio id="bed2" src="assets/audio/bed.m4a" data-start="15.85" data-duration="6.66" data-media-start="15.85" data-track-index="22" data-volume="0.28"></audio>
+
+      <!-- ================= SOUND DESIGN ================= -->
+      <audio id="x-open" src="assets/sfx/whoosh-short.mp3" data-start="0.05" data-duration="0.57" data-track-index="23" data-volume="0.35"></audio>
+      <audio id="x-a" src="assets/sfx/whoosh-short.mp3" data-start="2.30" data-duration="0.57" data-track-index="24" data-volume="0.6"></audio>
+      <audio id="x-a2" src="assets/sfx/pop.mp3" data-start="2.85" data-duration="0.72" data-track-index="25" data-volume="0.4"></audio>
+      <audio id="x-b" src="assets/sfx/whoosh-short.mp3" data-start="4.15" data-duration="0.57" data-track-index="24" data-volume="0.6"></audio>
+      <audio id="x-b2" src="assets/sfx/pop.mp3" data-start="4.70" data-duration="0.72" data-track-index="25" data-volume="0.4"></audio>
+      <audio id="x-prod" src="assets/sfx/click.mp3" data-start="9.30" data-duration="0.37" data-track-index="24" data-volume="0.6"></audio>
+      <audio id="x-price" src="assets/sfx/click.mp3" data-start="10.70" data-duration="0.37" data-track-index="25" data-volume="0.6"></audio>
+      <audio id="x-diff" src="assets/sfx/glitch-3.mp3" data-start="13.42" data-duration="1.2" data-track-index="24" data-volume="0.25"></audio>
+      <audio id="x-freeze" src="assets/sfx/impact-bass-1.mp3" data-start="14.70" data-duration="2.0" data-track-index="25" data-volume="0.9"></audio>
+      <audio id="x-eye" src="assets/sfx/ping.mp3" data-start="14.85" data-duration="1.0" data-track-index="23" data-volume="0.35"></audio>
+      <audio id="x-s1" src="assets/sfx/pop.mp3" data-start="16.00" data-duration="0.72" data-track-index="24" data-volume="0.35"></audio>
+      <audio id="x-s2" src="assets/sfx/click-soft.mp3" data-start="16.28" data-duration="0.37" data-track-index="26" data-volume="0.5"></audio>
+      <audio id="x-s3" src="assets/sfx/whoosh-short.mp3" data-start="16.50" data-duration="0.57" data-track-index="23" data-volume="0.35"></audio>
+      <audio id="x-s4" src="assets/sfx/notification.mp3" data-start="16.80" data-duration="1.0" data-track-index="24" data-volume="0.3"></audio>
+      <audio id="x-s5" src="assets/sfx/pop.mp3" data-start="17.10" data-duration="0.72" data-track-index="25" data-volume="0.35"></audio>
+      <audio id="x-s6" src="assets/sfx/click-soft.mp3" data-start="17.38" data-duration="0.37" data-track-index="23" data-volume="0.5"></audio>
+      <audio id="x-riser" src="assets/sfx/riser.mp3" data-start="20.21" data-duration="2.30" data-track-index="24" data-volume="0.4"></audio>
+      <audio id="x-cut" src="assets/sfx/impact-bass-2.mp3" data-start="22.51" data-duration="2.0" data-track-index="25" data-volume="1"></audio>
+      <audio id="x-logo" src="assets/sfx/impact-bass-1.mp3" data-start="24.60" data-duration="1.8" data-track-index="23" data-volume="0.55"></audio>
+    </div>
+
+    <script>
+      /* ===== MAPA DE COREOGRAFIA (tempo final do Reels, derivado do transcript + EDL) ===== */
+      const CUE = {
+        pointA: 2.3, // dedo aponta para a palma esquerda ("...empresa A")
+        pointB: 4.15, // dedo aponta para a palma direita ("...empresa B")
+        produto: 9.3,
+        preco: 10.7,
+        porem: 11.05,
+        diferenca: 13.42, // tudo começa a congelar, trilha para
+        freeze: 14.7, // frame congelado + VISIBILIDADE
+        jaViu: 15.85, // B aparece em todo lugar
+        naoViu: 17.98, // A sozinha e apagada
+        pergunta: 20.21, // câmera aproxima no rosto
+        porQue: 22.05,
+        cut: 22.51, // CORTE SECO → preto
+        voiceOut: 23.41,
+        logo: 24.6,
+      };
+      const tl = gsap.timeline({ paused: true });
+
+      /* ---------- Câmera: punch-ins alternados escondem os jump cuts ---------- */
+      const camScale = [
+        [0, 1.06],
+        [1.7, 1.0],
+        [5.29, 1.07],
+        [8.82, 1.0],
+        [11.05, 1.12],
+        [11.55, 1.05],
+        [15.85, 1.0],
+        [17.98, 1.07],
+        [20.21, 1.0],
+      ];
+      camScale.forEach(([t, s], i) => {
+        if (i === 0) tl.fromTo("#cam", { scale: s }, { scale: s, duration: 0.01 }, 0);
+        else tl.set("#cam", { scale: s }, t);
+      });
+      // aproxima no rosto em "E a pergunta que fica é... por quê?"
+      tl.to("#cam", { scale: 1.32, duration: 1.74, ease: "sine.inOut" }, CUE.pergunta + 0.05);
+      tl.to("#cam", { scale: 1.62, duration: 0.35, ease: "power4.out" }, CUE.porQue);
+
+      /* ---------- A: palma esquerda → card 3D ---------- */
+      tl.fromTo("#spark-a", { scale: 0, opacity: 0 }, { scale: 1.6, opacity: 1, duration: 0.2, ease: "power2.out" }, CUE.pointA);
+      tl.to("#spark-a", { x: 73, y: -1300, scale: 0.4, opacity: 0, duration: 0.5, ease: "power3.in" }, CUE.pointA + 0.2);
+      tl.fromTo(
+        "#card-a",
+        { x: -60, y: 1340, scale: 0.12, rotationY: 50, rotationX: -40, opacity: 0 },
+        { x: 0, y: 0, scale: 1, rotationY: 14, rotationX: 0, opacity: 1, duration: 0.85, ease: "expo.out" },
+        CUE.pointA + 0.35
+      );
+      /* ---------- B: palma direita → card 3D ---------- */
+      tl.fromTo("#spark-b", { scale: 0, opacity: 0 }, { scale: 1.6, opacity: 1, duration: 0.2, ease: "power2.out" }, CUE.pointB);
+      tl.to("#spark-b", { x: 13, y: -1220, scale: 0.4, opacity: 0, duration: 0.5, ease: "power3.in" }, CUE.pointB + 0.2);
+      tl.fromTo(
+        "#card-b",
+        { x: 0, y: 1260, scale: 0.12, rotationY: -50, rotationX: -40, opacity: 0 },
+        { x: 0, y: 0, scale: 1, rotationY: -14, rotationX: 0, opacity: 1, duration: 0.85, ease: "expo.out" },
+        CUE.pointB + 0.35
+      );
+      // flutuação sutil enquanto ele explica
+      tl.to("#card-a", { y: -12, duration: 3.2, ease: "sine.inOut", yoyo: true, repeat: 1 }, 3.55);
+      tl.to("#card-b", { y: -12, duration: 3.2, ease: "sine.inOut", yoyo: true, repeat: 1 }, 5.4);
+
+      /* ---------- PRODUTO ✓ / PREÇO ✓ nos dois cards ---------- */
+      tl.fromTo(["#a-prod", "#b-prod"], { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, CUE.produto);
+      tl.fromTo(["#a-price", "#b-price"], { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, CUE.preco);
+
+      /* ---------- "Porém" → os cards se viram de frente (atenção) ---------- */
+      tl.to("#card-a", { rotationY: 4, duration: 0.6, ease: "power2.out" }, CUE.porem);
+      tl.to("#card-b", { rotationY: -4, duration: 0.6, ease: "power2.out" }, CUE.porem);
+
+      /* ---------- "diferença" → tudo congela ---------- */
+      tl.fromTo("#cam", { filter: "saturate(1) brightness(1)" }, { filter: "saturate(0.15) brightness(0.72)", duration: 0.5, ease: "power2.out", immediateRender: false }, CUE.diferenca);
+      tl.to(["#card-a", "#card-b"], { opacity: 0.35, duration: 0.5 }, CUE.diferenca);
+      tl.fromTo("#flash", { opacity: 0 }, { opacity: 0.55, duration: 0.04 }, CUE.freeze);
+      tl.to("#flash", { opacity: 0, duration: 0.25, ease: "power2.out" }, CUE.freeze + 0.04);
+      tl.fromTo("#freeze", { scale: 1.0 }, { scale: 1.06, duration: 1.15, ease: "power1.out" }, CUE.freeze);
+      tl.fromTo("#eye-lid", { strokeDasharray: 400, strokeDashoffset: 400 }, { strokeDashoffset: 0, duration: 0.45, ease: "power2.inOut" }, CUE.freeze + 0.05);
+      tl.fromTo("#eye-pupil", { scale: 0, transformOrigin: "50% 50%" }, { scale: 1, duration: 0.3, ease: "back.out(2.5)" }, CUE.freeze + 0.3);
+      tl.fromTo("#vis-word", { opacity: 0, y: 30, scale: 1.12 }, { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: "expo.out" }, CUE.freeze + 0.12);
+      tl.fromTo("#vis-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power3.inOut" }, CUE.freeze + 0.35);
+      tl.set("#cam", { filter: "saturate(1) brightness(1)" }, CUE.jaViu);
+
+      /* ---------- "Essa daqui você já viu" → B em todo lugar ---------- */
+      const sats = [
+        ["#s-ig", -40, 30],
+        ["#s-google", 0, -40],
+        ["#s-bill", 0, 40],
+        ["#s-notif", -40, 0],
+        ["#s-map", 40, 0],
+        ["#s-ad", 40, 0],
+      ];
+      sats.forEach(([sel, dx, dy], i) => {
+        tl.fromTo(
+          sel,
+          { opacity: 0, x: dx, y: dy, scale: 0.85, rotationY: dx > 0 ? -25 : 25 },
+          { opacity: 1, x: 0, y: 0, scale: 1, rotationY: dx > 0 ? -8 : dx < 0 ? 8 : 0, duration: 0.5, ease: "back.out(1.6)" },
+          CUE.jaViu + 0.15 + i * 0.28
+        );
+      });
+      tl.fromTo("#a-alone", { opacity: 0 }, { opacity: 0.9, duration: 0.5 }, CUE.jaViu + 0.1);
+      /* ---------- "Essa daqui... provavelmente não" → A sozinha ---------- */
+      tl.to(
+        sats.map((s) => s[0]),
+        { opacity: 0.18, filter: "blur(3px)", duration: 0.5, ease: "power2.out" },
+        CUE.naoViu
+      );
+      tl.to("#a-alone", { x: 20, scale: 1.08, duration: 0.6, ease: "power3.out" }, CUE.naoViu);
+      tl.to("#a-alone", { opacity: 0.45, duration: 1.2, ease: "power1.in" }, CUE.naoViu + 0.7);
+      tl.to("#everywhere", { opacity: 0, duration: 0.3, ease: "power2.in" }, CUE.pergunta - 0.25);
+
+      /* ---------- Legendas: entrada curta por bloco ---------- */
+      document.querySelectorAll(".cap").forEach((el) => {
+        tl.fromTo(el, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.18, ease: "power2.out" }, parseFloat(el.dataset.start));
+      });
+
+      /* ---------- CORTE SECO → POR QUÊ? → EP.02 → ZENTURY ---------- */
+      tl.fromTo("#why", { scale: 1.25, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.25, ease: "power4.out" }, CUE.cut + 0.02);
+      tl.fromTo("#why-q", { opacity: 0.4 }, { opacity: 1, duration: 0.3, repeat: 1, yoyo: true }, CUE.cut + 0.3);
+      tl.fromTo("#cap-out", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.3 }, CUE.voiceOut);
+      tl.fromTo("#ep2", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, CUE.voiceOut + 0.6);
+      tl.fromTo("#wordmark", { opacity: 0, scale: 1.15 }, { opacity: 1, scale: 1, duration: 0.8, ease: "expo.out" }, CUE.logo);
+      tl.fromTo("#wm-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power3.inOut" }, CUE.logo + 0.25);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
