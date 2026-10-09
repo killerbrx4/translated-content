@@ -13,6 +13,7 @@ Ao trabalhar nesta pasta, Claude atua como **Diretor Criativo, Diretor de Vídeo
 ## Identidade visual
 
 - Preto matte, branco quente, dourado ZENTURY. **Spec de marca: `frame.md`** (tokens, tipografia, zonas seguras, motion). Tokens CSS em `brand/zentury-tokens.css`.
+- Referências visuais analisadas: `docs/referencias-showreels.md` (técnicas de 4 showreels → blocos do catálogo).
 - Antes de criar qualquer efeito, consultar `docs/biblioteca-motion.md` (momento narrativo → blueprint/bloco do catálogo/SFX).
 - Premium, editorial, cinematográfico, minimalista. Um destaque dourado por tela.
 - Proibido: cara de template Canva, glow em excesso, transição gratuita, poluição visual, estética de "guru".
