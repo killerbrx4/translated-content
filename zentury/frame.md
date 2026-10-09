@@ -77,5 +77,6 @@ Estratégia, posicionamento e performance falando com empresários que ainda nã
 
 ## Don't
 - Glow neon, gradiente roxo/azul, texto com gradiente, emoji como ícone.
+- Rótulos de canto e molduras decorativas: o guia Movez/Felipe Borges os lista como marca de "vídeo feito por IA". Só use se a referência de marca exigir (usado na V2/V3 do EP.01; remover nas próximas).
 - Inter, Poppins, Playfair, Syne (fontes genéricas de IA, segundo o guia de tipografia do HyperFrames).
 - Mais de 6 elementos na tela ao mesmo tempo, salvo quando a poluição é o próprio argumento (ex.: "B em todo lugar").

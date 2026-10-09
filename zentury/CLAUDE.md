@@ -40,6 +40,10 @@ Tempo: | Fala: | Ação do apresentador: | Composição: | Elementos 3D: | Texto
 Movimento de câmera: | Transição: | Sound design: | Música: | Prompt visual: | Ferramenta:
 ```
 
+## Skill do estúdio
+
+Todo vídeo segue `.claude/skills/zentury-motion-studio/SKILL.md` (as 7 peças: regras, marca real, referência, estados na grade de batidas, som na batida, crítica com nota até ≥ 8, briefing de diretor). O ambiente é preparado pelo hook `.claude/hooks/session-start.sh`.
+
 ## Ferramentas (capacidades verificadas em `docs/capacidades-ferramentas.md`)
 
 | Camada | Ferramenta |
