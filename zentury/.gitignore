@@ -7,3 +7,4 @@ videos/*/snapshots/
 videos/*/.hyperframes/
 node_modules/
 videos/*/assets/audio/mix.wav
+videos/*/assets/audio/lines/
