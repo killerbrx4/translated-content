@@ -1,0 +1,740 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>ZENTURY EP.01 · V2 editorial</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-700-normal.woff2") format("woff2");
+        font-weight: 700;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-900-normal.woff2") format("woff2");
+        font-weight: 900;
+      }
+      @font-face {
+        font-family: "JetBrains Mono";
+        src: url("assets/fonts/jetbrains-mono-latin-400-normal.woff2") format("woff2");
+        font-weight: 400;
+      }
+      @font-face {
+        font-family: "JetBrains Mono";
+        src: url("assets/fonts/jetbrains-mono-latin-700-normal.woff2") format("woff2");
+        font-weight: 700;
+      }
+      :root {
+        --z-black: #0b0b0c;
+        --z-line: #2a2a2e;
+        --z-white: #f5f3ee;
+        --z-mute: #9a968f;
+        --z-gold: #d4a842;
+        --z-gold-soft: #e9c977;
+        --z-gold-deep: #8a6a1f;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--z-black);
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: var(--z-black);
+        font-family: "Montserrat", sans-serif;
+        color: var(--z-white);
+      }
+
+      /* ===== CÂMERA: wrapper sem tempo; os cortes são os <video> dentro ===== */
+      #cam {
+        position: absolute;
+        inset: 0;
+        transform-origin: 520px 1020px;
+      }
+      .shot {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1920px;
+        object-fit: cover;
+      }
+
+      /* ===== GRADE / VINHETA (escurece parede clara e topo para os cards) ===== */
+      #grade {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to bottom, rgba(8, 8, 9, 0.72) 0%, rgba(8, 8, 9, 0.35) 30%, rgba(8, 8, 9, 0) 46%, rgba(8, 8, 9, 0) 62%, rgba(8, 8, 9, 0.62) 100%),
+          radial-gradient(ellipse at 50% 52%, rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0.6) 100%);
+      }
+      #flash {
+        position: absolute;
+        inset: 0;
+        background: #fff;
+        opacity: 0;
+      }
+
+      /* ===== FX: palco 3D ===== */
+      #fx {
+        position: absolute;
+        inset: 0;
+        perspective: 1500px;
+        perspective-origin: 50% 30%;
+      }
+      .co-card {
+        position: absolute;
+        top: 290px;
+        width: 400px;
+        height: 340px;
+        padding: 30px 32px;
+        border-radius: 28px;
+        background: linear-gradient(160deg, rgba(32, 32, 35, 0.94) 0%, rgba(14, 14, 16, 0.96) 100%);
+        border: 2px solid var(--z-line);
+        box-shadow: 0 40px 90px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+      }
+      #card-a {
+        left: 60px;
+      }
+      #card-b {
+        left: 620px;
+        border-color: var(--z-gold-deep);
+      }
+      .co-kicker {
+        display: block;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 22px;
+        letter-spacing: 0.32em;
+        color: var(--z-mute);
+      }
+      .co-name {
+        display: block;
+        margin-top: 6px;
+        font-size: 110px;
+        font-weight: 900;
+        letter-spacing: -0.05em;
+        line-height: 1;
+      }
+      #card-b .co-name {
+        color: var(--z-gold);
+      }
+      .check {
+        position: absolute;
+        left: 32px;
+        right: 32px;
+        height: 52px;
+        border-top: 1px solid var(--z-line);
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        line-height: 52px;
+      }
+      .check b {
+        position: absolute;
+        right: 0;
+        top: 0;
+        color: var(--z-gold);
+      }
+      .chk-prod {
+        top: 196px;
+      }
+      .chk-price {
+        top: 252px;
+      }
+      #spark-a,
+      #spark-b {
+        position: absolute;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: radial-gradient(circle, #fff3c9 0%, var(--z-gold) 45%, rgba(212, 168, 66, 0) 72%);
+      }
+      #spark-a {
+        left: 187px;
+        top: 1767px;
+      }
+      #spark-b {
+        left: 807px;
+        top: 1687px;
+      }
+
+      /* Congelamento */
+      #freeze {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1920px;
+        object-fit: cover;
+      }
+      #vis {
+        position: absolute;
+        left: 60px;
+        right: 60px;
+        top: 300px;
+        height: 400px;
+      }
+      #eye {
+        position: absolute;
+        left: 400px;
+        top: 0;
+        width: 160px;
+        height: 110px;
+      }
+      #eye path,
+      #eye circle {
+        fill: none;
+        stroke: var(--z-gold);
+        stroke-width: 5;
+        stroke-linecap: round;
+      }
+      #vis-word {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 140px;
+        text-align: center;
+        font-size: 100px;
+        font-weight: 900;
+        letter-spacing: 0.06em;
+      }
+      #vis-rule {
+        position: absolute;
+        left: 330px;
+        top: 290px;
+        width: 300px;
+        height: 4px;
+        background: var(--z-gold);
+      }
+
+      /* Empresa B em todo lugar */
+      /* B em todo lugar: ícones reais + setas à mão */
+      #arrows {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1920px;
+      }
+      #arrows path {
+        fill: none;
+        stroke: var(--z-white);
+        stroke-width: 4;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      #b-badge {
+        position: absolute;
+        left: 440px;
+        top: 300px;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        border: 3px solid var(--z-gold);
+        background: radial-gradient(circle, #2a2210 0%, #0f0e0c 75%);
+        text-align: center;
+        font-size: 120px;
+        font-weight: 900;
+        line-height: 194px;
+        color: var(--z-gold);
+        box-shadow: 0 0 80px rgba(212, 168, 66, 0.35);
+      }
+      .ico {
+        position: absolute;
+        width: 112px;
+        height: 150px;
+      }
+      .ico-c {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 112px;
+        height: 112px;
+        border-radius: 50%;
+        background: #141416;
+        border: 2px solid var(--z-gold-deep);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+      }
+      .ico-c svg {
+        position: absolute;
+        left: 28px;
+        top: 28px;
+        width: 56px;
+        height: 56px;
+        fill: var(--z-gold-soft);
+      }
+      .ico-l {
+        position: absolute;
+        left: -40px;
+        right: -40px;
+        top: 124px;
+        text-align: center;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 18px;
+        letter-spacing: 0.2em;
+        color: var(--z-mute);
+      }
+      #i-ig { left: 110px; top: 220px; }
+      #i-gg { left: 858px; top: 220px; }
+      #i-yt { left: 70px; top: 560px; }
+      #i-mp { left: 898px; top: 560px; }
+      #i-wa { left: 484px; top: 590px; }
+      #a-alone {
+        position: absolute;
+        left: 40px;
+        top: 860px;
+        width: 290px;
+        height: 200px;
+        padding: 22px 24px;
+        border-radius: 24px;
+        border: 2px dashed #46454a;
+        background: rgba(14, 14, 16, 0.85);
+      }
+      #a-alone .co-name {
+        font-size: 84px;
+        color: #6d6b70;
+      }
+      #a-alone .co-kicker {
+        color: #6d6b70;
+      }
+
+      /* Cantos editoriais */
+      .corner {
+        position: absolute;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 20px;
+        letter-spacing: 0.24em;
+        color: var(--z-white);
+        opacity: 0.75;
+        white-space: nowrap;
+      }
+      .corner b {
+        color: var(--z-gold);
+        font-weight: 700;
+      }
+      #c-tl { left: 60px; top: 240px; }
+      #c-tr { right: 150px; top: 240px; text-align: right; }
+      #c-bl { left: 60px; top: 1560px; }
+      #c-br { right: 150px; top: 1560px; text-align: right; }
+      #grain {
+        position: absolute;
+        left: -100px;
+        top: -100px;
+        width: 1280px;
+        height: 2120px;
+        opacity: 0.09;
+        mix-blend-mode: overlay;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='240' height='240' filter='url(%23n)'/></svg>");
+      }
+      /* CTA com cursor */
+      #ep2 {
+        position: absolute;
+        left: 330px;
+        top: 1020px;
+        width: 420px;
+        height: 76px;
+        border-radius: 38px;
+        border: 2px solid var(--z-gold);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        line-height: 72px;
+        text-align: center;
+        color: var(--z-gold-soft);
+      }
+      #ep2-fill {
+        position: absolute;
+        inset: 0;
+        border-radius: 38px;
+        background: var(--z-gold);
+        transform-origin: 50% 50%;
+      }
+      #ep2-txt {
+        position: relative;
+      }
+      #ripple {
+        position: absolute;
+        left: 610px;
+        top: 1030px;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: 3px solid var(--z-white);
+      }
+      #cursor {
+        position: absolute;
+        left: 640px;
+        top: 1060px;
+        width: 54px;
+        height: 70px;
+      }
+
+      /* Preto final */
+      #black {
+        background: #000;
+      }
+      #why {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 820px;
+        text-align: center;
+        font-size: 150px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+      }
+      #why-q {
+        color: var(--z-gold);
+      }
+      #wordmark {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 1380px;
+        text-align: center;
+        font-size: 64px;
+        font-weight: 900;
+        letter-spacing: 0.3em;
+        padding-left: 0.3em;
+      }
+      #wm-rule {
+        position: absolute;
+        left: 465px;
+        top: 1470px;
+        width: 150px;
+        height: 3px;
+        background: var(--z-gold);
+      }
+
+      /* Legendas: no peito (abaixo do queixo, acima das mãos e da UI do Reels) */
+      #captions {
+        position: absolute;
+        left: 60px;
+        right: 120px;
+        top: 1290px;
+        height: 140px;
+      }
+      .cap {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        text-align: center;
+        font-size: 54px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1.12;
+        text-shadow: 0 3px 18px rgba(0, 0, 0, 0.95), 0 0 2px rgba(0, 0, 0, 0.9);
+      }
+      .cap em {
+        font-style: normal;
+        color: var(--z-gold-soft);
+      }
+      #cap-out {
+        position: absolute;
+        left: 60px;
+        right: 120px;
+        top: 1180px;
+        text-align: center;
+        font-size: 40px;
+        color: var(--z-mute);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="26.4"
+      data-fps="30"
+      data-width="1080"
+      data-height="1920"
+    >
+      <!-- ================= CÂMERA (EDL: cortes secos nos silêncios) ================= -->
+      <div id="cam">
+        <video id="v1" class="shot" src="assets/footage/presenter.mp4" muted data-start="0" data-duration="1.70" data-media-start="0.42" data-track-index="0"></video>
+        <video id="v2" class="shot" src="assets/footage/presenter.mp4" muted data-start="1.70" data-duration="1.56" data-media-start="2.92" data-track-index="1"></video>
+        <video id="v3" class="shot" src="assets/footage/presenter.mp4" muted data-start="3.26" data-duration="2.03" data-media-start="4.72" data-track-index="0"></video>
+        <video id="v4" class="shot" src="assets/footage/presenter.mp4" muted data-start="5.29" data-duration="3.53" data-media-start="7.02" data-track-index="1"></video>
+        <video id="v5" class="shot" src="assets/footage/presenter.mp4" muted data-start="8.82" data-duration="2.23" data-media-start="11.22" data-track-index="0"></video>
+        <video id="v6" class="shot" src="assets/footage/presenter.mp4" muted data-start="11.05" data-duration="0.50" data-media-start="13.92" data-track-index="1"></video>
+        <video id="v7" class="shot" src="assets/footage/presenter.mp4" muted data-start="11.55" data-duration="3.15" data-media-start="15.00" data-track-index="0"></video>
+        <img id="freeze" class="clip" src="assets/img/freeze.jpg" alt="" data-start="14.70" data-duration="1.15" data-track-index="1" />
+        <video id="v8" class="shot" src="assets/footage/presenter.mp4" muted data-start="15.85" data-duration="2.13" data-media-start="19.22" data-track-index="0"></video>
+        <video id="v9" class="shot" src="assets/footage/presenter.mp4" muted data-start="17.98" data-duration="2.23" data-media-start="21.92" data-track-index="1"></video>
+        <video id="v10" class="shot" src="assets/footage/presenter.mp4" muted data-start="20.21" data-duration="2.30" data-media-start="24.82" data-track-index="0"></video>
+      </div>
+      <div id="grade" data-layout-ignore></div>
+
+      <!-- ================= FX 3D ================= -->
+      <div id="fx">
+        <!-- A e B nascem da palma da mão e sobem -->
+        <div id="ab" class="clip" data-start="1.9" data-duration="12.8" data-track-index="3">
+          <div id="spark-a"></div>
+          <div id="spark-b"></div>
+          <div id="card-a" class="co-card">
+            <span class="co-kicker">EMPRESA</span>
+            <span class="co-name">A</span>
+            <div class="check chk-prod" id="a-prod">PRODUTO <b>✓</b></div>
+            <div class="check chk-price" id="a-price">PREÇO <b>✓</b></div>
+          </div>
+          <div id="card-b" class="co-card">
+            <span class="co-kicker">EMPRESA</span>
+            <span class="co-name">B</span>
+            <div class="check chk-prod" id="b-prod">PRODUTO <b>✓</b></div>
+            <div class="check chk-price" id="b-price">PREÇO <b>✓</b></div>
+          </div>
+        </div>
+
+        <!-- Congela: VISIBILIDADE -->
+        <div id="vis" class="clip" data-start="14.70" data-duration="1.15" data-track-index="4">
+          <svg id="eye" viewBox="0 0 160 110" aria-hidden="true">
+            <path id="eye-lid" d="M8 55 C40 8 120 8 152 55 C120 102 40 102 8 55 Z" />
+            <circle id="eye-pupil" cx="80" cy="55" r="20" />
+          </svg>
+          <div id="vis-word">VISIBILIDADE</div>
+          <div id="vis-rule"></div>
+        </div>
+
+        <!-- B em todo lugar · A sozinha -->
+        <div id="everywhere" class="clip" data-start="15.85" data-duration="4.4" data-track-index="5">
+          <svg id="arrows" viewBox="0 0 1080 1920" aria-hidden="true">
+            <path id="ar-ig" d="M215 300 C 300 250, 380 300, 446 360" />
+            <path id="ar-gg" d="M865 300 C 780 250, 700 300, 634 360" />
+            <path id="ar-yt" d="M180 600 C 280 590, 360 520, 450 450" />
+            <path id="ar-mp" d="M900 600 C 800 590, 720 520, 630 450" />
+            <path id="ar-wa" d="M540 588 C 528 560, 552 540, 540 512" />
+          </svg>
+          <div id="b-badge">B</div>
+          <div id="i-ig" class="ico"><div class="ico-c"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077" /></svg></div><div class="ico-l">INSTAGRAM</div></div>
+          <div id="i-gg" class="ico"><div class="ico-c"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" /></svg></div><div class="ico-l">GOOGLE</div></div>
+          <div id="i-yt" class="ico"><div class="ico-c"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" /></svg></div><div class="ico-l">YOUTUBE</div></div>
+          <div id="i-mp" class="ico"><div class="ico-c"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.527 4.799c1.212 2.608.937 5.678-.405 8.173-1.101 2.047-2.744 3.74-4.098 5.614-.619.858-1.244 1.75-1.669 2.727-.141.325-.263.658-.383.992-.121.333-.224.673-.34 1.008-.109.314-.236.684-.627.687h-.007c-.466-.001-.579-.53-.695-.887-.284-.874-.581-1.713-1.019-2.525-.51-.944-1.145-1.817-1.79-2.671L19.527 4.799zM8.545 7.705l-3.959 4.707c.724 1.54 1.821 2.863 2.871 4.18.247.31.494.622.737.936l4.984-5.925-.029.01c-1.741.601-3.691-.291-4.392-1.987a3.377 3.377 0 0 1-.209-.716c-.063-.437-.077-.761-.004-1.198l.001-.007zM5.492 3.149l-.003.004c-1.947 2.466-2.281 5.88-1.117 8.77l4.785-5.689-.058-.05-3.607-3.035zM14.661.436l-3.838 4.563a.295.295 0 0 1 .027-.01c1.6-.551 3.403.15 4.22 1.626.176.319.323.683.377 1.045.068.446.085.773.012 1.22l-.003.016 3.836-4.561A8.382 8.382 0 0 0 14.67.439l-.009-.003zM9.466 5.868L14.162.285l-.047-.012A8.31 8.31 0 0 0 11.986 0a8.439 8.439 0 0 0-6.169 2.766l-.016.018 3.665 3.084z" /></svg></div><div class="ico-l">MAPS</div></div>
+          <div id="i-wa" class="ico"><div class="ico-c"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" /></svg></div><div class="ico-l">WHATSAPP</div></div>
+          <div id="a-alone">
+            <span class="co-kicker">EMPRESA</span>
+            <span class="co-name">A</span>
+          </div>
+        </div>
+      </div>
+      <div id="flash" data-layout-ignore></div>
+      <div id="corners" class="clip" data-start="0.3" data-duration="22.2" data-track-index="10" data-layout-ignore>
+        <div id="c-tl" class="corner"><b>●</b> ZENTURY</div>
+        <div id="c-tr" class="corner">EP.01 / <b>A</b> VS <b>B</b></div>
+        <div id="c-bl" class="corner">ESTRATÉGIA · POSICIONAMENTO</div>
+        <div id="c-br" class="corner">2026</div>
+      </div>
+
+      <!-- ================= LEGENDAS (texto fiel à fala) ================= -->
+      <div id="captions">
+        <div id="k1" class="cap clip" data-start="0.05" data-duration="1.65" data-track-index="8">Olha essas duas <em>empresas</em> aqui.</div>
+        <div id="k2" class="cap clip" data-start="1.78" data-duration="1.48" data-track-index="8">Essa daqui é a <em>empresa A.</em></div>
+        <div id="k3" class="cap clip" data-start="3.39" data-duration="1.85" data-track-index="8">Essa daqui é a <em>empresa B.</em></div>
+        <div id="k4" class="cap clip" data-start="5.35" data-duration="1.50" data-track-index="8">As duas empresas vendem</div>
+        <div id="k5" class="cap clip" data-start="6.85" data-duration="1.97" data-track-index="8">basicamente a <em>mesma coisa.</em></div>
+        <div id="k6" class="cap clip" data-start="8.90" data-duration="1.30" data-track-index="8">O mesmo <em>produto.</em></div>
+        <div id="k7" class="cap clip" data-start="10.20" data-duration="0.85" data-track-index="8">O mesmo <em>preço.</em></div>
+        <div id="k8" class="cap clip" data-start="11.10" data-duration="1.90" data-track-index="8">Porém, essa daqui…</div>
+        <div id="k9" class="cap clip" data-start="13.05" data-duration="1.65" data-track-index="8">tem uma <em>diferença.</em></div>
+        <div id="k10" class="cap clip" data-start="15.93" data-duration="2.05" data-track-index="8">Essa daqui você <em>já viu.</em></div>
+        <div id="k11" class="cap clip" data-start="18.06" data-duration="2.15" data-track-index="8">Essa daqui… provavelmente <em>não.</em></div>
+        <div id="k12" class="cap clip" data-start="20.29" data-duration="1.45" data-track-index="8">E a pergunta que fica é…</div>
+      </div>
+
+      <!-- ================= CORTE SECO → PRETO ================= -->
+      <div id="black" class="clip" data-start="22.51" data-duration="3.89" data-track-index="9">
+        <div id="why">POR QUÊ<span id="why-q">?</span></div>
+        <div id="ep2"><div id="ep2-fill"></div><span id="ep2-txt">EP. 02 →</span></div>
+        <div id="ripple"></div>
+        <svg id="cursor" viewBox="0 0 54 70" aria-hidden="true"><path d="M4 4 L4 56 L18 44 L28 66 L38 61 L28 40 L46 40 Z" fill="#F5F3EE" stroke="#0B0B0C" stroke-width="4" stroke-linejoin="round" /></svg>
+        <div id="cap-out">Isso eu te mostro no próximo vídeo.</div>
+        <div id="wordmark">ZENTURY</div>
+        <div id="wm-rule"></div>
+      </div>
+
+      <div id="grain" data-layout-ignore></div>
+
+      <!-- ================= VOZ (mesma EDL do vídeo) ================= -->
+      <audio id="a1" src="assets/audio/voice.m4a" data-start="0" data-duration="1.70" data-media-start="0.42" data-track-index="20"></audio>
+      <audio id="a2" src="assets/audio/voice.m4a" data-start="1.70" data-duration="1.56" data-media-start="2.92" data-track-index="21"></audio>
+      <audio id="a3" src="assets/audio/voice.m4a" data-start="3.26" data-duration="2.03" data-media-start="4.72" data-track-index="20"></audio>
+      <audio id="a4" src="assets/audio/voice.m4a" data-start="5.29" data-duration="3.53" data-media-start="7.02" data-track-index="21"></audio>
+      <audio id="a5" src="assets/audio/voice.m4a" data-start="8.82" data-duration="2.23" data-media-start="11.22" data-track-index="20"></audio>
+      <audio id="a6" src="assets/audio/voice.m4a" data-start="11.05" data-duration="0.50" data-media-start="13.92" data-track-index="21"></audio>
+      <audio id="a7" src="assets/audio/voice.m4a" data-start="11.55" data-duration="3.15" data-media-start="15.00" data-track-index="20"></audio>
+      <audio id="a8" src="assets/audio/voice.m4a" data-start="15.85" data-duration="2.13" data-media-start="19.22" data-track-index="21"></audio>
+      <audio id="a9" src="assets/audio/voice.m4a" data-start="17.98" data-duration="2.23" data-media-start="21.92" data-track-index="20"></audio>
+      <audio id="a10" src="assets/audio/voice.m4a" data-start="20.21" data-duration="2.30" data-media-start="24.82" data-track-index="21"></audio>
+      <audio id="a11" src="assets/audio/voice.m4a" data-start="23.41" data-duration="2.23" data-media-start="28.12" data-track-index="20"></audio>
+
+      <!-- ================= TRILHA (pausa no "diferença", volta no "já viu", some no preto) ================= -->
+      <audio id="bed1" src="assets/audio/bed.m4a" data-start="0" data-duration="13.45" data-media-start="0" data-track-index="22" data-volume="0.22"></audio>
+      <audio id="bed2" src="assets/audio/bed.m4a" data-start="15.85" data-duration="6.66" data-media-start="15.85" data-track-index="22" data-volume="0.28"></audio>
+
+      <!-- ================= SOUND DESIGN ================= -->
+      <audio id="x-open" src="assets/sfx/whoosh-short.mp3" data-start="0.05" data-duration="0.57" data-track-index="23" data-volume="0.35"></audio>
+      <audio id="x-a" src="assets/sfx/whoosh-short.mp3" data-start="2.30" data-duration="0.57" data-track-index="24" data-volume="0.6"></audio>
+      <audio id="x-a2" src="assets/sfx/pop.mp3" data-start="2.85" data-duration="0.72" data-track-index="25" data-volume="0.4"></audio>
+      <audio id="x-b" src="assets/sfx/whoosh-short.mp3" data-start="4.15" data-duration="0.57" data-track-index="24" data-volume="0.6"></audio>
+      <audio id="x-b2" src="assets/sfx/pop.mp3" data-start="4.70" data-duration="0.72" data-track-index="25" data-volume="0.4"></audio>
+      <audio id="x-prod" src="assets/sfx/click.mp3" data-start="9.30" data-duration="0.37" data-track-index="24" data-volume="0.6"></audio>
+      <audio id="x-price" src="assets/sfx/click.mp3" data-start="10.70" data-duration="0.37" data-track-index="25" data-volume="0.6"></audio>
+      <audio id="x-diff" src="assets/sfx/glitch-3.mp3" data-start="13.42" data-duration="1.2" data-track-index="24" data-volume="0.25"></audio>
+      <audio id="x-freeze" src="assets/sfx/impact-bass-1.mp3" data-start="14.70" data-duration="2.0" data-track-index="25" data-volume="0.9"></audio>
+      <audio id="x-eye" src="assets/sfx/ping.mp3" data-start="14.85" data-duration="1.0" data-track-index="23" data-volume="0.35"></audio>
+      <audio id="x-s1" src="assets/sfx/pop.mp3" data-start="16.00" data-duration="0.72" data-track-index="24" data-volume="0.35"></audio>
+      <audio id="x-s2" src="assets/sfx/click-soft.mp3" data-start="16.28" data-duration="0.37" data-track-index="26" data-volume="0.5"></audio>
+      <audio id="x-s3" src="assets/sfx/whoosh-short.mp3" data-start="16.50" data-duration="0.57" data-track-index="23" data-volume="0.35"></audio>
+      <audio id="x-s4" src="assets/sfx/notification.mp3" data-start="16.80" data-duration="1.0" data-track-index="24" data-volume="0.3"></audio>
+      <audio id="x-s5" src="assets/sfx/pop.mp3" data-start="17.10" data-duration="0.72" data-track-index="25" data-volume="0.35"></audio>
+      <audio id="x-s6" src="assets/sfx/click-soft.mp3" data-start="17.38" data-duration="0.37" data-track-index="23" data-volume="0.5"></audio>
+      <audio id="x-riser" src="assets/sfx/riser.mp3" data-start="20.21" data-duration="2.30" data-track-index="24" data-volume="0.4"></audio>
+      <audio id="x-cut" src="assets/sfx/impact-bass-2.mp3" data-start="22.51" data-duration="2.0" data-track-index="25" data-volume="1"></audio>
+      <audio id="x-logo" src="assets/sfx/impact-bass-1.mp3" data-start="24.60" data-duration="1.8" data-track-index="23" data-volume="0.55"></audio>
+    </div>
+
+    <script>
+      /* ===== MAPA DE COREOGRAFIA (tempo final do Reels, derivado do transcript + EDL) ===== */
+      const CUE = {
+        pointA: 2.3, // dedo aponta para a palma esquerda ("...empresa A")
+        pointB: 4.15, // dedo aponta para a palma direita ("...empresa B")
+        produto: 9.3,
+        preco: 10.7,
+        porem: 11.05,
+        diferenca: 13.42, // tudo começa a congelar, trilha para
+        freeze: 14.7, // frame congelado + VISIBILIDADE
+        jaViu: 15.85, // B aparece em todo lugar
+        naoViu: 17.98, // A sozinha e apagada
+        pergunta: 20.21, // câmera aproxima no rosto
+        porQue: 22.05,
+        cut: 22.51, // CORTE SECO → preto
+        voiceOut: 23.41,
+        logo: 24.6,
+      };
+      const tl = gsap.timeline({ paused: true });
+
+      /* ---------- Câmera: punch-ins alternados escondem os jump cuts ---------- */
+      const camScale = [
+        [0, 1.06],
+        [1.7, 1.0],
+        [5.29, 1.07],
+        [8.82, 1.0],
+        [11.05, 1.12],
+        [11.55, 1.05],
+        [15.85, 1.0],
+        [17.98, 1.07],
+        [20.21, 1.0],
+      ];
+      camScale.forEach(([t, s], i) => {
+        if (i === 0) tl.fromTo("#cam", { scale: s }, { scale: s, duration: 0.01 }, 0);
+        else tl.set("#cam", { scale: s }, t);
+      });
+      // aproxima no rosto em "E a pergunta que fica é... por quê?"
+      tl.to("#cam", { scale: 1.32, duration: 1.74, ease: "sine.inOut" }, CUE.pergunta + 0.05);
+      tl.to("#cam", { scale: 1.62, duration: 0.35, ease: "power4.out" }, CUE.porQue);
+
+      /* ---------- A: palma esquerda → card 3D ---------- */
+      tl.fromTo("#spark-a", { scale: 0, opacity: 0 }, { scale: 1.6, opacity: 1, duration: 0.2, ease: "power2.out" }, CUE.pointA);
+      tl.to("#spark-a", { x: 73, y: -1300, scale: 0.4, opacity: 0, duration: 0.5, ease: "power3.in" }, CUE.pointA + 0.2);
+      tl.fromTo(
+        "#card-a",
+        { x: -60, y: 1340, scale: 0.12, rotationY: 50, rotationX: -40, opacity: 0 },
+        { x: 0, y: 0, scale: 1, rotationY: 14, rotationX: 0, opacity: 1, duration: 0.85, ease: "expo.out" },
+        CUE.pointA + 0.35
+      );
+      /* ---------- B: palma direita → card 3D ---------- */
+      tl.fromTo("#spark-b", { scale: 0, opacity: 0 }, { scale: 1.6, opacity: 1, duration: 0.2, ease: "power2.out" }, CUE.pointB);
+      tl.to("#spark-b", { x: 13, y: -1220, scale: 0.4, opacity: 0, duration: 0.5, ease: "power3.in" }, CUE.pointB + 0.2);
+      tl.fromTo(
+        "#card-b",
+        { x: 0, y: 1260, scale: 0.12, rotationY: -50, rotationX: -40, opacity: 0 },
+        { x: 0, y: 0, scale: 1, rotationY: -14, rotationX: 0, opacity: 1, duration: 0.85, ease: "expo.out" },
+        CUE.pointB + 0.35
+      );
+      // flutuação sutil enquanto ele explica
+      tl.to("#card-a", { y: -12, duration: 3.2, ease: "sine.inOut", yoyo: true, repeat: 1 }, 3.55);
+      tl.to("#card-b", { y: -12, duration: 3.2, ease: "sine.inOut", yoyo: true, repeat: 1 }, 5.4);
+
+      /* ---------- PRODUTO ✓ / PREÇO ✓ nos dois cards ---------- */
+      tl.fromTo(["#a-prod", "#b-prod"], { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, CUE.produto);
+      tl.fromTo(["#a-price", "#b-price"], { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, CUE.preco);
+
+      /* ---------- "Porém" → os cards se viram de frente (atenção) ---------- */
+      tl.to("#card-a", { rotationY: 4, duration: 0.6, ease: "power2.out" }, CUE.porem);
+      tl.to("#card-b", { rotationY: -4, duration: 0.6, ease: "power2.out" }, CUE.porem);
+
+      /* ---------- "diferença" → tudo congela ---------- */
+      tl.fromTo("#cam", { filter: "saturate(1) brightness(1)" }, { filter: "saturate(0.15) brightness(0.72)", duration: 0.5, ease: "power2.out", immediateRender: false }, CUE.diferenca);
+      tl.to(["#card-a", "#card-b"], { opacity: 0.35, duration: 0.5 }, CUE.diferenca);
+      tl.fromTo("#flash", { opacity: 0 }, { opacity: 0.55, duration: 0.04 }, CUE.freeze);
+      tl.to("#flash", { opacity: 0, duration: 0.25, ease: "power2.out" }, CUE.freeze + 0.04);
+      tl.fromTo("#freeze", { scale: 1.0 }, { scale: 1.06, duration: 1.15, ease: "power1.out" }, CUE.freeze);
+      tl.fromTo("#eye-lid", { strokeDasharray: 400, strokeDashoffset: 400 }, { strokeDashoffset: 0, duration: 0.45, ease: "power2.inOut" }, CUE.freeze + 0.05);
+      tl.fromTo("#eye-pupil", { scale: 0, transformOrigin: "50% 50%" }, { scale: 1, duration: 0.3, ease: "back.out(2.5)" }, CUE.freeze + 0.3);
+      tl.fromTo("#vis-word", { opacity: 0, y: 30, scale: 1.12 }, { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: "expo.out" }, CUE.freeze + 0.12);
+      tl.fromTo("#vis-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power3.inOut" }, CUE.freeze + 0.35);
+      tl.set("#cam", { filter: "saturate(1) brightness(1)" }, CUE.jaViu);
+
+      /* ---------- "Essa daqui você já viu" → B em todo lugar ---------- */
+      const icons = ["#i-ig", "#i-gg", "#i-yt", "#i-mp", "#i-wa"];
+      const arrows = ["#ar-ig", "#ar-gg", "#ar-yt", "#ar-mp", "#ar-wa"];
+      tl.fromTo("#b-badge", { scale: 0.2, opacity: 0, rotation: -25 }, { scale: 1, opacity: 1, rotation: 0, duration: 0.55, ease: "back.out(2.2)" }, CUE.jaViu + 0.05);
+      icons.forEach((sel, i) => {
+        const t = CUE.jaViu + 0.2 + i * 0.26;
+        tl.fromTo(sel, { opacity: 0, scale: 0.4, y: 30 }, { opacity: 1, scale: 1, y: 0, duration: 0.42, ease: i % 2 ? "back.out(2)" : "expo.out" }, t);
+        const p = document.querySelector(arrows[i]);
+        const L = p.getTotalLength();
+        tl.fromTo(p, { strokeDasharray: L, strokeDashoffset: L, opacity: 0 }, { strokeDashoffset: 0, opacity: 1, duration: 0.38, ease: "power2.inOut" }, t + 0.18);
+      });
+      tl.to("#b-badge", { scale: 1.08, duration: 0.6, ease: "sine.inOut", yoyo: true, repeat: 1 }, CUE.jaViu + 1.6);
+      tl.fromTo("#a-alone", { opacity: 0 }, { opacity: 0.9, duration: 0.5 }, CUE.jaViu + 0.1);
+      /* ---------- "Essa daqui... provavelmente não" → A sozinha ---------- */
+      tl.to([...icons, "#arrows", "#b-badge"], { opacity: 0.15, filter: "blur(3px)", duration: 0.5, ease: "power2.out" }, CUE.naoViu);
+      tl.to("#a-alone", { x: 20, scale: 1.08, duration: 0.6, ease: "power3.out" }, CUE.naoViu);
+      tl.to("#a-alone", { opacity: 0.45, duration: 1.2, ease: "power1.in" }, CUE.naoViu + 0.7);
+      tl.to("#everywhere", { opacity: 0, duration: 0.3, ease: "power2.in" }, CUE.pergunta - 0.25);
+
+      /* ---------- Legendas: entrada curta por bloco ---------- */
+      document.querySelectorAll(".cap").forEach((el) => {
+        tl.fromTo(el, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.18, ease: "power2.out" }, parseFloat(el.dataset.start));
+      });
+
+      /* ---------- CORTE SECO → POR QUÊ? → EP.02 → ZENTURY ---------- */
+      tl.fromTo("#why", { scale: 1.25, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.25, ease: "power4.out" }, CUE.cut + 0.02);
+      tl.fromTo("#why-q", { opacity: 0.4 }, { opacity: 1, duration: 0.3, repeat: 1, yoyo: true }, CUE.cut + 0.3);
+      tl.fromTo("#cap-out", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.3 }, CUE.voiceOut);
+      tl.fromTo("#ep2", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, CUE.voiceOut + 0.6);
+      tl.fromTo("#wordmark", { opacity: 0, scale: 1.15 }, { opacity: 1, scale: 1, duration: 0.8, ease: "expo.out" }, CUE.logo);
+      tl.fromTo("#wm-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power3.inOut" }, CUE.logo + 0.25);
+
+      /* ---------- Cantos editoriais + grão ---------- */
+      tl.fromTo(".corner", { opacity: 0, y: 8 }, { opacity: 0.75, y: 0, duration: 0.5, stagger: 0.08, ease: "power2.out" }, 0.3);
+      tl.to(["#c-tl", "#c-tr"], { opacity: 0, duration: 0.25, ease: "power2.in" }, CUE.jaViu - 0.1);
+      tl.to(["#c-tl", "#c-tr"], { opacity: 0.75, duration: 0.4, ease: "power2.out" }, CUE.pergunta);
+      tl.fromTo("#grain", { x: 0, y: 0 }, { x: -60, y: -45, duration: 26.3, ease: "steps(200)" }, 0);
+      /* ---------- CTA: cursor clica no EP.02 ---------- */
+      tl.fromTo("#ep2-fill", { scaleX: 0 }, { scaleX: 0, duration: 0.01 }, 0);
+      tl.fromTo("#cursor", { x: 260, y: 420, opacity: 0 }, { x: 0, y: 0, opacity: 1, duration: 0.55, ease: "power3.out" }, 24.85);
+      tl.to("#cursor", { scale: 0.85, duration: 0.08, ease: "power2.in", transformOrigin: "0% 0%" }, 25.4);
+      tl.to("#cursor", { scale: 1, duration: 0.15, ease: "back.out(3)" }, 25.48);
+      tl.fromTo("#ripple", { scale: 0.2, opacity: 0.9 }, { scale: 2.6, opacity: 0, duration: 0.6, ease: "power2.out" }, 25.42);
+      tl.to("#ep2-fill", { scaleX: 1, duration: 0.3, ease: "power3.out" }, 25.42);
+      tl.to("#ep2-txt", { color: "#0B0B0C", duration: 0.15 }, 25.5);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

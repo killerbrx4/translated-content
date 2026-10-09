@@ -61,6 +61,9 @@ Nunca inventar capacidades. Se uma ferramenta não faz algo, diga isso, indique 
 4. Montar a EDL: cortar silêncio morto, manter as pausas dramáticas e alternar punch-in 1.00/1.06 para esconder jump cuts.
 5. Mapear cada palavra-gatilho para o tempo final (objeto `CUE` no topo do `<script>`).
 6. Compor no HyperFrames: vídeos `muted` mais voz em `<audio>` com a mesma EDL, FX 3D, legendas no peito (abaixo do queixo, acima de y=1600 por causa da UI do Reels) e SFX em trilhas sem sobreposição.
+6b. Recursos avançados com gravação real:
+   - **Recorte do apresentador:** `npx hyperframes remove-background presenter.mp4 -o presenter-cut.webm --quality best` (~0,4 s/frame em CPU). Permite trocar o fundo e colocar texto **atrás** da pessoa.
+   - **Rastreamento de mão:** `python3 -I tools/track_hands.py <video> hand_landmarker.task hands.json` (MediaPipe). Gera a posição da palma a 15 Hz para prender elementos na mão (ex.: holograma da empresa girando na palma).
 7. `npx hyperframes lint` → `check` → `snapshot --at <cues>` → revisar os frames → `render --quality delivery`.
 8. Verificar o MP4: duração, 1080×1920, ~-14 LUFS. Revisar um contact sheet do render.
 

@@ -114,3 +114,10 @@ npx --yes hyperframes@0.8.139 check
 npx --yes hyperframes@0.8.139 preview
 npm run render
 ```
+
+## 11. Versões (treino de edição)
+| Versão | Pasta | Linha de edição |
+| --- | --- | --- |
+| V1 | `./` | Cards de vidro escuro, congelamento P&B, 6 cards "B em todo lugar" |
+| V2 | `v2/` | Editorial: Montserrat + JetBrains Mono, textos nos cantos, ícones reais com setas desenhadas à mão, grão, cursor clicando no EP.02 |
+| V3 | `v3/` | Estúdio cinético: apresentador recortado (`hyperframes remove-background`) num estúdio preto, palavras gigantes atrás dele, prédio 3D em holograma preso à palma (`tools/track_hands.py` com MediaPipe), luz que apaga no "diferença", ícones orbitando por trás e pela frente do corpo |

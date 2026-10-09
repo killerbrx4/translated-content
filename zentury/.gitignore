@@ -1,7 +1,7 @@
 # Mídia pessoal e renders ficam fora do Git (repositório pode ser público)
 videos/*/assets/footage/
 videos/*/assets/audio/voice.*
-videos/*/assets/img/freeze.*
+videos/*/assets/img/freeze*
 videos/*/renders/
 videos/*/snapshots/
 videos/*/.hyperframes/
