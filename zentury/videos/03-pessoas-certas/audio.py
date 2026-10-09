@@ -1,5 +1,6 @@
 """Mix final: narração (frases nos tempos de timings.json) + trilha sintetizada com ducking sob a voz + SFX discretos. Saída -14 LUFS."""
-import json, subprocess, wave
+import json, os, subprocess, wave
+NOVOICE = os.environ.get("NOVOICE") == "1"  # NOVOICE=1: só trilha + SFX (sem narração, sem ducking)
 from pathlib import Path
 import numpy as np
 
@@ -63,6 +64,7 @@ while tb < T - 1.5:
 ve = np.abs(voice); win = int(0.12 * SR)
 ve = np.convolve(ve, np.ones(win) / win, "same")
 duck = 1 - 0.65 * np.clip(ve / 0.05, 0, 1)
+if NOVOICE: duck[:] = 1; voice[:] = 0
 music *= duck[:, None]
 
 # ---- SFX discretos ----
@@ -89,11 +91,12 @@ for f in (392.0, 493.88, 587.33): put(sfx, tone(f, 2.5, 1.2), L["l14"]["start"],
 
 mix = music + sfx + np.stack([voice, voice], 1)
 mix = np.tanh(mix * 0.95).astype(np.float32)
+NAME = "mix-sem-voz.wav" if NOVOICE else "mix.wav"
 out = HERE / "assets/audio"; raw = out / "raw.wav"
 subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "f32le", "-ar", str(SR), "-ac", "2", "-i", "-", str(raw)], input=mix.tobytes(), check=True)
 m = subprocess.run(["ffmpeg", "-hide_banner", "-i", str(raw), "-af", "loudnorm=I=-14:TP=-1.5:LRA=11:print_format=json", "-f", "null", "-"], capture_output=True, text=True).stderr
 j = json.loads(m[m.rindex("{"):m.rindex("}") + 1])
 af = (f"loudnorm=I=-14:TP=-1.5:LRA=11:measured_I={j['input_i']}:measured_TP={j['input_tp']}:measured_LRA={j['input_lra']}"
       f":measured_thresh={j['input_thresh']}:offset={j['target_offset']}:linear=true")
-subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(raw), "-af", af, "-ar", str(SR), str(out / "mix.wav")], check=True)
-raw.unlink(); print("mix ->", out / "mix.wav")
+subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(raw), "-af", af, "-ar", str(SR), str(out / NAME)], check=True)
+raw.unlink(); print("mix ->", out / NAME)
