@@ -85,6 +85,20 @@
    "tag": "COBERTURAS"
   },
   {
+   "id": "c6b",
+   "src": [
+    49.6,
+    50.939
+   ],
+   "zoom": [
+    1.06,
+    1.12
+   ],
+   "note": "5 · caixa: o copo vai para a balança",
+   "mute": true,
+   "tag": "PAGUE PELO PESO"
+  },
+  {
    "id": "c7",
    "src": [
     51.6,
