@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Jolie · Desafio PhotoCraft</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Montserrat"; src: url("assets/fonts/montserrat-latin-700-normal.woff2") format("woff2"); font-weight: 700; }
+      @font-face { font-family: "Montserrat"; src: url("assets/fonts/montserrat-latin-900-normal.woff2") format("woff2"); font-weight: 900; }
+      :root { --navy: #0b1d47; --red: #e61a27; --orange: #f39a1e; --cream: #f6ece3; --white: #fff; --acai: #5a1a6e; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #000; font-family: "Montserrat", sans-serif; font-weight: 900; color: var(--white); }
+      .ic { width: 1em; height: 1em; display: inline-block; vertical-align: -0.14em; }
+      #cam { position: absolute; inset: 0; transform-origin: 50% 45%; }
+      .shot { position: absolute; inset: 0; width: 1080px; height: 1920px; object-fit: cover; }
+      #shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to bottom, rgba(11,29,71,0.6) 0%, rgba(11,29,71,0) 30%, rgba(11,29,71,0) 58%, rgba(11,29,71,0.4) 84%, rgba(11,29,71,0.2) 100%); }
+
+      .cap { position: absolute; left: 70px; right: 70px; text-align: center; font-size: 72px; line-height: 1.22; letter-spacing: -0.015em; }
+      .cw { display: inline-block; color: var(--white); -webkit-text-stroke: 12px var(--navy); paint-order: stroke fill; opacity: 0; text-shadow: 0 6px 18px rgba(0,0,0,0.35); }
+      .cw.k { -webkit-text-stroke: 0; padding: 0 18px 4px; border-radius: 20px; background: var(--red); text-shadow: none; box-shadow: 0 10px 0 rgba(11,29,71,0.9); }
+      .cw.k.acai { background: var(--acai); box-shadow: 0 10px 0 #2c0a37; }
+
+      .hl { position: absolute; left: 66px; top: 200px; width: 948px; font-size: 100px; line-height: 1.04; letter-spacing: -0.04em; text-transform: uppercase; opacity: 0; }
+      .hl .t { color: var(--white); -webkit-text-stroke: 16px var(--navy); paint-order: stroke fill; }
+      .pill { display: inline-block; padding: 0 24px 6px; border-radius: 26px; color: var(--white); box-shadow: 0 12px 0 rgba(11,29,71,0.85); white-space: nowrap; }
+      .pill.red { background: var(--red); }
+      #h1 { opacity: 1; }
+
+      /* palco roxo (mesma luz do pôster feito no PhotoCraft) */
+      #stage { position: absolute; inset: 0; opacity: 0; background: radial-gradient(circle at 50% 50%, #a14cc0 0%, #6a2483 45%, #2a0838 100%); }
+      #s-title { position: absolute; left: 0; right: 0; top: 330px; text-align: center; font-size: 290px; line-height: 1; letter-spacing: -0.05em; color: var(--cream); text-shadow: 0 14px 0 #1a0623; }
+      #s-sub { position: absolute; left: 0; right: 0; top: 650px; text-align: center; font-size: 104px; letter-spacing: -0.03em; color: var(--orange); text-shadow: 0 10px 0 #1a0623; opacity: 0; }
+      .stk { position: absolute; left: 50%; top: 1150px; transform-origin: 50% 50%; }
+      #puro { width: 700px; margin-left: -350px; margin-top: -276px; opacity: 0; }
+      #full { width: 820px; margin-left: -410px; margin-top: -387px; opacity: 0; }
+      .spark { position: absolute; width: 70px; height: 70px; color: var(--cream); opacity: 0; }
+
+      /* contador 1-2-3 sobre a filmagem real */
+      #count { position: absolute; left: 0; right: 0; top: 220px; display: flex; justify-content: center; gap: 26px; }
+      .cn { width: 150px; height: 150px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 84px; color: var(--cream); background: rgba(11,29,71,0.6); border: 6px dashed rgba(246,236,227,0.85); opacity: 0; }
+      .cn.on { border: 6px solid var(--white); color: var(--navy); }
+      #cn-l { position: absolute; left: 0; right: 0; top: 410px; text-align: center; opacity: 0; }
+      #cn-l span { display: inline-block; padding: 8px 28px 12px; border-radius: 22px; background: var(--orange); color: var(--navy); font-size: 50px; text-transform: uppercase; box-shadow: 0 10px 0 rgba(11,29,71,0.8); }
+
+      /* pôster do PhotoCraft: fundo (PSD sem o adesivo) + adesivo que cai no lugar */
+      #poster { position: absolute; inset: 0; opacity: 0; }
+      #poster img.bg { position: absolute; inset: 0; width: 1080px; height: 1920px; }
+      #p-stk { position: absolute; left: 540px; top: 1262px; width: 870px; margin-left: -435px; margin-top: -410px; opacity: 0; }
+
+      #cta { position: absolute; inset: 0; opacity: 0; }
+      #cta img.bg { position: absolute; inset: 0; width: 1080px; height: 1920px; filter: brightness(0.3) blur(22px); transform: scale(1.15); }
+      #logo { position: absolute; left: 330px; top: 380px; width: 420px; height: 420px; opacity: 0; filter: drop-shadow(0 18px 0 rgba(26,6,35,0.7)); }
+      #end { position: absolute; left: 0; right: 0; top: 960px; text-align: center; opacity: 0; }
+      #end-k { font-size: 64px; color: var(--cream); letter-spacing: -0.02em; }
+      #btn { position: relative; display: inline-flex; align-items: center; gap: 22px; margin-top: 26px; padding: 34px 64px; border-radius: 999px; background: var(--red); font-size: 76px; letter-spacing: -0.02em; box-shadow: 0 16px 0 #7d0b12; }
+      #btn .ic { font-size: 70px; }
+      #ripple { position: absolute; left: 50%; top: 50%; width: 120px; height: 120px; margin: -60px 0 0 -60px; border-radius: 50%; border: 8px solid var(--cream); opacity: 0; }
+      #hand { position: absolute; left: 790px; top: 1080px; font-size: 150px; color: var(--white); filter: drop-shadow(0 10px 0 rgba(11,29,71,0.9)); opacity: 0; }
+      #hand .ic { fill: var(--white); stroke: var(--navy); stroke-width: 1.4; }
+      #end-a { margin-top: 56px; font-size: 44px; font-weight: 700; color: var(--cream); }
+      #end-a b { color: var(--orange); font-weight: 900; }
+      #flash { position: absolute; inset: 0; background: var(--cream); opacity: 0; pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="17.57" data-width="1080" data-height="1920">
+      <div id="cam">
+        <video id="v1" class="shot clip" src="assets/footage/tour.mp4" muted playsinline data-start="0.0" data-duration="1.8" data-media-start="2.95" data-track-index="0"></video>
+        <video id="v2" class="shot clip" src="assets/footage/tour.mp4" muted playsinline data-start="1.8" data-duration="0.47" data-media-start="13.2" data-track-index="1"></video>
+        <video id="v3" class="shot clip" src="assets/footage/tour.mp4" muted playsinline data-start="2.27" data-duration="0.47" data-media-start="23.3" data-track-index="0"></video>
+        <video id="v4" class="shot clip" src="assets/footage/tour.mp4" muted playsinline data-start="2.74" data-duration="0.46" data-media-start="29.5" data-track-index="1"></video>
+        <video id="v5" class="shot clip" src="assets/footage/acai.mp4" muted playsinline data-start="6.6" data-duration="3.4" data-media-start="9.22" data-track-index="0"></video>
+        <video id="v6" class="shot clip" src="assets/footage/acai.mp4" muted playsinline data-start="10.0" data-duration="2.07" data-media-start="14.35" data-track-index="1"></video>
+      </div>
+      <div id="shade"></div>
+      <div class="hl" id="h1"><span class="t">Você gosta</span><br /><span class="t">de</span> <span class="pill red" id="h1-p">sorvete?</span></div>
+
+      <div id="stage">
+        <div id="s-title">AÇAÍ</div>
+        <div id="s-sub">DO SEU JEITO</div>
+        <img class="stk" id="puro" src="assets/photocraft/puro-sticker.png" alt="" />
+        <img class="stk" id="full" src="assets/photocraft/acai-sticker.png" alt="" />
+      </div>
+      <div id="sparks"></div>
+
+      <div id="count"><div class="cn" id="n1">1</div><div class="cn" id="n2">2</div><div class="cn" id="n3">3</div></div>
+      <div id="cn-l"><span>+ 3 acompanhamentos</span></div>
+      <div class="hl" id="h6"><span class="t">Vem montar</span><br /><span class="pill red" id="h6-p">o seu!</span></div>
+
+      <div class="cap clip" id="cap1" style="top:1530px" data-start="1.81" data-duration="1.76" data-track-index="9"><span id="w1_0" class="cw">Então</span> <span id="w1_1" class="cw">é</span> <span id="w1_2" class="cw">porque</span> <span id="w1_3" class="cw">você</span> <span id="w1_4" class="cw">ainda</span> <span id="w1_5" class="cw">não</span> <span id="w1_6" class="cw">viu</span> <span id="w1_7" class="cw">nosso</span> <span id="w1_8" class="cw k acai">açaí.</span></div>
+      <div class="cap clip" id="cap2" style="top:1530px" data-start="3.76" data-duration="1.46" data-track-index="9"><span id="w2_0" class="cw">E</span> <span id="w2_1" class="cw">o</span> <span id="w2_2" class="cw">melhor</span> <span id="w2_3" class="cw">é</span> <span id="w2_4" class="cw">que</span> <span id="w2_5" class="cw">você</span></div>
+      <div class="cap clip" id="cap3" style="top:1530px" data-start="5.24" data-duration="1.28" data-track-index="9"><span id="w3_0" class="cw">pode</span> <span id="w3_1" class="cw k">montar</span> <span id="w3_2" class="cw">do</span> <span id="w3_3" class="cw">seu</span> <span id="w3_4" class="cw k">jeito.</span></div>
+      <div class="cap clip" id="cap4" style="top:1300px" data-start="6.6" data-duration="1.66" data-track-index="9"><span id="w4_0" class="cw">Escolha</span> <span id="w4_1" class="cw">o</span> <span id="w4_2" class="cw">seu</span> <span id="w4_3" class="cw k acai">açaí</span></div>
+      <div class="cap clip" id="cap5" style="top:1300px" data-start="8.28" data-duration="1.72" data-track-index="9"><span id="w5_0" class="cw">e</span> <span id="w5_1" class="cw">seus</span> <span id="w5_2" class="cw k">três</span> <span id="w5_3" class="cw">acompanhamentos.</span></div>
+      <div class="cap clip" id="cap6" style="top:1250px" data-start="10.11" data-duration="1.96" data-track-index="9"><span id="w6_0" class="cw">Então</span> <span id="w6_1" class="cw">vem</span> <span id="w6_2" class="cw">montar</span> <span id="w6_3" class="cw">o</span> <span id="w6_4" class="cw">seu</span> <span id="w6_5" class="cw">na</span> <span id="w6_6" class="cw k">Jolie!</span></div>
+
+      <div id="poster"><img class="bg" src="assets/photocraft/jolie-acai-story-fundo.png" alt="" /><img id="p-stk" src="assets/photocraft/acai-sticker.png" alt="" /></div>
+      <div id="cta">
+        <img class="bg" src="assets/photocraft/jolie-acai-story-fundo.png" alt="" />
+        <img id="logo" src="assets/photocraft/logo-jolie.png" alt="Jolie" />
+        <div id="end">
+          <div id="end-k">Toque em</div>
+          <div id="btn"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="3 11 22 2 13 21 11 13 3 11" /></svg><span id="btn-l">Como chegar</span><div id="ripple"></div></div>
+          <div id="end-a">CLN 407, Bloco A · <b>Asa Norte</b></div>
+        </div>
+        <div id="hand"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 14a8 8 0 0 1-8 8" />
+  <path d="M18 11v-1a2 2 0 0 0-2-2a2 2 0 0 0-2 2" />
+  <path d="M14 10V9a2 2 0 0 0-2-2a2 2 0 0 0-2 2v1" />
+  <path d="M10 9.5V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v10" />
+  <path d="M18 11a2 2 0 1 1 4 0v3a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15" /></svg></div>
+      </div>
+      <div id="flash"></div>
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="17.57" data-track-index="20"></audio>
+    </div>
+
+    <script>
+      const CONFIG = { cta: "Como chegar" };
+      document.getElementById("btn-l").textContent = CONFIG.cta;
+      const T = {"total": 17.57, "shots": {"v1": [0.0, 1.8, [1.16, 1.04]], "v2": [1.8, 0.47, [1.1, 1.14]], "v3": [2.27, 0.47, [1.06, 1.12]], "v4": [2.74, 0.46, [1.08, 1.12]], "v5": [6.6, 3.4, [1.04, 1.16]], "v6": [10.0, 2.07, [1.04, 1.08]]}, "words": [{"id": "w0_0", "t": 0.55, "k": false}, {"id": "w0_1", "t": 0.71, "k": false}, {"id": "w0_2", "t": 0.97, "k": false}, {"id": "w0_3", "t": 1.11, "k": true}, {"id": "w1_0", "t": 1.87, "k": false}, {"id": "w1_1", "t": 1.97, "k": false}, {"id": "w1_2", "t": 2.11, "k": false}, {"id": "w1_3", "t": 2.43, "k": false}, {"id": "w1_4", "t": 2.61, "k": false}, {"id": "w1_5", "t": 2.77, "k": false}, {"id": "w1_6", "t": 2.93, "k": false}, {"id": "w1_7", "t": 3.17, "k": false}, {"id": "w1_8", "t": 3.27, "k": true}, {"id": "w2_0", "t": 3.82, "k": false}, {"id": "w2_1", "t": 3.92, "k": false}, {"id": "w2_2", "t": 4.14, "k": false}, {"id": "w2_3", "t": 4.52, "k": false}, {"id": "w2_4", "t": 4.66, "k": false}, {"id": "w2_5", "t": 5.04, "k": false}, {"id": "w3_0", "t": 5.3, "k": false}, {"id": "w3_1", "t": 5.56, "k": true}, {"id": "w3_2", "t": 5.82, "k": false}, {"id": "w3_3", "t": 5.96, "k": false}, {"id": "w3_4", "t": 6.22, "k": true}, {"id": "w4_0", "t": 6.66, "k": false}, {"id": "w4_1", "t": 7.0, "k": false}, {"id": "w4_2", "t": 7.12, "k": false}, {"id": "w4_3", "t": 7.32, "k": true}, {"id": "w5_0", "t": 8.34, "k": false}, {"id": "w5_1", "t": 8.6, "k": false}, {"id": "w5_2", "t": 8.8, "k": true}, {"id": "w5_3", "t": 9.16, "k": false}, {"id": "w6_0", "t": 10.17, "k": false}, {"id": "w6_1", "t": 10.47, "k": false}, {"id": "w6_2", "t": 10.75, "k": false}, {"id": "w6_3", "t": 11.01, "k": false}, {"id": "w6_4", "t": 11.17, "k": false}, {"id": "w6_5", "t": 11.37, "k": false}, {"id": "w6_6", "t": 11.53, "k": true}], "stage": [3.2, 6.6], "poster": [12.07, 14.67], "cta": [14.67, 17.57], "sorvete": 1.11, "acai": 3.27, "montar": 5.56, "jeito": 6.22, "acai2": 7.32, "tres": 8.8, "acomp": 9.16, "vem": 10.47, "jolie": 11.53};
+      // brilhos (posições fixas, determinísticas) em volta do adesivo
+      const SP = [[130, 840, 80], [880, 780, 64], [950, 1380, 50], [100, 1420, 56], [300, 740, 40], [760, 1500, 44], [520, 700, 36], [990, 1080, 40]];
+      const box = document.getElementById("sparks");
+      SP.forEach(([x, y, s], i) => { box.insertAdjacentHTML("beforeend", `<svg class="spark" id="sp${i}" style="left:${x}px;top:${y}px;width:${s}px;height:${s}px" viewBox="0 0 24 24"><path fill="currentColor" d="M12 0 L14.2 9.8 L24 12 L14.2 14.2 L12 24 L9.8 14.2 L0 12 L9.8 9.8 Z"/></svg>`); });
+
+      const tl = gsap.timeline({ paused: true });
+      const ir = { immediateRender: false };
+      const flash = (t, a = 0.6) => tl.fromTo("#flash", { opacity: 0 }, { opacity: a, duration: 0.05, ...ir }, t - 0.03).to("#flash", { opacity: 0, duration: 0.3, ease: "power2.out" }, t + 0.03);
+
+      // ---- câmera nos trechos filmados ----
+      Object.entries(T.shots).forEach(([id, [s, d, z]]) => {
+        tl.fromTo("#cam", { scale: z[0] }, { scale: z[1], duration: d, ease: id === "v1" ? "expo.out" : "none", ...ir }, s);
+      });
+
+      // ---- legendas ----
+      T.words.forEach((w) => {
+        if (!document.getElementById(w.id)) return;
+        tl.fromTo("#" + w.id, { opacity: 0, scale: w.k ? 0.7 : 0.88 }, { opacity: 1, scale: 1, duration: w.k ? 0.22 : 0.14, ease: w.k ? "back.out(1.6)" : "power2.out", ...ir }, w.t - 0.04);
+      });
+
+      // ---- 1 · gancho ----
+      tl.fromTo("#h1", { y: -30 }, { y: 0, duration: 0.5, ease: "expo.out", ...ir }, 0)
+        .fromTo("#h1-p", { scale: 1 }, { scale: 1.14, duration: 0.12, yoyo: true, repeat: 1, ease: "power1.out", ...ir }, T.sorvete - 0.06)
+        .to("#h1", { y: -420, opacity: 0, duration: 0.25, ease: "power3.in" }, 1.72);
+
+      // ---- 2 · palco roxo: "nosso AÇAÍ" → adesivo do açaí puro (recorte PhotoCraft) ----
+      const s0 = T.stage[0];
+      flash(s0, 0.7);
+      tl.fromTo("#stage", { opacity: 0 }, { opacity: 1, duration: 0.05, ...ir }, s0)
+        .fromTo("#s-title", { scale: 2.4, opacity: 0, filter: "blur(24px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.4, ease: "expo.out", ...ir }, s0)
+        .fromTo("#puro", { opacity: 0, y: 700, rotation: -18, scale: 0.6 }, { opacity: 1, y: 0, rotation: -4, scale: 1, duration: 0.5, ease: "back.out(1.4)", ...ir }, s0 + 0.12)
+        .fromTo("#puro", { y: 0 }, { y: -18, duration: 0.6, yoyo: true, repeat: 2, ease: "sine.inOut", ...ir }, s0 + 0.65);
+      // "montar": o açaí puro gira e vira o açaí montado
+      tl.to("#puro", { scale: 0.2, rotation: 200, opacity: 0, duration: 0.28, ease: "power3.in" }, T.montar - 0.18)
+        .fromTo("#full", { opacity: 0, scale: 0.2, rotation: -200 }, { opacity: 1, scale: 1, rotation: -3, duration: 0.45, ease: "back.out(1.5)", ...ir }, T.montar + 0.08)
+        .fromTo("#full", { y: 0 }, { y: -16, duration: 0.55, yoyo: true, repeat: 1, ease: "sine.inOut", ...ir }, T.montar + 0.55);
+      SP.forEach((_, i) => {
+        tl.fromTo("#sp" + i, { opacity: 0, scale: 0, rotation: -60 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.28, ease: "back.out(2)", ...ir }, T.montar + 0.12 + i * 0.04)
+          .to("#sp" + i, { opacity: 0, scale: 0.3, rotation: 60, duration: 0.3 }, T.stage[1] - 0.25);
+      });
+      tl.fromTo("#s-sub", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(1.7)", ...ir }, T.jeito - 0.06)
+        .to("#stage", { opacity: 0, duration: 0.12 }, T.stage[1] - 0.06);
+
+      // ---- 3 · filmagem real: 1 · 2 · 3 acompanhamentos ----
+      ["#n1", "#n2", "#n3"].forEach((s, i) => tl.fromTo(s, { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.25, ease: "back.out(1.7)", ...ir }, T.acai2 + 0.1 + i * 0.08));
+      [["#n1", "#f6c945"], ["#n2", "#e2263a"], ["#n3", "#7cb342"]].forEach(([s, c], i) => {
+        const t = T.tres - 0.05 + i * 0.3;
+        tl.set(s, { className: "cn on", backgroundColor: c }, t)
+          .fromTo(s, { scale: 1 }, { scale: 1.18, duration: 0.1, yoyo: true, repeat: 1, ...ir }, t);
+      });
+      tl.fromTo("#cn-l", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.25, ease: "power3.out", ...ir }, T.acomp + 0.1)
+        .to(["#count", "#cn-l"], { opacity: 0, y: -60, duration: 0.22 }, T.shots.v6[0] - 0.15);
+
+      // ---- 4 · "Vem montar o seu!" ----
+      tl.fromTo("#h6", { opacity: 0, x: -1000 }, { opacity: 1, x: 0, duration: 0.3, ease: "power3.out", ...ir }, T.vem - 0.25)
+        .fromTo("#h6-p", { scale: 1 }, { scale: 1.12, duration: 0.12, yoyo: true, repeat: 1, ...ir }, T.jolie - 0.05)
+        .to("#h6", { x: -1000, duration: 0.25, ease: "power3.in" }, T.poster[0] - 0.12);
+
+      // ---- 5 · pôster do PhotoCraft: o adesivo cai no lugar ----
+      const p0 = T.poster[0];
+      flash(p0, 0.5);
+      tl.fromTo("#poster", { opacity: 0 }, { opacity: 1, duration: 0.05, ...ir }, p0)
+        .fromTo("#poster img.bg", { scale: 1.08 }, { scale: 1.0, duration: T.poster[1] - p0, ease: "power2.out", ...ir }, p0)
+        .fromTo("#p-stk", { opacity: 1, y: -1500, rotation: -25 }, { opacity: 1, y: 0, rotation: 0, duration: 0.5, ease: "back.out(1.2)", ...ir }, p0 + 0.25)
+        .fromTo("#p-stk", { scaleY: 1 }, { scaleY: 0.92, duration: 0.08, yoyo: true, repeat: 1, ...ir }, p0 + 0.74);
+
+      // ---- 6 · CTA ----
+      const e0 = T.cta[0];
+      tl.fromTo("#cta", { opacity: 0 }, { opacity: 1, duration: 0.25, ...ir }, e0)
+        .fromTo("#logo", { opacity: 0, scale: 1.6, rotation: -10 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.32, ease: "power4.in", ...ir }, e0 + 0.1)
+        .fromTo("#end", { opacity: 0, y: 80 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", ...ir }, e0 + 0.35)
+        .fromTo("#hand", { opacity: 0, x: 220, y: 260 }, { opacity: 1, x: 0, y: 0, duration: 0.45, ease: "power3.out", ...ir }, e0 + 0.8)
+        .fromTo("#hand", { scale: 1 }, { scale: 0.86, duration: 0.09, yoyo: true, repeat: 1, ease: "power1.inOut", ...ir }, e0 + 1.35)
+        .fromTo("#btn", { scale: 1 }, { scale: 0.94, duration: 0.09, yoyo: true, repeat: 1, ease: "power1.inOut", ...ir }, e0 + 1.35)
+        .fromTo("#ripple", { opacity: 0.9, scale: 0.5 }, { opacity: 0, scale: 5, duration: 0.6, ease: "power2.out", ...ir }, e0 + 1.41)
+        .fromTo("#btn", { scale: 1 }, { scale: 1.04, duration: 0.5, yoyo: true, repeat: 1, ease: "sine.inOut", ...ir }, e0 + 1.65);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

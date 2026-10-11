@@ -9,3 +9,7 @@ node_modules/
 videos/*/assets/audio/mix*.wav
 videos/*/assets/audio/lines/
 videos/*/assets/img/cartao*
+videos/*/assets/photocraft/
+videos/*/photocraft/*.psd
+videos/*/photocraft/*.png
+videos/*/assets/audio/voice-*
