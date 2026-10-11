@@ -33,7 +33,7 @@ def tone(f, dur, d=0.25, a=0.004, kind="sin"):
 def noise(dur, d=0.03):
     n = int(dur * SR); x = np.diff(rng.standard_normal(n + 1)).astype(np.float32); return x * env(n, 0.001, d)
 
-music = np.zeros((N, 2), np.float32); sfx = np.zeros((N, 2), np.float32)
+drums = np.zeros((N, 2), np.float32); music = np.zeros((N, 2), np.float32); sfx = np.zeros((N, 2), np.float32)
 def put(buf, sig, t, g=1.0, pan=0.0):
     i0 = int(t * SR)
     if i0 < 0 or i0 >= N: return
@@ -49,13 +49,21 @@ def pluck(f): return mixs(tone(f, 0.4, 0.16), 0.3 * tone(f * 2, 0.3, 0.08))
 t = 0.0; k = 0
 while t < TOTAL - 0.2:
     bar = k // 4; ch = CH[bar % 4]; beat_in_bar = k % 4
-    put(music, kick(), t, 0.55)
-    if beat_in_bar in (1, 3): put(music, clap(), t, 0.22, 0.1)
+    put(drums, kick(), t, 0.55)
+    if beat_in_bar in (1, 3): put(drums, clap(), t, 0.22, 0.1)
     for h in (0, 0.5): put(music, noise(0.05, 0.01) * 0.5, t + h * BEAT + BEAT / 4, 0.18, -0.4 + 0.8 * h)
-    if beat_in_bar == 0: put(music, tone(BASS[bar % 4], BAR, 0.9, 0.01), t, 0.30)
+    if beat_in_bar == 0: put(drums, tone(BASS[bar % 4], BAR, 0.9, 0.01), t, 0.30)
     for j, f in enumerate(ch): put(music, pluck(f), t + BEAT / 2 + j * 0.012, 0.09, (-0.3, 0, 0.3)[j])
     if beat_in_bar == 2: put(music, pluck(ch[-1] * 2), t + BEAT * 0.75, 0.05, 0.4)
     t += BEAT; k += 1
+# drop: bateria e baixo só entram no carimbo do 10% (momento-chave); antes, só pluck + shaker
+html = (HERE / "index.html").read_text()
+T = json.loads(html.split("const T = ", 1)[1].split(";\n", 1)[0])
+gate = (np.arange(N) / SR >= T["dez"] - 0.02).astype(np.float32)[:, None]
+music += drums * gate
+rn = int(0.9 * SR); rt = np.arange(rn) / SR
+riser = (np.convolve(rng.standard_normal(rn), np.ones(12) / 12, "same") * (rt / 0.9) ** 3 * 0.6 + np.sin(2 * np.pi * (300 + 900 * (rt / 0.9) ** 2) * rt) * (rt / 0.9) ** 2 * 0.12).astype(np.float32)
+put(music, riser, T["dez"] - 0.9, 0.5)
 fade = np.minimum(1, np.arange(N) / SR / 0.3)[:, None] * np.minimum(1, (TOTAL - np.arange(N) / SR) / 0.6)[:, None]
 music *= fade
 
@@ -64,8 +72,6 @@ ve = np.convolve(np.abs(voice), np.ones(int(0.1 * SR)) / int(0.1 * SR), "same")
 music *= (1 - 0.7 * np.clip(ve / 0.04, 0, 1))[:, None]
 
 # ---- SFX presos aos grafismos (mesmos gatilhos do index.html) ----
-html = (HERE / "index.html").read_text()
-T = json.loads(html.split("const T = ", 1)[1].split(";\n", 1)[0])
 def pop(f=650): n = int(0.11 * SR); tt = np.arange(n) / SR; return (np.sin(2 * np.pi * (f + 900 * tt) * tt) * env(n, 0.002, 0.04)).astype(np.float32)
 def thump(): n = int(0.4 * SR); tt = np.arange(n) / SR; return (np.sin(2 * np.pi * (120 - 80 * tt) * tt) * env(n, 0.002, 0.14)).astype(np.float32)
 def whoosh(d=0.35):
@@ -82,6 +88,11 @@ put(sfx, whoosh(0.4), T["cuts"]["c6"][0] - 0.1, 0.12)
 c8 = T["cuts"]["card"][0]
 for f in (523.25, 659.25, 783.99, 1046.5): put(sfx, tone(f, 2.4, 0.9), c8, 0.08)
 put(sfx, sparkle(), c8 + 0.05, 0.12)
+if "cta" in T["cuts"]:  # V2: carimbo do selo + clique no botão
+    e0 = T["cuts"]["cta"][0]
+    put(sfx, whoosh(0.3), e0, 0.12); put(sfx, thump(), e0 + 0.33, 0.6)
+    put(sfx, mixs(noise(0.03, 0.006) * 0.8, tone(2400, 0.03, 0.008) * 0.5), e0 + 1.3, 0.8)
+    for i, f in enumerate((783.99, 1046.5, 1318.5)): put(sfx, tone(f, 1.2, 0.5), e0 + 1.36 + i * 0.07, 0.10)
 
 mix = np.tanh((music + sfx + voice[:, None]) * 0.95).astype(np.float32)
 out = HERE / "assets/audio"; raw = out / "raw.wav"

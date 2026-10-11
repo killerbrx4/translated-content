@@ -1,10 +1,13 @@
 """Gera index.html a partir de edl.json + src/template.html.
-Uso: python3 -I src/build.py <pasta-do-projeto>"""
+Uso: python3 -I src/build.py <pasta> [edl.json] [src/template.html]
+   V2: python3 -I src/build.py . edl-v2.json src/template-v2.html"""
 import json, math, re, sys, pathlib
 
 P = pathlib.Path(sys.argv[1])
 A = P / "assets"
-E = json.load(open(P / "edl.json"))
+EDL = sys.argv[2] if len(sys.argv) > 2 else "edl.json"
+TPL = sys.argv[3] if len(sys.argv) > 3 else "src/template.html"
+E = json.load(open(P / EDL))
 
 # ---- linha do tempo de saída ----
 t = 0.0; cuts = {}
@@ -34,6 +37,7 @@ for i, ph in enumerate(E["phrases"]):
         wid = f"w{i}_{j}"; cls = "cw k" if len(w) > 2 else "cw"
         spans.append(f'<span id="{wid}" class="{cls}">{w[0]}</span>')
         words.append({"id": wid, "t": out(w[1], ph["cut"]), "k": len(w) > 2})
+    if ph.get("nocap"): continue  # V2: frase já está no título fixo do topo
     caps.append(f'<div class="cap clip" id="cap{i}" style="top:{ph["y"]}px" data-start="{round(max(0, s), 3)}" data-duration="{round(e - max(0, s), 3)}" data-track-index="9">{" ".join(spans)}</div>')
 
 # ---- selo 10% (borda ondulada como o selo do logo, desenhada aqui, não é o logo) ----
@@ -62,7 +66,7 @@ T = {
     "sul2": wt(6, 3), "norte2": wt(7, 3),
     "parar": wt(8, 5), "vontade": wt(9, 3),
 }
-tpl = (P / "src/template.html").read_text()
+tpl = (P / TPL).read_text()
 tpl = re.sub(r"\{\{lucide:([a-z-]+)(?::([a-z-]+))?\}\}", lambda m: lucide(m.group(1), m.group(2) or "ic"), tpl)
 html = (tpl.replace("__T__", json.dumps(T, ensure_ascii=False))
         .replace("__TOTAL__", str(TOTAL))

@@ -47,3 +47,25 @@ python3 -I src/build.py .              # index.html + timeline.json a partir de 
 python3 -I audio.py                    # mix -14 LUFS
 npx --yes hyperframes@0.8.139 render --quality delivery --output renders/jolie-desconto-v1.mp4
 ```
+
+---
+
+# V2: criativo de vendas (`renders/jolie-desconto-v2.mp4`, 26,1 s, 1080×1920, -14,0 LUFS)
+
+Pedido: "edite de forma profissional para ser um criativo de vendas… tem que ter uma boa conversão".
+Gerar: `python3 -I src/build.py . edl-v2.json src/template-v2.html && python3 -I audio.py` + render + loudnorm final.
+
+| O que mudou | Por que converte mais |
+|---|---|
+| **Título fixo no topo já no 1º quadro** ("MORA NA ASA SUL OU ASA NORTE?") + zoom de entrada | para o dedo antes da fala começar; segmenta o público pelo bairro no 1º segundo |
+| **Gramática da referência:** título no mesmo lugar, só a palavra troca ("TÁ PELA ASA SUL? → ASA NORTE?") | leitura sem som; o olho não precisa procurar |
+| **Oferta sempre visível:** o selo 10% bate no centro e vira adesivo no canto até o fim | quem entra no meio do vídeo também vê a oferta |
+| **Drop da música no carimbo do 10%** (antes só pluck; riser de 0,9 s) | o pico de energia cai no momento-chave da oferta |
+| "SUA PARADA CERTA:" + pino Jolie · Asa Norte | transforma a fala em destino concreto |
+| Arte do cliente 2 s (era 3 s) | menos tempo parado |
+| **Tela de CTA nova:** selo + "Toque em [Como chegar]" com a mão clicando e o endereço | espelha o botão real do anúncio; diz exatamente o que fazer (`CONFIG.cta` troca para "Enviar mensagem") |
+| Legendas duplicadas do título removidas; legenda da mesa abaixo do adesivo | uma informação por vez |
+
+Crítica V2: gancho 9 · legibilidade 8,5 · movimento 8,5 · variedade 9 · composição 8 · marca 8,5 · som 8,5.
+
+**Configuração recomendada no Gerenciador de Anúncios:** objetivo Tráfego/Reconhecimento com raio de 3–5 km da CLN 407 (Asa Norte + Asa Sul), botão "Como chegar"; se o pedido for por WhatsApp, objetivo Engajamento → mensagens e `CONFIG.cta = "Enviar mensagem"`. Testar V1 × V2 com o mesmo público e orçamento por 3–4 dias antes de escalar.
