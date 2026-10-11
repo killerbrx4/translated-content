@@ -71,3 +71,14 @@ Primeira mensagem, antes do código: duração · formato mestre e derivados (9:
 
 ## Entrega (checklist)
 ☐ 7 peças feitas ☐ estados aprovados ☐ notas ≥ 8 ☐ 0 erros no `check` ☐ drop no momento-chave ☐ -14 LUFS ☐ nada inventado ☐ legenda verdadeira ☐ versão registrada no BRIEF.md
+
+## Padrão "criativo de vendas local" (aprovado: Jolie V2, `zentury/videos/04-jolie-desconto/`)
+Para anúncios de cliente gravados pelo próprio cliente (fala + loja). Base técnica: `edl-v2.json` + `src/template-v2.html` + `src/build.py` + `audio.py`.
+1. Transcrever palavra a palavra (Whisper small via transformers.js; `NODE_USE_ENV_PROXY=1`) e cortar só o silêncio morto. O punch-in alternado esconde os jump cuts.
+2. **Título fixo no topo já no 1º quadro**, segmentando o público (bairro, dor, desejo). Depois disso, só a palavra troca.
+3. **Oferta sempre visível:** o selo entra como carimbo e vira adesivo no canto até o fim.
+4. **Drop da música na oferta** (antes só melodia; riser de 0,9 s). Ducking sob a voz, SFX em cada grafismo, -14 LUFS (loudnorm também no MP4 final).
+5. Cada fala concreta vira um grafismo (cardápio = cartões com ícone; "onde" = pino + endereço igual ao da arte do cliente).
+6. Arte do cliente sem alteração (≤ 2 s) → **tela de CTA espelhando o botão do anúncio** ("Como chegar" / "Enviar mensagem") com a mão clicando.
+7. Cores amostradas da arte do cliente. Nunca inventar condição de oferta: pedir validade/regras e listar em Pendências.
+8. Cada novo vídeo deve **melhorar um ponto em relação ao anterior** (registrar no BRIEF.md o que foi melhorado).
