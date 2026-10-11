@@ -1,0 +1,27 @@
+{
+  "source": "VIDEO-2026-10-11-00-42-25.mov (cliente: Jolie Sorveteria e Café, 576x1024, 30,4 s)",
+  "cuts": [
+    {"id": "c1", "src": [0.80, 4.10],  "zoom": [1.00, 1.04], "note": "corredor, gancho Asa Sul / Asa Norte"},
+    {"id": "c2", "src": [4.45, 8.10],  "zoom": [1.16, 1.19], "note": "punch-in no desconto"},
+    {"id": "c3", "src": [8.18, 11.00], "zoom": [1.00, 1.05], "note": "cardápio"},
+    {"id": "c4", "src": [11.30, 14.00], "zoom": [1.08, 1.12], "note": "closes solo (parque)"},
+    {"id": "c5", "src": [15.75, 19.93], "zoom": [1.00, 1.08], "note": "chegam juntas, 'onde parar'"},
+    {"id": "c6", "src": [20.35, 21.75], "zoom": [1.04, 1.10], "note": "fachada (sem fala)"},
+    {"id": "c7", "src": [22.60, 25.70], "zoom": [1.00, 1.06], "note": "mesa em frente à loja"},
+    {"id": "card", "img": "assets/img/cartao-jolie.png", "dur": 3.0, "zoom": [1.00, 1.03], "note": "arte final do cliente, sem alteração"}
+  ],
+  "phrases": [
+    {"cut": "c1", "y": 1250, "words": [["Você",0.92],["mora",1.16],["na",1.42],["Asa",1.56],["Sul",1.88,"k"],["ou",2.20],["na",2.34],["Asa",2.48],["Norte?",2.74,"k"]], "end": 3.10},
+    {"cut": "c1", "y": 1250, "words": [["Então",3.24],["essa",3.40],["é",3.50],["pra",3.62],["você.",3.86,"k"]], "end": 4.10},
+    {"cut": "c2", "y": 1250, "words": [["A",4.58],["Jolie",4.70],["está",5.02],["com",5.20],["10%",5.40,"k"],["de",5.92],["desconto",6.16]], "end": 6.58},
+    {"cut": "c2", "y": 1250, "words": [["pra",6.58],["você",6.88],["aproveitar!",7.16,"k"]], "end": 8.10},
+    {"cut": "c3", "y": 1250, "words": [["Nos",8.26],["sorvetes,",8.52,"k"],["no",9.18],["açaí",9.30,"k"]], "end": 9.80},
+    {"cut": "c3", "y": 1250, "words": [["e",9.80],["também",10.02],["no",10.16],["nosso",10.36],["café.",10.58,"k"]], "end": 11.00},
+    {"cut": "c4", "y": 1250, "words": [["Tá",11.42],["pela",11.58],["Asa",11.80],["Sul",12.20,"k"]], "end": 12.74},
+    {"cut": "c4", "y": 1250, "words": [["ou",12.74],["pela",12.94],["Asa",13.14],["Norte?",13.50,"k"]], "end": 14.00},
+    {"cut": "c5", "y": 1250, "words": [["Então",16.36],["você",16.72],["já",16.96],["sabe",17.26],["onde",17.50],["parar",17.74,"k"]], "end": 18.04},
+    {"cut": "c5", "y": 1250, "words": [["quando",18.04],["bater",18.40],["aquela",18.72],["vontade.",19.10,"k"]], "end": 19.93},
+    {"cut": "c7", "y": 330, "words": [["Porque",22.92],["coisa",23.30],["boa",23.66,"k"]], "end": 24.14},
+    {"cut": "c7", "y": 330, "words": [["tem",24.14],["que",24.28],["estar",24.46],["perto",24.74,"k"],["de",24.96,"k"],["você!",25.10,"k"]], "end": 25.70}
+  ]
+}

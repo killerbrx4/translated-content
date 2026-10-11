@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Jolie · 10% de desconto</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Montserrat"; src: url("assets/fonts/montserrat-latin-700-normal.woff2") format("woff2"); font-weight: 700; }
+      @font-face { font-family: "Montserrat"; src: url("assets/fonts/montserrat-latin-900-normal.woff2") format("woff2"); font-weight: 900; }
+      /* cores amostradas da arte do cliente */
+      :root { --navy: #0b1d47; --red: #e61a27; --orange: #f39a1e; --cream: #f6ece3; --white: #ffffff; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #000; font-family: "Montserrat", sans-serif; font-weight: 900; color: var(--white); }
+      .ic { width: 1em; height: 1em; display: inline-block; vertical-align: -0.14em; }
+
+      #cam { position: absolute; inset: 0; transform-origin: 50% 40%; }
+      .shot { position: absolute; inset: 0; width: 1080px; height: 1920px; object-fit: cover; }
+      /* leve escurecimento no topo e na base para os textos lerem sobre qualquer fundo */
+      #shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to bottom, rgba(11,29,71,0.35) 0%, rgba(11,29,71,0) 26%, rgba(11,29,71,0) 56%, rgba(11,29,71,0.45) 82%, rgba(11,29,71,0.2) 100%); }
+
+      /* ---- legendas ---- */
+      .cap { position: absolute; left: 70px; right: 70px; text-align: center; font-size: 74px; line-height: 1.22; letter-spacing: -0.015em; }
+      .cw { display: inline-block; color: var(--white); -webkit-text-stroke: 12px var(--navy); paint-order: stroke fill; opacity: 0; text-shadow: 0 6px 18px rgba(0,0,0,0.35); }
+      .cw.k { position: relative; -webkit-text-stroke: 0; padding: 0 18px 4px; border-radius: 20px; background: var(--red); text-shadow: none; box-shadow: 0 10px 0 rgba(11,29,71,0.9); }
+
+      /* ---- chips de bairro ---- */
+      .areas { position: absolute; left: 0; right: 0; top: 300px; display: flex; justify-content: center; gap: 26px; }
+      .area { display: flex; align-items: center; gap: 12px; padding: 22px 34px; border-radius: 999px; font-size: 52px; letter-spacing: -0.01em; box-shadow: 0 14px 0 rgba(0,0,0,0.25); opacity: 0; }
+      .area .ic { font-size: 50px; }
+      .area.sul { background: var(--navy); color: var(--white); border: 5px solid var(--white); }
+      .area.norte { background: var(--red); color: var(--white); border: 5px solid var(--white); }
+
+      /* ---- selo 10% ---- */
+      #seal { position: absolute; left: 280px; top: 170px; width: 520px; height: 520px; opacity: 0; }
+      #seal svg { position: absolute; inset: 0; width: 520px; height: 520px; }
+      #seal-txt { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--navy); }
+      #seal-n { font-size: 190px; line-height: 0.9; letter-spacing: -0.05em; }
+      #seal-n small { font-size: 110px; }
+      #seal-l { margin-top: 6px; font-size: 40px; font-weight: 700; color: var(--red); letter-spacing: 0.02em; text-transform: uppercase; }
+
+      /* ---- cardápio ---- */
+      #menu { position: absolute; left: 0; right: 0; top: 300px; display: flex; justify-content: center; gap: 22px; }
+      .item { display: flex; flex-direction: column; align-items: center; gap: 12px; width: 288px; padding: 30px 0 26px; border-radius: 40px; background: var(--cream); color: var(--navy); font-size: 46px; box-shadow: 0 14px 0 rgba(11,29,71,0.55); opacity: 0; }
+      .item .ic { font-size: 110px; color: var(--red); }
+
+      /* ---- pino + endereço ---- */
+      #pin { position: absolute; left: 0; right: 0; top: 230px; display: flex; flex-direction: column; align-items: center; opacity: 0; }
+      #pin-ic { font-size: 210px; color: var(--red); filter: drop-shadow(0 16px 0 rgba(11,29,71,0.6)); }
+      #pin-ic .ic { fill: var(--cream); stroke: var(--red); }
+      #pin-l { margin-top: 10px; padding: 18px 38px; border-radius: 999px; background: var(--cream); color: var(--navy); font-size: 52px; }
+      #pin-l b { color: var(--red); }
+      #addr { position: absolute; left: 90px; right: 90px; top: 1240px; padding: 40px 34px; border-radius: 44px; background: var(--navy); border: 5px solid var(--cream); text-align: center; opacity: 0; box-shadow: 0 18px 0 rgba(0,0,0,0.3); }
+      #addr-a { display: inline-block; padding: 12px 34px; border-radius: 22px; background: var(--red); font-size: 56px; }
+      #addr-l { margin-top: 20px; font-size: 48px; font-weight: 700; color: var(--cream); }
+
+      #flash { position: absolute; inset: 0; background: var(--cream); opacity: 0; pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="24.15" data-width="1080" data-height="1920">
+      <div id="cam">
+        <video id="c1" class="shot clip" src="assets/footage/jolie.mp4" muted playsinline data-start="0.0" data-duration="3.3" data-media-start="0.8" data-track-index="0"></video>
+        <video id="c2" class="shot clip" src="assets/footage/jolie.mp4" muted playsinline data-start="3.3" data-duration="3.65" data-media-start="4.45" data-track-index="1"></video>
+        <video id="c3" class="shot clip" src="assets/footage/jolie.mp4" muted playsinline data-start="6.95" data-duration="2.82" data-media-start="8.18" data-track-index="0"></video>
+        <video id="c4" class="shot clip" src="assets/footage/jolie.mp4" muted playsinline data-start="9.77" data-duration="2.7" data-media-start="11.3" data-track-index="1"></video>
+        <video id="c5" class="shot clip" src="assets/footage/jolie.mp4" muted playsinline data-start="12.47" data-duration="4.18" data-media-start="15.75" data-track-index="0"></video>
+        <video id="c6" class="shot clip" src="assets/footage/jolie.mp4" muted playsinline data-start="16.65" data-duration="1.4" data-media-start="20.35" data-track-index="1"></video>
+        <video id="c7" class="shot clip" src="assets/footage/jolie.mp4" muted playsinline data-start="18.05" data-duration="3.1" data-media-start="22.6" data-track-index="0"></video>
+        <img id="card" class="shot clip" src="assets/img/cartao-jolie.png" alt="" data-start="21.15" data-duration="3.0" data-track-index="1" />
+      </div>
+      <div id="shade"></div>
+
+      <!-- 1 · Asa Sul ou Asa Norte? -->
+      <div class="areas" id="areas">
+        <div class="area sul" id="a-sul"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
+  <circle cx="12" cy="10" r="3" /></svg> Asa Sul</div>
+        <div class="area norte" id="a-norte"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
+  <circle cx="12" cy="10" r="3" /></svg> Asa Norte</div>
+      </div>
+
+      <!-- 2 · selo 10% -->
+      <div id="seal">
+        <svg viewBox="0 0 520 520" aria-hidden="true">
+          <path d="M510.0,260.0 L509.3,264.4 L507.2,268.6 L503.9,272.8 L499.7,276.8 L495.1,280.6 L490.4,284.2 L486.1,287.8 L482.5,291.3 L479.9,294.8 L478.6,298.5 L478.6,302.5 L479.8,306.7 L481.9,311.2 L484.8,316.0 L488.0,321.1 L491.0,326.2 L493.6,331.4 L495.2,336.4 L495.7,341.2 L494.9,345.5 L492.8,349.3 L489.3,352.7 L484.8,355.4 L479.5,357.7 L473.9,359.7 L468.2,361.6 L462.9,363.4 L458.4,365.5 L454.8,368.0 L452.3,371.0 L450.9,374.7 L450.5,379.1 L451.0,384.1 L452.1,389.6 L453.3,395.4 L454.4,401.3 L455.0,407.0 L454.9,412.3 L453.8,416.9 L451.5,420.7 L448.2,423.6 L443.8,425.5 L438.6,426.6 L432.9,426.9 L426.9,426.9 L420.9,426.7 L415.3,426.6 L410.3,427.0 L406.1,428.1 L402.7,430.1 L400.1,433.1 L398.3,437.0 L397.1,441.9 L396.2,447.4 L395.4,453.3 L394.4,459.2 L393.0,464.8 L391.1,469.7 L388.4,473.7 L385.0,476.5 L380.9,478.1 L376.1,478.4 L370.9,477.6 L365.4,476.0 L359.7,473.9 L354.2,471.6 L349.0,469.7 L344.2,468.3 L339.8,467.9 L335.9,468.6 L332.5,470.6 L329.4,473.7 L326.6,477.8 L323.9,482.7 L321.1,488.0 L318.1,493.2 L314.9,498.0 L311.4,501.9 L307.6,504.7 L303.4,506.2 L299.0,506.2 L294.4,504.9 L289.8,502.4 L285.1,499.0 L280.6,495.1 L276.2,491.1 L271.9,487.5 L267.8,484.5 L263.9,482.7 L260.0,482.0 L256.1,482.7 L252.2,484.5 L248.1,487.5 L243.8,491.1 L239.4,495.1 L234.9,499.0 L230.2,502.4 L225.6,504.9 L221.0,506.2 L216.6,506.2 L212.4,504.7 L208.6,501.9 L205.1,498.0 L201.9,493.2 L198.9,488.0 L196.1,482.7 L193.4,477.8 L190.6,473.7 L187.5,470.6 L184.1,468.6 L180.2,467.9 L175.8,468.3 L171.0,469.7 L165.8,471.6 L160.3,473.9 L154.6,476.0 L149.1,477.6 L143.9,478.4 L139.1,478.1 L135.0,476.5 L131.6,473.7 L128.9,469.7 L127.0,464.8 L125.6,459.2 L124.6,453.3 L123.8,447.4 L122.9,441.9 L121.7,437.0 L119.9,433.1 L117.3,430.1 L113.9,428.1 L109.7,427.0 L104.7,426.6 L99.1,426.7 L93.1,426.9 L87.1,426.9 L81.4,426.6 L76.2,425.5 L71.8,423.6 L68.5,420.7 L66.2,416.9 L65.1,412.3 L65.0,407.0 L65.6,401.3 L66.7,395.4 L67.9,389.6 L69.0,384.1 L69.5,379.1 L69.1,374.7 L67.7,371.0 L65.2,368.0 L61.6,365.5 L57.1,363.4 L51.8,361.6 L46.1,359.7 L40.5,357.7 L35.2,355.4 L30.7,352.7 L27.2,349.3 L25.1,345.5 L24.3,341.2 L24.8,336.4 L26.4,331.4 L29.0,326.2 L32.0,321.1 L35.2,316.0 L38.1,311.2 L40.2,306.7 L41.4,302.5 L41.4,298.5 L40.1,294.8 L37.5,291.3 L33.9,287.8 L29.6,284.2 L24.9,280.6 L20.3,276.8 L16.1,272.8 L12.8,268.6 L10.7,264.4 L10.0,260.0 L10.7,255.6 L12.8,251.4 L16.1,247.2 L20.3,243.2 L24.9,239.4 L29.6,235.8 L33.9,232.2 L37.5,228.7 L40.1,225.2 L41.4,221.5 L41.4,217.5 L40.2,213.3 L38.1,208.8 L35.2,204.0 L32.0,198.9 L29.0,193.8 L26.4,188.6 L24.8,183.6 L24.3,178.8 L25.1,174.5 L27.2,170.7 L30.7,167.3 L35.2,164.6 L40.5,162.3 L46.1,160.3 L51.8,158.4 L57.1,156.6 L61.6,154.5 L65.2,152.0 L67.7,149.0 L69.1,145.3 L69.5,140.9 L69.0,135.9 L67.9,130.4 L66.7,124.6 L65.6,118.7 L65.0,113.0 L65.1,107.7 L66.2,103.1 L68.5,99.3 L71.8,96.4 L76.2,94.5 L81.4,93.4 L87.1,93.1 L93.1,93.1 L99.1,93.3 L104.7,93.4 L109.7,93.0 L113.9,91.9 L117.3,89.9 L119.9,86.9 L121.7,83.0 L122.9,78.1 L123.8,72.6 L124.6,66.7 L125.6,60.8 L127.0,55.2 L128.9,50.3 L131.6,46.3 L135.0,43.5 L139.1,41.9 L143.9,41.6 L149.1,42.4 L154.6,44.0 L160.3,46.1 L165.8,48.4 L171.0,50.3 L175.8,51.7 L180.2,52.1 L184.1,51.4 L187.5,49.4 L190.6,46.3 L193.4,42.2 L196.1,37.3 L198.9,32.0 L201.9,26.8 L205.1,22.0 L208.6,18.1 L212.4,15.3 L216.6,13.8 L221.0,13.8 L225.6,15.1 L230.2,17.6 L234.9,21.0 L239.4,24.9 L243.8,28.9 L248.1,32.5 L252.2,35.5 L256.1,37.3 L260.0,38.0 L263.9,37.3 L267.8,35.5 L271.9,32.5 L276.2,28.9 L280.6,24.9 L285.1,21.0 L289.8,17.6 L294.4,15.1 L299.0,13.8 L303.4,13.8 L307.6,15.3 L311.4,18.1 L314.9,22.0 L318.1,26.8 L321.1,32.0 L323.9,37.3 L326.6,42.2 L329.4,46.3 L332.5,49.4 L335.9,51.4 L339.8,52.1 L344.2,51.7 L349.0,50.3 L354.2,48.4 L359.7,46.1 L365.4,44.0 L370.9,42.4 L376.1,41.6 L380.9,41.9 L385.0,43.5 L388.4,46.3 L391.1,50.3 L393.0,55.2 L394.4,60.8 L395.4,66.7 L396.2,72.6 L397.1,78.1 L398.3,83.0 L400.1,86.9 L402.7,89.9 L406.1,91.9 L410.3,93.0 L415.3,93.4 L420.9,93.3 L426.9,93.1 L432.9,93.1 L438.6,93.4 L443.8,94.5 L448.2,96.4 L451.5,99.3 L453.8,103.1 L454.9,107.7 L455.0,113.0 L454.4,118.7 L453.3,124.6 L452.1,130.4 L451.0,135.9 L450.5,140.9 L450.9,145.3 L452.3,149.0 L454.8,152.0 L458.4,154.5 L462.9,156.6 L468.2,158.4 L473.9,160.3 L479.5,162.3 L484.8,164.6 L489.3,167.3 L492.8,170.7 L494.9,174.5 L495.7,178.8 L495.2,183.6 L493.6,188.6 L491.0,193.8 L488.0,198.9 L484.8,204.0 L481.9,208.8 L479.8,213.3 L478.6,217.5 L478.6,221.5 L479.9,225.2 L482.5,228.7 L486.1,232.2 L490.4,235.8 L495.1,239.4 L499.7,243.2 L503.9,247.2 L507.2,251.4 L509.3,255.6 L510.0,260.0 Z" fill="#e61a27" />
+          <circle cx="260" cy="260" r="212" fill="#f39a1e" />
+          <circle cx="260" cy="260" r="200" fill="none" stroke="#fff" stroke-width="5" stroke-dasharray="2 26" stroke-linecap="round" />
+          <circle cx="260" cy="260" r="180" fill="#f6ece3" />
+        </svg>
+        <div id="seal-txt"><div id="seal-n">10<small>%</small></div><div id="seal-l">de desconto</div></div>
+      </div>
+
+      <!-- 3 · cardápio -->
+      <div id="menu">
+        <div class="item" id="m1"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 11 4.08 10.35a1 1 0 0 0 1.84 0L17 11" />
+  <path d="M17 7A5 5 0 0 0 7 7" />
+  <path d="M17 7a2 2 0 0 1 0 4H7a2 2 0 0 1 0-4" /></svg>Sorvetes</div>
+        <div class="item" id="m2"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17c5 0 8-2.69 8-6H4c0 3.31 3 6 8 6m-4 4h8m-4-3v3M5.14 11a3.5 3.5 0 1 1 6.71 0" />
+  <path d="M12.14 11a3.5 3.5 0 1 1 6.71 0" />
+  <path d="M15.5 6.5a3.5 3.5 0 1 0-7 0" /></svg>Açaí</div>
+        <div class="item" id="m3"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2v2" />
+  <path d="M14 2v2" />
+  <path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1" />
+  <path d="M6 2v2" /></svg>Café</div>
+      </div>
+
+      <!-- 5 · onde parar -->
+      <div id="pin"><div id="pin-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
+  <circle cx="12" cy="10" r="3" /></svg></div><div id="pin-l">Jolie · <b>Asa Norte</b></div></div>
+      <!-- 6 · endereço (mesmo texto da arte do cliente) -->
+      <div id="addr"><div id="addr-a">Asa Norte</div><div id="addr-l">CLN 407, Bloco A, Lojas 1 e 5</div></div>
+
+      <div class="cap clip" id="cap0" style="top:1250px" data-start="0.06" data-duration="2.24" data-track-index="9"><span id="w0_0" class="cw">Você</span> <span id="w0_1" class="cw">mora</span> <span id="w0_2" class="cw">na</span> <span id="w0_3" class="cw">Asa</span> <span id="w0_4" class="cw k">Sul</span> <span id="w0_5" class="cw">ou</span> <span id="w0_6" class="cw">na</span> <span id="w0_7" class="cw">Asa</span> <span id="w0_8" class="cw k">Norte?</span></div>
+      <div class="cap clip" id="cap1" style="top:1250px" data-start="2.38" data-duration="0.92" data-track-index="9"><span id="w1_0" class="cw">Então</span> <span id="w1_1" class="cw">essa</span> <span id="w1_2" class="cw">é</span> <span id="w1_3" class="cw">pra</span> <span id="w1_4" class="cw k">você.</span></div>
+      <div class="cap clip" id="cap2" style="top:1250px" data-start="3.37" data-duration="2.06" data-track-index="9"><span id="w2_0" class="cw">A</span> <span id="w2_1" class="cw">Jolie</span> <span id="w2_2" class="cw">está</span> <span id="w2_3" class="cw">com</span> <span id="w2_4" class="cw k">10%</span> <span id="w2_5" class="cw">de</span> <span id="w2_6" class="cw">desconto</span></div>
+      <div class="cap clip" id="cap3" style="top:1250px" data-start="5.37" data-duration="1.58" data-track-index="9"><span id="w3_0" class="cw">pra</span> <span id="w3_1" class="cw">você</span> <span id="w3_2" class="cw k">aproveitar!</span></div>
+      <div class="cap clip" id="cap4" style="top:1250px" data-start="6.97" data-duration="1.6" data-track-index="9"><span id="w4_0" class="cw">Nos</span> <span id="w4_1" class="cw k">sorvetes,</span> <span id="w4_2" class="cw">no</span> <span id="w4_3" class="cw k">açaí</span></div>
+      <div class="cap clip" id="cap5" style="top:1250px" data-start="8.51" data-duration="1.26" data-track-index="9"><span id="w5_0" class="cw">e</span> <span id="w5_1" class="cw">também</span> <span id="w5_2" class="cw">no</span> <span id="w5_3" class="cw">nosso</span> <span id="w5_4" class="cw k">café.</span></div>
+      <div class="cap clip" id="cap6" style="top:1250px" data-start="9.83" data-duration="1.38" data-track-index="9"><span id="w6_0" class="cw">Tá</span> <span id="w6_1" class="cw">pela</span> <span id="w6_2" class="cw">Asa</span> <span id="w6_3" class="cw k">Sul</span></div>
+      <div class="cap clip" id="cap7" style="top:1250px" data-start="11.15" data-duration="1.32" data-track-index="9"><span id="w7_0" class="cw">ou</span> <span id="w7_1" class="cw">pela</span> <span id="w7_2" class="cw">Asa</span> <span id="w7_3" class="cw k">Norte?</span></div>
+      <div class="cap clip" id="cap8" style="top:1250px" data-start="13.02" data-duration="1.74" data-track-index="9"><span id="w8_0" class="cw">Então</span> <span id="w8_1" class="cw">você</span> <span id="w8_2" class="cw">já</span> <span id="w8_3" class="cw">sabe</span> <span id="w8_4" class="cw">onde</span> <span id="w8_5" class="cw k">parar</span></div>
+      <div class="cap clip" id="cap9" style="top:1250px" data-start="14.7" data-duration="1.95" data-track-index="9"><span id="w9_0" class="cw">quando</span> <span id="w9_1" class="cw">bater</span> <span id="w9_2" class="cw">aquela</span> <span id="w9_3" class="cw k">vontade.</span></div>
+      <div class="cap clip" id="cap10" style="top:330px" data-start="18.31" data-duration="1.28" data-track-index="9"><span id="w10_0" class="cw">Porque</span> <span id="w10_1" class="cw">coisa</span> <span id="w10_2" class="cw k">boa</span></div>
+      <div class="cap clip" id="cap11" style="top:330px" data-start="19.53" data-duration="1.62" data-track-index="9"><span id="w11_0" class="cw">tem</span> <span id="w11_1" class="cw">que</span> <span id="w11_2" class="cw">estar</span> <span id="w11_3" class="cw k">perto</span> <span id="w11_4" class="cw k">de</span> <span id="w11_5" class="cw k">você!</span></div>
+
+      <div id="flash"></div>
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="24.15" data-track-index="20"></audio>
+    </div>
+
+    <script>
+      const T = {"total": 24.15, "cuts": {"c1": [0.0, 3.3, [1.0, 1.04]], "c2": [3.3, 3.65, [1.16, 1.19]], "c3": [6.95, 2.82, [1.0, 1.05]], "c4": [9.77, 2.7, [1.08, 1.12]], "c5": [12.47, 4.18, [1.0, 1.08]], "c6": [16.65, 1.4, [1.04, 1.1]], "c7": [18.05, 3.1, [1.0, 1.06]], "card": [21.15, 3.0, [1.0, 1.03]]}, "words": [{"id": "w0_0", "t": 0.12, "k": false}, {"id": "w0_1", "t": 0.36, "k": false}, {"id": "w0_2", "t": 0.62, "k": false}, {"id": "w0_3", "t": 0.76, "k": false}, {"id": "w0_4", "t": 1.08, "k": true}, {"id": "w0_5", "t": 1.4, "k": false}, {"id": "w0_6", "t": 1.54, "k": false}, {"id": "w0_7", "t": 1.68, "k": false}, {"id": "w0_8", "t": 1.94, "k": true}, {"id": "w1_0", "t": 2.44, "k": false}, {"id": "w1_1", "t": 2.6, "k": false}, {"id": "w1_2", "t": 2.7, "k": false}, {"id": "w1_3", "t": 2.82, "k": false}, {"id": "w1_4", "t": 3.06, "k": true}, {"id": "w2_0", "t": 3.43, "k": false}, {"id": "w2_1", "t": 3.55, "k": false}, {"id": "w2_2", "t": 3.87, "k": false}, {"id": "w2_3", "t": 4.05, "k": false}, {"id": "w2_4", "t": 4.25, "k": true}, {"id": "w2_5", "t": 4.77, "k": false}, {"id": "w2_6", "t": 5.01, "k": false}, {"id": "w3_0", "t": 5.43, "k": false}, {"id": "w3_1", "t": 5.73, "k": false}, {"id": "w3_2", "t": 6.01, "k": true}, {"id": "w4_0", "t": 7.03, "k": false}, {"id": "w4_1", "t": 7.29, "k": true}, {"id": "w4_2", "t": 7.95, "k": false}, {"id": "w4_3", "t": 8.07, "k": true}, {"id": "w5_0", "t": 8.57, "k": false}, {"id": "w5_1", "t": 8.79, "k": false}, {"id": "w5_2", "t": 8.93, "k": false}, {"id": "w5_3", "t": 9.13, "k": false}, {"id": "w5_4", "t": 9.35, "k": true}, {"id": "w6_0", "t": 9.89, "k": false}, {"id": "w6_1", "t": 10.05, "k": false}, {"id": "w6_2", "t": 10.27, "k": false}, {"id": "w6_3", "t": 10.67, "k": true}, {"id": "w7_0", "t": 11.21, "k": false}, {"id": "w7_1", "t": 11.41, "k": false}, {"id": "w7_2", "t": 11.61, "k": false}, {"id": "w7_3", "t": 11.97, "k": true}, {"id": "w8_0", "t": 13.08, "k": false}, {"id": "w8_1", "t": 13.44, "k": false}, {"id": "w8_2", "t": 13.68, "k": false}, {"id": "w8_3", "t": 13.98, "k": false}, {"id": "w8_4", "t": 14.22, "k": false}, {"id": "w8_5", "t": 14.46, "k": true}, {"id": "w9_0", "t": 14.76, "k": false}, {"id": "w9_1", "t": 15.12, "k": false}, {"id": "w9_2", "t": 15.44, "k": false}, {"id": "w9_3", "t": 15.82, "k": true}, {"id": "w10_0", "t": 18.37, "k": false}, {"id": "w10_1", "t": 18.75, "k": false}, {"id": "w10_2", "t": 19.11, "k": true}, {"id": "w11_0", "t": 19.59, "k": false}, {"id": "w11_1", "t": 19.73, "k": false}, {"id": "w11_2", "t": 19.91, "k": false}, {"id": "w11_3", "t": 20.19, "k": true}, {"id": "w11_4", "t": 20.41, "k": true}, {"id": "w11_5", "t": 20.55, "k": true}], "sul": 1.08, "norte": 1.94, "praVoce": 3.06, "dez": 4.25, "aprov": 6.01, "sorv": 7.29, "acai": 8.07, "cafe": 9.35, "sul2": 10.67, "norte2": 11.97, "parar": 14.46, "vontade": 15.82};
+      const tl = gsap.timeline({ paused: true });
+      const ir = { immediateRender: false };
+
+      // ---- câmera: zoom lento dentro de cada corte; punch-in alterna entre cortes ----
+      Object.entries(T.cuts).forEach(([id, [s, d, z]]) => {
+        tl.fromTo("#cam", { scale: z[0] }, { scale: z[1], duration: d, ease: "none", ...ir }, s);
+      });
+      // flash curto só na entrada da arte final
+      tl.fromTo("#flash", { opacity: 0.0 }, { opacity: 0.55, duration: 0.06, ...ir }, T.cuts.card[0] - 0.03)
+        .to("#flash", { opacity: 0, duration: 0.3, ease: "power2.out" }, T.cuts.card[0] + 0.03);
+
+      // ---- legendas: cada palavra entra quando é dita ----
+      T.words.forEach((w) => {
+        tl.fromTo("#" + w.id, { opacity: 0, scale: w.k ? 0.7 : 0.88 }, { opacity: 1, scale: 1, duration: w.k ? 0.22 : 0.14, ease: w.k ? "back.out(1.6)" : "power2.out", ...ir }, w.t - 0.04);
+      });
+
+      // ---- 1 · Asa Sul / Asa Norte (corredor) ----
+      const pop = (sel, t, from) => tl.fromTo(sel, { opacity: 0, scale: 0.6, ...from }, { opacity: 1, scale: 1, x: 0, y: 0, rotation: 0, duration: 0.32, ease: "back.out(1.5)", ...ir }, t);
+      pop("#a-sul", T.sul - 0.08, { y: -40, rotation: -6 });
+      pop("#a-norte", T.norte - 0.08, { y: -40, rotation: 6 });
+      tl.to("#a-sul", { x: -620, opacity: 0, duration: 0.3, ease: "power3.in" }, T.praVoce - 0.15)
+        .to("#a-norte", { x: 620, opacity: 0, duration: 0.3, ease: "power3.in" }, T.praVoce - 0.15);
+
+      // ---- 2 · selo 10% bate como carimbo ----
+      tl.fromTo("#seal", { opacity: 0, scale: 2.2, rotation: -24 }, { opacity: 1, scale: 1, rotation: -8, duration: 0.3, ease: "power4.in", ...ir }, T.dez - 0.26)
+        .fromTo("#seal", { scale: 1 }, { scale: 1.05, duration: 0.08, yoyo: true, repeat: 1, ease: "power1.out", ...ir }, T.dez + 0.04)
+        .fromTo("#seal", { rotation: -8 }, { rotation: -3, duration: 2.2, ease: "sine.inOut", ...ir }, T.dez + 0.2)
+        .to("#seal", { scale: 0.4, y: -500, opacity: 0, duration: 0.32, ease: "power3.in" }, T.cuts.c3[0] - 0.2);
+
+      // ---- 3 · cardápio, um por palavra ----
+      [["#m1", T.sorv], ["#m2", T.acai], ["#m3", T.cafe]].forEach(([s, t]) => pop(s, t - 0.1, { y: 60 }));
+      tl.to("#menu", { y: -420, opacity: 0, duration: 0.3, ease: "power3.in" }, T.cuts.c4[0] - 0.18);
+
+      // ---- 4 · Asa Sul / Asa Norte de novo, agora entrando pelas laterais ----
+      tl.set("#areas", { y: 0 }, T.cuts.c4[0]);
+      tl.fromTo("#a-sul", { opacity: 0, x: -620 }, { opacity: 1, x: 0, duration: 0.3, ease: "power3.out", ...ir }, T.sul2 - 0.12)
+        .fromTo("#a-norte", { opacity: 0, x: 620 }, { opacity: 1, x: 0, duration: 0.3, ease: "power3.out", ...ir }, T.norte2 - 0.12)
+        .to(["#a-sul", "#a-norte"], { y: -360, opacity: 0, duration: 0.28, ease: "power3.in" }, T.cuts.c5[0] - 0.1);
+
+      // ---- 5 · pino cai em "onde parar" e vira o cartão de endereço na fachada ----
+      tl.fromTo("#pin", { opacity: 0, y: -520 }, { opacity: 1, y: 0, duration: 0.42, ease: "back.out(1.3)", ...ir }, T.parar - 0.3)
+        .fromTo("#pin-l", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.28, ease: "back.out(1.5)", ...ir }, T.parar + 0.12)
+        .fromTo("#pin", { y: 0 }, { y: -14, duration: 0.5, yoyo: true, repeat: 3, ease: "sine.inOut", ...ir }, T.parar + 0.5)
+        .to("#pin", { opacity: 0, scale: 0.7, duration: 0.25, ease: "power2.in" }, T.cuts.c6[0] - 0.12);
+      tl.fromTo("#addr", { opacity: 0, y: 260 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out", ...ir }, T.cuts.c6[0] + 0.05)
+        .to("#addr", { opacity: 0, y: 200, duration: 0.25, ease: "power2.in" }, T.cuts.c7[0] - 0.1);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
