@@ -1,0 +1,189 @@
+{
+ "source": "VIDEO-2026-10-11-01-41-18.mov (cliente Jolie, tour da loja, 576x1024, 49,5 s)",
+ "bpm": 112,
+ "cuts": [
+  {
+   "id": "c1",
+   "src": [
+    2.2,
+    7.05
+   ],
+   "zoom": [
+    1.14,
+    1.03
+   ],
+   "note": "espia da pilastra + fala"
+  },
+  {
+   "id": "c2",
+   "src": [
+    7.6,
+    9.207
+   ],
+   "zoom": [
+    1.06,
+    1.12
+   ],
+   "note": "interior: banco e freezers Jolie",
+   "tag": "AMBIENTE LINDO",
+   "mute": true
+  },
+  {
+   "id": "c3",
+   "src": [
+    13.0,
+    15.143
+   ],
+   "zoom": [
+    1.0,
+    1.06
+   ],
+   "note": "vitrine de sabores",
+   "tag": "VÁRIOS SABORES",
+   "mute": true
+  },
+  {
+   "id": "c4",
+   "src": [
+    16.6,
+    18.207
+   ],
+   "zoom": [
+    1.08,
+    1.03
+   ],
+   "note": "sabores de perto",
+   "mute": true
+  },
+  {
+   "id": "c5",
+   "src": [
+    21.3,
+    24.514
+   ],
+   "zoom": [
+    1.0,
+    1.07
+   ],
+   "note": "POV montando o pote",
+   "tag": "DO SEU JEITO",
+   "mute": true
+  },
+  {
+   "id": "c6",
+   "src": [
+    29.0,
+    31.143
+   ],
+   "zoom": [
+    1.06,
+    1.1
+   ],
+   "note": "amigas nas coberturas",
+   "tag": "COBERTURAS",
+   "mute": true
+  },
+  {
+   "id": "c7",
+   "src": [
+    37.5,
+    39.643
+   ],
+   "zoom": [
+    1.0,
+    1.05
+   ],
+   "note": "servindo juntas",
+   "tag": "PRA DIVIDIR",
+   "mute": true
+  },
+  {
+   "id": "c8",
+   "src": [
+    41.7,
+    44.379
+   ],
+   "zoom": [
+    1.3,
+    1.36
+   ],
+   "note": "fachada (zoom com origem baixa esconde o texto queimado no topo)",
+   "mute": true
+  },
+  {
+   "id": "card",
+   "img": "assets/img/cartao-jolie.png",
+   "dur": 2.0,
+   "zoom": [
+    1.0,
+    1.03
+   ],
+   "note": "arte do cliente"
+  },
+  {
+   "id": "cta",
+   "img": "assets/img/cartao-jolie.png",
+   "dur": 2.9,
+   "zoom": [
+    1.08,
+    1.1
+   ],
+   "note": "CTA"
+  }
+ ],
+ "phrases": [
+  {
+   "cut": "c1",
+   "y": 1250,
+   "nocap": true,
+   "words": [
+    [
+     "Você",
+     3.5
+    ],
+    [
+     "gosta",
+     3.66
+    ],
+    [
+     "de",
+     3.92
+    ],
+    [
+     "sorvete?",
+     4.06,
+     "k"
+    ]
+   ],
+   "end": 4.62
+  },
+  {
+   "cut": "c1",
+   "y": 1250,
+   "words": [
+    [
+     "Então",
+     5.4
+    ],
+    [
+     "entra",
+     5.64
+    ],
+    [
+     "na",
+     5.86
+    ],
+    [
+     "sorveteria",
+     5.98
+    ],
+    [
+     "Jolie!",
+     6.44,
+     "k"
+    ]
+   ],
+   "end": 7.05
+  }
+ ]
+}
