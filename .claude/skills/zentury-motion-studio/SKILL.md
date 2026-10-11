@@ -82,3 +82,4 @@ Para anúncios de cliente gravados pelo próprio cliente (fala + loja). Base té
 6. Arte do cliente sem alteração (≤ 2 s) → **tela de CTA espelhando o botão do anúncio** ("Como chegar" / "Enviar mensagem") com a mão clicando.
 7. Cores amostradas da arte do cliente. Nunca inventar condição de oferta: pedir validade/regras e listar em Pendências.
 8. Cada novo vídeo deve **melhorar um ponto em relação ao anterior** (registrar no BRIEF.md o que foi melhorado).
+9. **Preferência do cliente:** o estilo aprovado é o das edições sobre a filmagem real (Jolie 04–07). PhotoCraft (pôster/adesivos/LUT, `docs/photocraft.md`) só quando ele pedir.

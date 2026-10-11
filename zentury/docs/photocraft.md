@@ -1,5 +1,7 @@
 # PhotoCraft no estúdio ZENTURY (estudado em out/2026)
 
+> **Status (preferência do cliente, 11/out/2026):** testado no desafio Jolie (`videos/08-jolie-photocraft`). O cliente gostou, mas prefere o estilo das edições (04–07). **Não usar o PhotoCraft por padrão. Só quando ele pedir.**
+
 Repositório: https://github.com/storytold/photocraft (MIT / Apache-2.0, early alpha). É uma reimplementação clean-room do Photoshop em Rust puro, do time ArtCraft. Desktop (macOS/Windows/Linux/FreeBSD) e web (WebAssembly).
 
 ## O que ele faz
