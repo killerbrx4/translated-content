@@ -10,7 +10,7 @@ description: Estúdio de motion da ZENTURY — o método "o prompt é 10%, o est
 
 Motor padrão: **HyperFrames** (`/hyperframes`, `/hyperframes-core`, `/hyperframes-cli`), porque já resolve render, áudio, legendas, recorte (`remove-background`) e checagem (`lint`/`check`/`snapshot`). Alternativa bare-metal `window.seek(t)` + Playwright + ffmpeg: `.claude/skills/motion-design/` (Howseen, MIT). Use as técnicas dela (molas, câmera em escala log, floods, motion blur por subframes, áudio por pico) dentro do HyperFrames quando couber.
 
-Leia antes de começar: `zentury/CLAUDE.md` (manual), `zentury/frame.md` (marca), `zentury/docs/biblioteca-motion.md` (momento → técnica), `zentury/docs/referencias-showreels.md`.
+Leia antes de começar: `zentury/CLAUDE.md` (manual), `zentury/frame.md` (marca), `zentury/docs/biblioteca-motion.md` (momento → técnica), `zentury/docs/referencias-showreels.md`, `zentury/docs/referencia-anuncio-paginas-ia.md` (anúncio de 15 s guiado por texto: gancho "Isso não é X. É Y.", título fixo com palavra trocando na batida, entregável em 3D, CTA espelhando o botão da plataforma).
 
 ## As 7 peças do estúdio (todas obrigatórias, nesta ordem)
 
