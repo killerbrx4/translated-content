@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Jolie · Açaí do seu jeito · V1</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Montserrat"; src: url("assets/fonts/montserrat-latin-700-normal.woff2") format("woff2"); font-weight: 700; }
+      @font-face { font-family: "Montserrat"; src: url("assets/fonts/montserrat-latin-900-normal.woff2") format("woff2"); font-weight: 900; }
+      /* marca Jolie + roxo do açaí (só no produto) */
+      :root { --navy: #0b1d47; --red: #e61a27; --orange: #f39a1e; --cream: #f6ece3; --white: #ffffff; --acai: #5a1a6e; --acai-2: #8e3fa8; --banana: #f6c945; --morango: #e2263a; --uva: #7cb342; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #000; font-family: "Montserrat", sans-serif; font-weight: 900; color: var(--white); }
+      .ic { width: 1em; height: 1em; display: inline-block; vertical-align: -0.14em; }
+
+      #cam { position: absolute; inset: 0; transform-origin: 50% 45%; }
+      .shot { position: absolute; inset: 0; width: 1080px; height: 1920px; object-fit: cover; }
+      #cta { filter: brightness(0.32) saturate(0.8) blur(6px); }
+      #shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to bottom, rgba(11,29,71,0.6) 0%, rgba(11,29,71,0) 30%, rgba(11,29,71,0) 58%, rgba(11,29,71,0.4) 84%, rgba(11,29,71,0.2) 100%); }
+
+      .cap { position: absolute; left: 70px; right: 70px; text-align: center; font-size: 72px; line-height: 1.22; letter-spacing: -0.015em; }
+      .cw { display: inline-block; color: var(--white); -webkit-text-stroke: 12px var(--navy); paint-order: stroke fill; opacity: 0; text-shadow: 0 6px 18px rgba(0,0,0,0.35); }
+      .cw.k { -webkit-text-stroke: 0; padding: 0 18px 4px; border-radius: 20px; background: var(--red); text-shadow: none; box-shadow: 0 10px 0 rgba(11,29,71,0.9); }
+      .cw.k.acai { background: var(--acai); box-shadow: 0 10px 0 #2c0a37; }
+
+      .hl { position: absolute; left: 66px; top: 200px; width: 948px; font-size: 100px; line-height: 1.04; letter-spacing: -0.04em; text-transform: uppercase; opacity: 0; }
+      .hl .t { color: var(--white); -webkit-text-stroke: 16px var(--navy); paint-order: stroke fill; }
+      .pill { display: inline-block; padding: 0 24px 6px; border-radius: 26px; color: var(--white); box-shadow: 0 12px 0 rgba(11,29,71,0.85); white-space: nowrap; }
+      .pill.red { background: var(--red); }
+      .pill.acai { background: var(--acai); box-shadow: 0 12px 0 #2c0a37; }
+      #h1 { opacity: 1; font-size: 92px; }
+
+      /* palavra AÇAÍ gigante no corte (entra com zoom-blur, como "página" na referência) */
+      #big { position: absolute; left: 0; right: 0; top: 230px; text-align: center; font-size: 270px; line-height: 1; letter-spacing: -0.06em; color: var(--acai); -webkit-text-stroke: 18px var(--cream); paint-order: stroke fill; text-shadow: 0 20px 0 #2c0a37; opacity: 0; }
+
+      /* montador: açaí + 3 acompanhamentos (preenche conforme a fala) */
+      #builder { position: absolute; left: 50px; right: 50px; top: 190px; opacity: 0; }
+      #b-t { font-size: 76px; letter-spacing: -0.04em; text-transform: uppercase; color: var(--white); -webkit-text-stroke: 14px var(--navy); paint-order: stroke fill; }
+      #b-top { display: flex; align-items: center; gap: 18px; }
+      #b-row { margin-top: 22px; display: flex; align-items: center; gap: 16px; }
+      .slot { display: flex; align-items: center; gap: 12px; height: 100px; padding: 0 28px 0 16px; border-radius: 50px; background: rgba(11,29,71,0.6); border: 4px dashed rgba(246,236,227,0.8); font-size: 44px; color: var(--cream); white-space: nowrap; opacity: 0; }
+      .slot .n { display: flex; align-items: center; justify-content: center; width: 66px; height: 66px; border-radius: 50%; background: rgba(246,236,227,0.25); font-size: 38px; }
+      .slot.on { border: 4px solid var(--white); background: var(--cream); color: var(--navy); box-shadow: 0 10px 0 rgba(11,29,71,0.7); }
+      #s0 { background: var(--acai); border: 4px solid var(--white); color: var(--white); box-shadow: 0 10px 0 #2c0a37; opacity: 0; }
+      #s0 .n { background: var(--white); color: var(--acai); }
+      .plus { font-size: 60px; color: var(--white); -webkit-text-stroke: 10px var(--navy); paint-order: stroke fill; opacity: 0; }
+      #b-k { margin-top: 22px; display: inline-block; padding: 8px 26px 12px; border-radius: 22px; background: var(--orange); color: var(--navy); font-size: 44px; text-transform: uppercase; letter-spacing: -0.01em; box-shadow: 0 10px 0 rgba(11,29,71,0.8); opacity: 0; }
+
+      /* momento herói: pote pronto */
+      #hero { position: absolute; left: 66px; top: 200px; opacity: 0; font-size: 104px; line-height: 1.04; letter-spacing: -0.04em; text-transform: uppercase; }
+      .spark { position: absolute; width: 70px; height: 70px; opacity: 0; color: var(--cream); filter: drop-shadow(0 4px 0 rgba(44,10,55,0.8)); }
+
+      #addr { position: absolute; left: 90px; right: 90px; top: 1230px; padding: 40px 34px; border-radius: 44px; background: var(--navy); border: 5px solid var(--cream); text-align: center; opacity: 0; box-shadow: 0 18px 0 rgba(0,0,0,0.3); }
+      #addr-a { display: inline-flex; align-items: center; gap: 12px; padding: 12px 34px; border-radius: 22px; background: var(--red); font-size: 56px; }
+      #addr-l { margin-top: 20px; font-size: 48px; font-weight: 700; color: var(--cream); }
+
+      #logo { position: absolute; left: 270px; top: 300px; width: 540px; height: 540px; border-radius: 60px; overflow: hidden; opacity: 0; box-shadow: 0 20px 0 rgba(11,29,71,0.6); }
+      #logo div { position: absolute; left: -135px; top: -203px; width: 810px; height: 1440px; background: url("assets/img/cartao-jolie.png") 0 0 / 810px 1440px no-repeat; }
+      #end { position: absolute; left: 0; right: 0; top: 980px; text-align: center; opacity: 0; }
+      #end-k { font-size: 64px; color: var(--cream); letter-spacing: -0.02em; }
+      #btn { position: relative; display: inline-flex; align-items: center; gap: 22px; margin-top: 26px; padding: 34px 64px; border-radius: 999px; background: var(--red); font-size: 76px; letter-spacing: -0.02em; box-shadow: 0 16px 0 #7d0b12; }
+      #btn .ic { font-size: 70px; }
+      #ripple { position: absolute; left: 50%; top: 50%; width: 120px; height: 120px; margin: -60px 0 0 -60px; border-radius: 50%; border: 8px solid var(--cream); opacity: 0; }
+      #hand { position: absolute; left: 790px; top: 1100px; font-size: 150px; color: var(--white); filter: drop-shadow(0 10px 0 rgba(11,29,71,0.9)); opacity: 0; }
+      #hand .ic { fill: var(--white); stroke: var(--navy); stroke-width: 1.4; }
+      #end-a { margin-top: 56px; font-size: 44px; font-weight: 700; color: var(--cream); }
+      #end-a b { color: var(--orange); font-weight: 900; }
+
+      #flash { position: absolute; inset: 0; background: var(--cream); opacity: 0; pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="__TOTAL__" data-width="1080" data-height="1920">
+      <div id="cam">
+        __VIDEOS__
+      </div>
+      <div id="shade"></div>
+
+      <div class="hl" id="h1"><span class="t">Passando pela Jolie</span><br /><span class="pill red" id="h1-p">e não entrou?</span></div>
+      <div id="big">AÇAÍ</div>
+      <div class="hl" id="h3"><span class="t">Monte</span><br /><span class="pill acai" id="h3-p">do seu jeito</span></div>
+
+      <div id="builder">
+        <div id="b-top"><div id="b-t">Monte o seu:</div><div class="slot" id="s0"><span class="n">✓</span>Açaí</div><div class="plus" id="plus">+</div></div>
+        <div id="b-row">
+          <div class="slot" id="s1"><span class="n">1</span><span class="lb">Banana</span></div>
+          <div class="slot" id="s2"><span class="n">2</span><span class="lb">Morango</span></div>
+          <div class="slot" id="s3"><span class="n">3</span><span class="lb">Uva</span></div>
+        </div>
+        <div id="b-k">3 acompanhamentos</div>
+      </div>
+
+      <div id="hero"><span class="t" style="color:#fff;-webkit-text-stroke:16px #0b1d47;paint-order:stroke fill">Seu açaí,</span><br /><span class="pill acai" id="hero-p">do seu jeito.</span></div>
+      <svg class="spark" id="sp1" style="left:180px;top:760px" viewBox="0 0 24 24"><path fill="currentColor" d="M12 0 L14.2 9.8 L24 12 L14.2 14.2 L12 24 L9.8 14.2 L0 12 L9.8 9.8 Z" /></svg>
+      <svg class="spark" id="sp2" style="left:820px;top:700px;width:54px;height:54px" viewBox="0 0 24 24"><path fill="currentColor" d="M12 0 L14.2 9.8 L24 12 L14.2 14.2 L12 24 L9.8 14.2 L0 12 L9.8 9.8 Z" /></svg>
+      <svg class="spark" id="sp3" style="left:860px;top:1080px;width:44px;height:44px" viewBox="0 0 24 24"><path fill="currentColor" d="M12 0 L14.2 9.8 L24 12 L14.2 14.2 L12 24 L9.8 14.2 L0 12 L9.8 9.8 Z" /></svg>
+
+      <div class="hl" id="h5"><span class="t">Vem montar</span><br /><span class="pill red" id="h5-p">o seu!</span></div>
+      <div class="hl" id="h6"><span class="t">Te esperamos</span><br /><span class="pill acai">na Jolie!</span></div>
+      <div id="addr"><div id="addr-a">{{lucide:map-pin}} Asa Norte</div><div id="addr-l">CLN 407, Bloco A, Lojas 1 e 5</div></div>
+
+      __CAPTIONS__
+
+      <div id="logo"><div></div></div>
+      <div id="end">
+        <div id="end-k">Toque em</div>
+        <div id="btn">{{lucide:navigation}}<span id="btn-l">Como chegar</span><div id="ripple"></div></div>
+        <div id="end-a">CLN 407, Bloco A · <b>Asa Norte</b></div>
+      </div>
+      <div id="hand">{{lucide:pointer}}</div>
+
+      <div id="flash"></div>
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="__TOTAL__" data-track-index="20"></audio>
+    </div>
+
+    <script>
+      const CONFIG = { cta: "Como chegar" };
+      document.getElementById("btn-l").textContent = CONFIG.cta;
+      const T = __T__;
+      const C = T.cuts;
+      // palavras "açaí" na legenda ganham a cor do produto
+      T.words.forEach((w) => { const e = document.getElementById(w.id); if (e && /aça/i.test(e.textContent)) e.classList.add("acai"); });
+
+      const tl = gsap.timeline({ paused: true });
+      const ir = { immediateRender: false };
+      const inL = (sel, t) => tl.fromTo(sel, { opacity: 0, x: -1000 }, { opacity: 1, x: 0, duration: 0.3, ease: "power3.out", ...ir }, t);
+      const outL = (sel, t) => tl.to(sel, { x: -1000, duration: 0.28, ease: "power3.in" }, t);
+      const pop = (sel, t) => tl.fromTo(sel, { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(1.7)", ...ir }, t);
+
+      // ---- câmera ----
+      Object.entries(C).forEach(([id, [s, d, z]]) => {
+        if (id === "c1") {
+          tl.fromTo("#cam", { scale: z[0] }, { scale: 1.05, duration: 0.5, ease: "expo.out", ...ir }, s)
+            .fromTo("#cam", { scale: 1.05 }, { scale: z[1], duration: d - 0.5, ease: "none", ...ir }, s + 0.5);
+        } else {
+          tl.fromTo("#cam", { scale: z[0] }, { scale: z[1], duration: d, ease: id === "c3" ? "sine.in" : "none", ...ir }, s);
+        }
+      });
+      tl.fromTo("#flash", { opacity: 0 }, { opacity: 0.55, duration: 0.06, ...ir }, C.card[0] - 0.03)
+        .to("#flash", { opacity: 0, duration: 0.3, ease: "power2.out" }, C.card[0] + 0.03);
+
+      // ---- legendas ----
+      T.words.forEach((w) => {
+        if (!document.getElementById(w.id)) return;
+        tl.fromTo("#" + w.id, { opacity: 0, scale: w.k ? 0.7 : 0.88 }, { opacity: 1, scale: 1, duration: w.k ? 0.22 : 0.14, ease: w.k ? "back.out(1.6)" : "power2.out", ...ir }, w.t - 0.04);
+      });
+
+      // ---- 1 · gancho ----
+      tl.fromTo("#h1", { y: -30 }, { y: 0, duration: 0.5, ease: "expo.out", ...ir }, 0)
+        .fromTo("#h1-p", { scale: 1 }, { scale: 1.12, duration: 0.12, yoyo: true, repeat: 1, ease: "power1.out", ...ir }, T.entrou - 0.06)
+        .to("#h1", { y: -400, opacity: 0, duration: 0.25, ease: "power3.in" }, T.acai - 0.2);
+
+      // ---- 2 · AÇAÍ gigante no corte para o pote ----
+      tl.fromTo("#big", { opacity: 0, scale: 2.4, filter: "blur(24px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.38, ease: "expo.out", ...ir }, C.c2[0] - 0.02)
+        .fromTo("#big", { scale: 1 }, { scale: 1.05, duration: 1.6, ease: "sine.out", ...ir }, C.c2[0] + 0.4)
+        .to("#big", { opacity: 0, y: -260, scale: 0.6, duration: 0.25, ease: "power3.in" }, T.montar - 0.62);
+
+      // ---- 3 · "Monte do seu jeito" ----
+      inL("#h3", T.montar - 0.3);
+      tl.fromTo("#h3-p", { scale: 1 }, { scale: 1.1, duration: 0.12, yoyo: true, repeat: 1, ...ir }, T.jeito - 0.05);
+      outL("#h3", T.escolha - 0.2);
+
+      // ---- 4 · montador: açaí ✓ + 3 acompanhamentos ----
+      tl.fromTo("#builder", { opacity: 0, y: -40 }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out", ...ir }, T.escolha - 0.05);
+      pop("#s0", T.acai2 - 0.06);
+      pop("#plus", T.acai2 + 0.2);
+      ["#s1", "#s2", "#s3"].forEach((s, i) => tl.fromTo(s, { opacity: 0, x: 60 }, { opacity: 1, x: 0, duration: 0.25, ease: "power3.out", ...ir }, T.acai2 + 0.35 + i * 0.1));
+      // preenchem um por um a partir de "três"
+      ["#s1", "#s2", "#s3"].forEach((s, i) => {
+        const t = T.tres - 0.05 + i * 0.32;
+        tl.set(s, { className: "slot on" }, t);
+        tl.fromTo(s, { scale: 1 }, { scale: 1.12, duration: 0.1, yoyo: true, repeat: 1, ease: "power1.out", ...ir }, t);
+      });
+      tl.set("#s1 .n", { backgroundColor: "#f6c945", color: "#0b1d47" }, T.tres - 0.05)
+        .set("#s2 .n", { backgroundColor: "#e2263a", color: "#ffffff" }, T.tres + 0.27)
+        .set("#s3 .n", { backgroundColor: "#7cb342", color: "#ffffff" }, T.tres + 0.59);
+      pop("#b-k", T.acomp + 0.1);
+      tl.to("#builder", { opacity: 0, y: -60, duration: 0.22, ease: "power2.in" }, T.acomp + 0.7);
+
+      // ---- 5 · herói: pote pronto ----
+      const hs = T.acomp + 0.85;
+      inL("#hero", hs);
+      tl.fromTo("#hero-p", { scale: 0.6 }, { scale: 1, duration: 0.3, ease: "back.out(1.6)", ...ir }, hs + 0.15);
+      ["#sp1", "#sp2", "#sp3"].forEach((s, i) => {
+        tl.fromTo(s, { opacity: 0, scale: 0, rotation: -45 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.3, ease: "back.out(2)", ...ir }, hs + 0.2 + i * 0.12)
+          .to(s, { opacity: 0, scale: 0.4, rotation: 45, duration: 0.25 }, C.c5[0] - 0.2);
+      });
+      tl.to("#hero", { x: -1000, duration: 0.28, ease: "power3.in" }, T.vem - 0.55);
+
+      // ---- 6 · "Vem montar o seu!" ----
+      inL("#h5", T.vem - 0.25);
+      tl.fromTo("#h5-p", { scale: 1 }, { scale: 1.12, duration: 0.12, yoyo: true, repeat: 1, ...ir }, T.jolie - 0.05);
+      outL("#h5", C.c6[0] - 0.12);
+
+      // ---- 7 · fachada ----
+      inL("#h6", C.c6[0] + 0.05);
+      tl.fromTo("#addr", { opacity: 0, y: 260 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out", ...ir }, C.c6[0] + 0.4)
+        .to(["#h6", "#addr"], { opacity: 0, duration: 0.2 }, C.card[0] - 0.1);
+
+      // ---- CTA ----
+      const e0 = C.cta[0];
+      tl.fromTo("#logo", { opacity: 0, scale: 1.6, rotation: -10 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.32, ease: "power4.in", ...ir }, e0 + 0.05)
+        .fromTo("#end", { opacity: 0, y: 80 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", ...ir }, e0 + 0.3)
+        .fromTo("#hand", { opacity: 0, x: 220, y: 260 }, { opacity: 1, x: 0, y: 0, duration: 0.45, ease: "power3.out", ...ir }, e0 + 0.75)
+        .fromTo("#hand", { scale: 1 }, { scale: 0.86, duration: 0.09, yoyo: true, repeat: 1, ease: "power1.inOut", ...ir }, e0 + 1.3)
+        .fromTo("#btn", { scale: 1 }, { scale: 0.94, duration: 0.09, yoyo: true, repeat: 1, ease: "power1.inOut", ...ir }, e0 + 1.3)
+        .fromTo("#ripple", { opacity: 0.9, scale: 0.5 }, { opacity: 0, scale: 5, duration: 0.6, ease: "power2.out", ...ir }, e0 + 1.36)
+        .fromTo("#btn", { scale: 1 }, { scale: 1.04, duration: 0.5, yoyo: true, repeat: 1, ease: "sine.inOut", ...ir }, e0 + 1.6);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
