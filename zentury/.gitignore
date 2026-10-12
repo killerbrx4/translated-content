@@ -13,3 +13,4 @@ videos/*/assets/photocraft/
 videos/*/photocraft/*.psd
 videos/*/photocraft/*.png
 videos/*/assets/audio/voice-*
+clientes/*/estaticos/saida/
