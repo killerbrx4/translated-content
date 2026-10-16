@@ -33,7 +33,22 @@ for i, c in enumerate(cuts.values()):
     else:
         vids.append(f'<video id="{c["id"]}" class="shot clip" src="assets/footage/gamerstar.mp4" muted playsinline data-start="{c["out"]}" data-duration="{c["d"]}" data-media-start="{c["src"][0]}" data-track-index="{i % 2}"></video>')
 
-# ---- legendas: blocos de até 3 palavras / 17 letras dentro da placa ----
+# ---- legenda queimada do original (OCR, já espelhada para o vídeo virado): src/burned.json ----
+BUR = json.load(open(P / "src/burned.json"))
+JUNK = re.compile(r"AJI|ITAM|MROF|AMRO|CEEO|EEOB|ELOB|BCE|OBC")  # INFORMÁTICA da camisa e GEFORCE RTX das caixas, lidos ao contrário
+def burned(a, b):
+    """caixas da legenda antiga entre os tempos de fonte a e b"""
+    bx = []
+    for f in range(max(0, int(a * BUR["fps"])), min(len(BUR["frames"]), int(b * BUR["fps"]) + 1)):
+        for x0, x1, y0, y1, txt in BUR["frames"][f]:
+            if JUNK.search(txt) or abs((x0 + x1) / 2 - 540) > 260 or y1 > 1760 or y0 < 1250: continue
+            bx.append((x0, x1, y0, y1))
+    return bx
+OY = 0.83 * 1920  # origem do zoom da câmera (#cam)
+def zoomed(b, z):
+    return (540 + (b[0] - 540) * z, 540 + (b[1] - 540) * z, OY + (b[2] - OY) * z, OY + (b[3] - OY) * z)
+
+# ---- legendas: blocos de até 3 palavras / 15 letras numa etiqueta compacta que cobre a legenda antiga daquele trecho ----
 caps, words = [], []
 for c in cuts.values():
     if "w" not in c: continue
@@ -41,22 +56,32 @@ for c in cuts.values():
     chunks, cur = [], []
     for i in ids:
         txt = " ".join(WORDS[j][0] for j in cur + [i])
-        if cur and (len(cur) == 3 or len(txt) > 17 or WORDS[cur[-1]][0][-1] in ",.?!"):
+        if cur and (len(cur) == 3 or len(txt) > 15 or WORDS[cur[-1]][0][-1] in ",.?!"):
             chunks.append(cur); cur = []
         cur.append(i)
     if cur: chunks.append(cur)
     for k, ch in enumerate(chunks):
-        s = out(ch[0]) - 0.05
+        s = c["out"] if k == 0 else out(ch[0]) - 0.05  # o 1º bloco já cobre desde o início do corte
         e = out(chunks[k + 1][0]) - 0.05 if k + 1 < len(chunks) else c["out"] + c["d"]
         for n in E["nocap"]:  # o bloco some quando começa o trecho sem legenda (cartão de tela cheia)
             if n[0] == c["id"] and n[1] > c["src"][0]:
                 e = min(e, c["out"] + n[1] - c["src"][0])
+        s = round(max(0, s), 3); e = round(e, 3)
+        a, b = c["src"][0] + s - c["out"], c["src"][0] + e - c["out"]
+        z0, z1 = c["zoom"]; zs = [z0 + (z1 - z0) * (t - c["out"]) / c["d"] for t in (s, e)]
+        bx = [zoomed(q, z) for q in burned(a - 0.1, b + 0.1) for z in zs]
+        # a etiqueta é uma peça só: centrada na legenda antiga e no mínimo do tamanho dela
+        st = "left:540px;top:1572px"
+        if bx:
+            X0, X1 = min(q[0] for q in bx) - 22, max(q[1] for q in bx) + 22
+            Y0, Y1 = min(q[2] for q in bx) - 16, max(q[3] for q in bx) + 16
+            st = f"left:{round((X0 + X1) / 2)}px;top:{round((Y0 + Y1) / 2)}px;min-width:{round(X1 - X0)}px;min-height:{round(Y1 - Y0)}px"
         spans = []
         for i in ch:
             k_ = WORDS[i][0] in KEYS
             spans.append(f'<span id="w{i}" class="cw{" k" if k_ else ""}">{WORDS[i][0]}</span>')
             words.append({"id": f"w{i}", "t": out(i), "k": k_})
-        caps.append(f'<div class="cap clip" id="cap{len(caps)}" data-start="{round(max(0, s), 3)}" data-duration="{round(e - max(0, s), 3)}" data-track-index="9">{" ".join(spans)}</div>')
+        caps.append(f'<div class="cap clip" id="cap{len(caps)}" style="{st}" data-start="{s}" data-duration="{round(e - s, 3)}" data-track-index="9">{" ".join(spans)}</div>')
 
 def lucide(name, cls="ic"):
     tx = (A / f"icons/lucide-{name}.svg").read_text()
