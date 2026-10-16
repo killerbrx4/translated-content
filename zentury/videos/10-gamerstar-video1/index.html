@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Gamer Star · 4070 ou 5060 Ti</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Bebas"; src: url("assets/fonts/bebas-neue-latin-400-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Barlow"; src: url("assets/fonts/barlow-condensed-latin-600-normal.woff2") format("woff2"); font-weight: 600; }
+      @font-face { font-family: "Barlow"; src: url("assets/fonts/barlow-condensed-latin-800-normal.woff2") format("woff2"); font-weight: 800; }
+      /* cores da marca: vermelho amostrado do logo oficial, preto e branco */
+      :root { --red: #cb2129; --red-d: #7e0f14; --ink: #0d0d0f; --white: #ffffff; --grey: #b9b9c0; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #000; font-family: "Bebas", sans-serif; color: var(--white); }
+      .ic { width: 1em; height: 1em; display: inline-block; vertical-align: -0.12em; }
+
+      /* a câmera escala a partir da faixa da legenda queimada (y≈83%), para a placa continuar cobrindo */
+      #cam { position: absolute; inset: 0; transform-origin: 50% 83%; }
+      .shot { position: absolute; inset: 0; width: 1080px; height: 1920px; object-fit: cover; }
+      #end { filter: brightness(0.28) saturate(0.7) blur(10px); }
+      #shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to bottom, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.0) 30%, rgba(0,0,0,0) 62%, rgba(0,0,0,0.35) 100%); }
+      #scan { position: absolute; inset: 0; pointer-events: none; opacity: 0.10; background: repeating-linear-gradient(to bottom, rgba(255,255,255,0.5) 0 1px, transparent 1px 4px); mix-blend-mode: overlay; }
+
+      #bug { position: absolute; left: 50%; top: 92px; width: 260px; margin-left: -130px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6)); }
+
+      /* ---- placa de legenda (cobre a legenda queimada do original) ---- */
+      #plate { position: absolute; left: 50px; right: 50px; top: 1418px; height: 316px; border-radius: 30px; background: #0d0d0f; border-left: 14px solid var(--red); box-shadow: 0 18px 40px rgba(0,0,0,0.45); }
+      #plate::after { content: ""; position: absolute; right: 22px; top: 20px; width: 60px; height: 8px; background: repeating-linear-gradient(90deg, var(--red) 0 12px, transparent 12px 20px); }
+      .cap { position: absolute; left: 84px; right: 64px; top: 1418px; height: 316px; display: flex; align-items: center; justify-content: center; gap: 0 22px; flex-wrap: wrap; font-size: 124px; line-height: 1.02; letter-spacing: 0.01em; text-transform: uppercase; }
+      .cw { display: inline-block; color: var(--white); opacity: 0; }
+      .cw.k { color: var(--red); text-shadow: 0 0 26px rgba(203,33,41,0.55); }
+
+      /* ---- títulos do topo ---- */
+      .top { position: absolute; left: 0; right: 0; top: 250px; display: flex; flex-direction: column; align-items: center; gap: 14px; opacity: 0; }
+      .row { display: flex; align-items: center; justify-content: center; gap: 18px; }
+      .plt { display: inline-block; padding: 10px 34px 2px; font-size: 112px; line-height: 1; transform: skewX(-10deg); box-shadow: 0 12px 0 rgba(0,0,0,0.55); white-space: nowrap; }
+      .plt > span { display: inline-block; transform: skewX(10deg); }
+      .plt.blk { background: var(--ink); border: 5px solid var(--white); }
+      .plt.red { background: var(--red); }
+      .plt.wht { background: var(--white); color: var(--ink); }
+      .plt.sm { font-size: 84px; }
+      #vsb { width: 132px; height: 132px; border-radius: 50%; background: var(--white); color: var(--red); display: flex; align-items: center; justify-content: center; font-size: 86px; padding-top: 6px; box-shadow: 0 0 0 8px var(--red), 0 14px 0 8px rgba(0,0,0,0.5); z-index: 2; margin: 0 -34px; }
+      #vs { opacity: 1; }
+      .pname, #hg-b, #hn-b, #hg-a, #hn-a, #hc-a, #pq { opacity: 0; }
+
+      /* ---- cartão "50 > 40 ?" (cobre o efeito cinza do original) ---- */
+      #c50 { position: absolute; inset: 0; background: radial-gradient(circle at 50% 45%, #2a0a0d 0%, #0b0b0d 62%); opacity: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      #c50::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(-55deg, rgba(203,33,41,0.10) 0 26px, transparent 26px 70px); }
+      #c50 .lbl { font-family: "Barlow"; font-weight: 800; font-size: 54px; letter-spacing: 0.24em; color: var(--grey); }
+      #c50-row { display: flex; align-items: center; gap: 30px; margin-top: 10px; }
+      .gen { display: flex; flex-direction: column; align-items: center; }
+      .gen b { font-weight: 400; font-size: 380px; line-height: 0.86; }
+      #gt { font-size: 250px; color: var(--red); line-height: 0; margin-top: 70px; filter: drop-shadow(0 0 30px rgba(203,33,41,0.7)); }
+      #gt .ic { stroke-width: 3.2; }
+      #c50-q { margin-top: 40px; }
+      #c50 .plt { font-size: 130px; }
+
+      #cyou { position: absolute; inset: 0; background: radial-gradient(circle at 50% 45%, #2a0a0d 0%, #0b0b0d 62%); display: flex; align-items: center; justify-content: center; opacity: 0; }
+      #cyou::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(-55deg, rgba(203,33,41,0.10) 0 26px, transparent 26px 70px); }
+      #cyou .plt { font-size: 180px; padding: 20px 54px 6px; }
+
+      /* ---- linha das gerações ---- */
+      #genl { position: absolute; left: 0; right: 0; top: 250px; height: 380px; opacity: 0; }
+      #gl-line { position: absolute; left: 230px; right: 230px; top: 128px; height: 10px; background: rgba(255,255,255,0.35); border-radius: 5px; transform-origin: 0 50%; }
+      #gl-fill { position: absolute; left: 230px; width: 620px; top: 128px; height: 10px; background: var(--red); border-radius: 5px; transform-origin: 0 50%; transform: scaleX(0); }
+      .node { position: absolute; top: 40px; width: 186px; height: 186px; margin-left: -93px; border-radius: 50%; background: var(--ink); border: 8px solid var(--white); display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 14px 0 rgba(0,0,0,0.5); }
+      .node small { font-family: "Barlow"; font-weight: 800; font-size: 30px; letter-spacing: 0.16em; color: var(--grey); margin-bottom: -6px; }
+      .node b { font-weight: 400; font-size: 104px; line-height: 0.9; }
+      #n40 { left: 230px; } #n50 { left: 850px; }
+      .pname { position: absolute; top: 254px; width: 420px; margin-left: -210px; text-align: center; }
+      #p40 { left: 230px; } #p50 { left: 850px; }
+      .pname .plt { font-size: 84px; }
+      #newer { position: absolute; left: 0; right: 0; top: 158px; text-align: center; font-family: "Barlow"; font-weight: 800; font-size: 34px; letter-spacing: 0.12em; color: var(--white); opacity: 0; }
+
+      /* ---- atenção ---- */
+      #redfl { position: absolute; inset: 0; background: radial-gradient(circle, rgba(203,33,41,0) 35%, rgba(203,33,41,0.85) 100%); opacity: 0; pointer-events: none; }
+      #warn { position: absolute; left: 0; right: 0; top: 300px; display: flex; justify-content: center; opacity: 0; }
+      #warn .plt { font-size: 170px; padding: 18px 50px 6px; }
+      #warn .ic { font-size: 140px; margin-right: 18px; vertical-align: -0.08em; }
+
+      /* ---- checklist ---- */
+      #list { position: absolute; left: 50px; right: 50px; top: 1010px; height: 728px; padding: 30px 34px; border-radius: 34px; background: #0d0d0f; border: 4px solid rgba(255,255,255,0.12); border-top: 12px solid var(--red); display: flex; flex-direction: column; justify-content: space-between; opacity: 0; box-shadow: 0 30px 60px rgba(0,0,0,0.55); }
+      .it { display: flex; align-items: center; gap: 30px; height: 150px; padding: 0 22px; border-radius: 22px; background: rgba(255,255,255,0.05); }
+      .it .ib { flex: none; width: 112px; height: 112px; border-radius: 22px; background: #26262b; color: var(--grey); display: flex; align-items: center; justify-content: center; font-size: 66px; }
+      .it .tx { flex: 1; font-size: 84px; line-height: 1; padding-top: 8px; color: rgba(255,255,255,0.28); }
+      .it .ck { flex: none; width: 92px; height: 92px; border-radius: 50%; border: 6px solid rgba(255,255,255,0.25); color: var(--white); display: flex; align-items: center; justify-content: center; font-size: 56px; }
+      .it .ck .ic { opacity: 0; }
+
+      /* ---- enquete ---- */
+      #poll { position: absolute; left: 0; right: 0; top: 250px; display: flex; flex-direction: column; align-items: center; gap: 22px; opacity: 0; }
+      .opt { display: flex; align-items: center; gap: 22px; width: 760px; padding: 18px 26px; border-radius: 28px; background: rgba(13,13,15,0.9); border: 5px solid var(--white); font-size: 96px; line-height: 1; opacity: 0; box-shadow: 0 12px 0 rgba(0,0,0,0.5); }
+      .opt i { font-style: normal; flex: none; width: 96px; height: 96px; border-radius: 20px; background: var(--red); display: flex; align-items: center; justify-content: center; padding-top: 6px; font-size: 76px; }
+      .opt span { padding-top: 8px; }
+      #cmt { position: absolute; right: 70px; top: 1130px; display: flex; align-items: center; gap: 16px; padding: 18px 34px 12px; border-radius: 999px; background: var(--white); color: var(--ink); font-size: 76px; opacity: 0; box-shadow: 0 12px 0 rgba(0,0,0,0.5); }
+      #cmt .ic { color: var(--red); font-size: 70px; }
+
+      /* ---- cartão final ---- */
+      #fin { position: absolute; left: 0; right: 0; top: 420px; display: flex; flex-direction: column; align-items: center; opacity: 0; }
+      #fin-logo { width: 880px; filter: drop-shadow(0 12px 30px rgba(0,0,0,0.6)); }
+      #fin-k { margin-top: 70px; font-family: "Barlow"; font-weight: 800; font-size: 62px; letter-spacing: 0.04em; color: var(--white); }
+      #btn { position: relative; display: inline-flex; align-items: center; gap: 22px; margin-top: 26px; padding: 30px 64px 22px; border-radius: 999px; background: var(--red); font-size: 100px; line-height: 1; box-shadow: 0 16px 0 var(--red-d); }
+      #btn .ic { font-size: 80px; vertical-align: 0; margin-top: -8px; }
+      #ripple { position: absolute; left: 50%; top: 50%; width: 120px; height: 120px; margin: -60px 0 0 -60px; border-radius: 50%; border: 8px solid var(--white); opacity: 0; }
+      .info { margin-top: 30px; display: flex; align-items: center; gap: 16px; font-family: "Barlow"; font-weight: 600; font-size: 50px; color: var(--white); opacity: 0; }
+      .info .ic { color: var(--red); font-size: 54px; }
+      .info b { font-weight: 800; }
+      #info1 { margin-top: 64px; }
+
+      #flash { position: absolute; inset: 0; background: var(--white); opacity: 0; pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="45.93" data-width="1080" data-height="1920">
+      <div id="cam">
+        <video id="c1" class="shot clip" src="assets/footage/gamerstar.mp4" muted playsinline data-start="0.0" data-duration="4.74" data-media-start="0.0" data-track-index="0"></video>
+        <video id="c2" class="shot clip" src="assets/footage/gamerstar.mp4" muted playsinline data-start="4.74" data-duration="4.99" data-media-start="4.96" data-track-index="1"></video>
+        <video id="c3" class="shot clip" src="assets/footage/gamerstar.mp4" muted playsinline data-start="9.73" data-duration="3.75" data-media-start="10.55" data-track-index="0"></video>
+        <video id="c4" class="shot clip" src="assets/footage/gamerstar.mp4" muted playsinline data-start="13.48" data-duration="5.9" data-media-start="14.62" data-track-index="1"></video>
+        <video id="c5" class="shot clip" src="assets/footage/gamerstar.mp4" muted playsinline data-start="19.38" data-duration="2.26" data-media-start="20.76" data-track-index="0"></video>
+        <video id="c6" class="shot clip" src="assets/footage/gamerstar.mp4" muted playsinline data-start="21.64" data-duration="1.88" data-media-start="26.86" data-track-index="1"></video>
+        <video id="c7" class="shot clip" src="assets/footage/gamerstar.mp4" muted playsinline data-start="23.52" data-duration="4.5" data-media-start="30.14" data-track-index="0"></video>
+        <video id="c8" class="shot clip" src="assets/footage/gamerstar.mp4" muted playsinline data-start="28.02" data-duration="6.73" data-media-start="37.72" data-track-index="1"></video>
+        <video id="c9" class="shot clip" src="assets/footage/gamerstar.mp4" muted playsinline data-start="34.75" data-duration="7.98" data-media-start="44.82" data-track-index="0"></video>
+        <img id="end" class="shot clip" src="assets/img/fim.jpg" alt="" data-start="42.73" data-duration="3.2" data-track-index="1" />
+      </div>
+      <div id="shade"></div>
+      <div id="redfl"></div>
+      <!-- cobre o fade para preto que o vídeo original tem no início da pergunta final -->
+      <div id="cyou"><div class="plt red"><span>E VOCÊ?</span></div></div>
+
+      <div id="plate"></div>
+      <div class="cap clip" id="cap0" data-start="0.13" data-duration="1.2" data-track-index="9"><span id="w0" class="cw">Vem</span> <span id="w1" class="cw">cá!</span></div>
+      <div class="cap clip" id="cap1" data-start="1.33" data-duration="3.24" data-track-index="9"><span id="w2" class="cw k">4070</span> <span id="w3" class="cw">ou</span> <span id="w4" class="cw k">5060</span></div>
+      <div class="cap clip" id="cap2" data-start="4.57" data-duration="0.17" data-track-index="9"><span id="w5" class="cw k">Ti?</span></div>
+      <div class="cap clip" id="cap3" data-start="4.89" data-duration="0.5" data-track-index="9"><span id="w6" class="cw">Será</span> <span id="w7" class="cw">que</span> <span id="w8" class="cw">a</span></div>
+      <div class="cap clip" id="cap4" data-start="5.39" data-duration="1.02" data-track-index="9"><span id="w9" class="cw">placa</span> <span id="w10" class="cw">da</span> <span id="w11" class="cw k">série</span></div>
+      <div class="cap clip" id="cap5" data-start="6.41" data-duration="0.56" data-track-index="9"><span id="w12" class="cw k">50</span></div>
+      <div class="cap clip" id="cap6" data-start="6.97" data-duration="1.2" data-track-index="9"><span id="w13" class="cw">necessariamente</span> <span id="w14" class="cw">é</span></div>
+      <div class="cap clip" id="cap7" data-start="8.17" data-duration="0.11" data-track-index="9"><span id="w15" class="cw k">melhor</span></div>
+      <div class="cap clip" id="cap8" data-start="10.03" data-duration="1.88" data-track-index="9"><span id="w21" class="cw">Essa</span> <span id="w22" class="cw">RTX</span> <span id="w23" class="cw k">4070</span></div>
+      <div class="cap clip" id="cap9" data-start="11.91" data-duration="0.66" data-track-index="9"><span id="w24" class="cw">ela</span> <span id="w25" class="cw">faz</span> <span id="w26" class="cw">parte</span></div>
+      <div class="cap clip" id="cap10" data-start="12.57" data-duration="0.91" data-track-index="9"><span id="w27" class="cw">da</span> <span id="w28" class="cw k">série</span> <span id="w29" class="cw k">40,</span></div>
+      <div class="cap clip" id="cap11" data-start="13.73" data-duration="1.18" data-track-index="9"><span id="w30" class="cw">enquanto</span> <span id="w31" class="cw">a</span> <span id="w32" class="cw">RTX</span></div>
+      <div class="cap clip" id="cap12" data-start="14.91" data-duration="1.94" data-track-index="9"><span id="w33" class="cw k">5060</span> <span id="w34" class="cw k">Ti</span> <span id="w35" class="cw">pertence</span></div>
+      <div class="cap clip" id="cap13" data-start="16.85" data-duration="1.4" data-track-index="9"><span id="w36" class="cw">à</span> <span id="w37" class="cw k">série</span> <span id="w38" class="cw k">50.</span></div>
+      <div class="cap clip" id="cap14" data-start="18.25" data-duration="0.72" data-track-index="9"><span id="w39" class="cw">Mas,</span></div>
+      <div class="cap clip" id="cap15" data-start="18.97" data-duration="0.41" data-track-index="9"><span id="w40" class="cw k">atenção!</span></div>
+      <div class="cap clip" id="cap16" data-start="19.57" data-duration="0.42" data-track-index="9"><span id="w41" class="cw">Olhar</span> <span id="w42" class="cw">para</span></div>
+      <div class="cap clip" id="cap17" data-start="19.99" data-duration="0.98" data-track-index="9"><span id="w43" class="cw k">geração</span> <span id="w44" class="cw">não</span> <span id="w45" class="cw">é</span></div>
+      <div class="cap clip" id="cap18" data-start="20.97" data-duration="0.67" data-track-index="9"><span id="w46" class="cw">o</span> <span id="w47" class="cw k">suficiente</span></div>
+      <div class="cap clip" id="cap19" data-start="21.81" data-duration="0.94" data-track-index="9"><span id="w57" class="cw">Para</span> <span id="w58" class="cw">comparar</span> <span id="w59" class="cw">as</span></div>
+      <div class="cap clip" id="cap20" data-start="22.75" data-duration="0.77" data-track-index="9"><span id="w60" class="cw">placas</span> <span id="w61" class="cw">de</span> <span id="w62" class="cw">vídeo,</span></div>
+      <div class="cap clip" id="cap21" data-start="28.21" data-duration="0.78" data-track-index="9"><span id="w87" class="cw">Afinal,</span></div>
+      <div class="cap clip" id="cap22" data-start="28.99" data-duration="0.82" data-track-index="9"><span id="w88" class="cw">uma</span> <span id="w89" class="cw k">geração</span> <span id="w90" class="cw">mais</span></div>
+      <div class="cap clip" id="cap23" data-start="29.81" data-duration="0.7" data-track-index="9"><span id="w91" class="cw k">nova</span> <span id="w92" class="cw">não</span></div>
+      <div class="cap clip" id="cap24" data-start="30.51" data-duration="0.5" data-track-index="9"><span id="w93" class="cw">significa</span></div>
+      <div class="cap clip" id="cap25" data-start="31.01" data-duration="0.68" data-track-index="9"><span id="w94" class="cw k">automaticamente</span></div>
+      <div class="cap clip" id="cap26" data-start="31.69" data-duration="0.62" data-track-index="9"><span id="w95" class="cw">que</span> <span id="w96" class="cw">ela</span> <span id="w97" class="cw">vai</span></div>
+      <div class="cap clip" id="cap27" data-start="32.31" data-duration="0.88" data-track-index="9"><span id="w98" class="cw k">superar</span> <span id="w99" class="cw">os</span></div>
+      <div class="cap clip" id="cap28" data-start="33.19" data-duration="0.38" data-track-index="9"><span id="w100" class="cw">modelos</span> <span id="w101" class="cw">da</span></div>
+      <div class="cap clip" id="cap29" data-start="33.57" data-duration="1.18" data-track-index="9"><span id="w102" class="cw k">geração</span> <span id="w103" class="cw k">anterior.</span></div>
+      <div class="cap clip" id="cap30" data-start="34.84" data-duration="1.04" data-track-index="9"><span id="w104" class="cw">E</span> <span id="w105" class="cw">você,</span></div>
+      <div class="cap clip" id="cap31" data-start="35.88" data-duration="0.54" data-track-index="9"><span id="w106" class="cw">quando</span> <span id="w107" class="cw">vai</span></div>
+      <div class="cap clip" id="cap32" data-start="36.42" data-duration="0.5" data-track-index="9"><span id="w108" class="cw">escolher</span> <span id="w109" class="cw">uma</span></div>
+      <div class="cap clip" id="cap33" data-start="36.92" data-duration="0.78" data-track-index="9"><span id="w110" class="cw">placa</span> <span id="w111" class="cw">de</span> <span id="w112" class="cw">vídeo,</span></div>
+      <div class="cap clip" id="cap34" data-start="37.7" data-duration="0.48" data-track-index="9"><span id="w113" class="cw">você</span> <span id="w114" class="cw">olha</span></div>
+      <div class="cap clip" id="cap35" data-start="38.18" data-duration="0.32" data-track-index="9"><span id="w115" class="cw">primeiro</span> <span id="w116" class="cw">a</span></div>
+      <div class="cap clip" id="cap36" data-start="38.5" data-duration="0.98" data-track-index="9"><span id="w117" class="cw k">geração</span> <span id="w118" class="cw">ou</span></div>
+      <div class="cap clip" id="cap37" data-start="39.48" data-duration="0.36" data-track-index="9"><span id="w119" class="cw">pesquisa</span> <span id="w120" class="cw">o</span></div>
+      <div class="cap clip" id="cap38" data-start="39.84" data-duration="0.82" data-track-index="9"><span id="w121" class="cw k">desempenho</span> <span id="w122" class="cw">do</span></div>
+      <div class="cap clip" id="cap39" data-start="40.66" data-duration="0.64" data-track-index="9"><span id="w123" class="cw">modelo.</span></div>
+      <div class="cap clip" id="cap40" data-start="41.3" data-duration="0.64" data-track-index="9"><span id="w124" class="cw k">Conta</span> <span id="w125" class="cw k">aqui</span> <span id="w126" class="cw">pra</span></div>
+      <div class="cap clip" id="cap41" data-start="41.94" data-duration="0.79" data-track-index="9"><span id="w127" class="cw">gente!</span></div>
+
+      <!-- 1. gancho: o confronto já está na tela no 1º quadro -->
+      <div class="top" id="vs"><div class="row"><div class="plt blk" id="vs-a"><span>RTX 4070</span></div><div id="vsb">VS</div><div class="plt red" id="vs-b"><span>RTX 5060 Ti</span></div></div></div>
+
+      <!-- 2. linha das gerações -->
+      <div id="genl">
+        <div id="newer">GERAÇÃO MAIS NOVA →</div>
+        <div id="gl-line"></div><div id="gl-fill"></div>
+        <div class="node" id="n40"><small>SÉRIE</small><b>40</b></div>
+        <div class="node" id="n50"><small>SÉRIE</small><b>50</b></div>
+        <div class="pname" id="p40"><div class="plt wht"><span>RTX 4070</span></div></div>
+        <div class="pname" id="p50"><div class="plt red"><span>RTX 5060 Ti</span></div></div>
+      </div>
+
+      <!-- 3. atenção / só a geração não basta -->
+      <div id="warn"><div class="plt red"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
+  <path d="M12 9v4" />
+  <path d="M12 17h.01" /></svg>ATENÇÃO!</span></div></div>
+      <div class="top" id="hg"><div class="plt blk" id="hg-a"><span>OLHAR SÓ A GERAÇÃO</span></div><div class="plt red" id="hg-b"><span>NÃO BASTA!</span></div></div>
+
+      <!-- 4. como comparar -->
+      <div class="top" id="hc"><div class="plt wht" id="hc-a"><span>COMO COMPARAR?</span></div></div>
+      <div id="list">
+        <div class="it" id="i1"><div class="ib"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 14 4-4" />
+  <path d="M3.34 19a10 10 0 1 1 17.32 0" /></svg></div><div class="tx">TESTES DE DESEMPENHO</div><div class="ck"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg></div></div>
+        <div class="it" id="i2"><div class="ib"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 12v-2" />
+  <path d="M12 18v-2" />
+  <path d="M16 12v-2" />
+  <path d="M16 18v-2" />
+  <path d="M2 11h1.5" />
+  <path d="M20 18v-2" />
+  <path d="M20.5 11H22" />
+  <path d="M4 18v-2" />
+  <path d="M8 12v-2" />
+  <path d="M8 18v-2" />
+  <rect x="2" y="6" width="20" height="10" rx="2" /></svg></div><div class="tx">MEMÓRIA</div><div class="ck"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg></div></div>
+        <div class="it" id="i3"><div class="ib"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v2" />
+  <path d="M12 2v2" />
+  <path d="M17 20v2" />
+  <path d="M17 2v2" />
+  <path d="M2 12h2" />
+  <path d="M2 17h2" />
+  <path d="M2 7h2" />
+  <path d="M20 12h2" />
+  <path d="M20 17h2" />
+  <path d="M20 7h2" />
+  <path d="M7 20v2" />
+  <path d="M7 2v2" />
+  <rect x="4" y="4" width="16" height="16" rx="2" />
+  <rect x="8" y="8" width="8" height="8" rx="1" /></svg></div><div class="tx">RECURSOS DISPONÍVEIS</div><div class="ck"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg></div></div>
+        <div class="it" id="i4"><div class="ib"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" x2="10" y1="11" y2="11" />
+  <line x1="8" x2="8" y1="9" y2="13" />
+  <line x1="15" x2="15.01" y1="12" y2="12" />
+  <line x1="18" x2="18.01" y1="10" y2="10" />
+  <path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z" /></svg></div><div class="tx">TIPO DE JOGO</div><div class="ck"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg></div></div>
+      </div>
+
+      <!-- 5. mais nova ≠ sempre superior -->
+      <div class="top" id="hn"><div class="plt blk" id="hn-a"><span>GERAÇÃO MAIS NOVA</span></div><div class="plt red" id="hn-b"><span>≠ SEMPRE SUPERIOR</span></div></div>
+
+      <!-- 6. enquete para os comentários -->
+      <div id="poll">
+        <div class="plt wht" id="pq"><span>E VOCÊ, OLHA PRIMEIRO…</span></div>
+        <div class="opt" id="oA"><i>A</i><span>A GERAÇÃO</span></div>
+        <div class="opt" id="oB"><i>B</i><span>O DESEMPENHO</span></div>
+      </div>
+      <div id="cmt"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" /></svg><span>COMENTA AQUI</span></div>
+
+      <!-- 2b. cartão 50 > 40 ? -->
+      <div id="c50">
+        <div id="c50-row">
+          <div class="gen" id="g50"><div class="lbl">SÉRIE</div><b>50</b></div>
+          <div id="gt"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg></div>
+          <div class="gen" id="g40"><div class="lbl">SÉRIE</div><b>40</b></div>
+        </div>
+        <div id="c50-q"><div class="plt red"><span>SEMPRE?</span></div></div>
+      </div>
+
+      <!-- logo oficial (versão negativa: preto → branco, vermelho original) -->
+      <img id="bug" src="assets/img/logo-branco.png" alt="Gamer Star Informática" />
+
+      <!-- 7. final -->
+      <div id="fin">
+        <img id="fin-logo" src="assets/img/logo-branco.png" alt="Gamer Star Informática" />
+        <div id="fin-k">Na dúvida entre duas placas?</div>
+        <div id="btn"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" /></svg><span id="btn-l">Enviar mensagem</span><div id="ripple"></div></div>
+        <div class="info" id="info1"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
+  <circle cx="12" cy="10" r="3" /></svg><span>CLN 406 · Bloco E · Loja 38 · <b>Asa Norte</b></span></div>
+        <div class="info" id="info2"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" />
+  <path d="M15 18H9" />
+  <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14" />
+  <circle cx="17" cy="18" r="2" />
+  <circle cx="7" cy="18" r="2" /></svg><span><b>+ de 1.000 pedidos</b> enviados por mês</span></div>
+      </div>
+
+      <div id="scan"></div>
+      <div id="flash"></div>
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="45.93" data-track-index="20"></audio>
+    </div>
+
+    <script>
+      const CONFIG = { cta: "Enviar mensagem" }; // espelha o botão do anúncio (ex.: "Comprar agora", "Saiba mais")
+      document.getElementById("btn-l").textContent = CONFIG.cta;
+      const T = {"total": 45.93, "cuts": {"c1": [0.0, 4.74, [1.1, 1.0]], "c2": [4.74, 4.99, [1.0, 1.06]], "c3": [9.73, 3.75, [1.08, 1.12]], "c4": [13.48, 5.9, [1.0, 1.05]], "c5": [19.38, 2.26, [1.1, 1.14]], "c6": [21.64, 1.88, [1.0, 1.03]], "c7": [23.52, 4.5, [1.04, 1.08]], "c8": [28.02, 6.73, [1.0, 1.06]], "c9": [34.75, 7.98, [1.08, 1.02]], "end": [42.73, 3.2, [1.06, 1.12]]}, "words": [{"id": "w0", "t": 0.18, "k": false}, {"id": "w1", "t": 0.48, "k": false}, {"id": "w2", "t": 1.38, "k": true}, {"id": "w3", "t": 3.1, "k": false}, {"id": "w4", "t": 3.58, "k": true}, {"id": "w5", "t": 4.62, "k": true}, {"id": "w6", "t": 4.94, "k": false}, {"id": "w7", "t": 5.14, "k": false}, {"id": "w8", "t": 5.24, "k": false}, {"id": "w9", "t": 5.44, "k": false}, {"id": "w10", "t": 5.76, "k": false}, {"id": "w11", "t": 6.04, "k": true}, {"id": "w12", "t": 6.46, "k": true}, {"id": "w13", "t": 7.02, "k": false}, {"id": "w14", "t": 7.94, "k": false}, {"id": "w15", "t": 8.22, "k": true}, {"id": "w21", "t": 10.08, "k": false}, {"id": "w22", "t": 10.4, "k": false}, {"id": "w23", "t": 11.06, "k": true}, {"id": "w24", "t": 11.96, "k": false}, {"id": "w25", "t": 12.18, "k": false}, {"id": "w26", "t": 12.46, "k": false}, {"id": "w27", "t": 12.62, "k": false}, {"id": "w28", "t": 12.82, "k": true}, {"id": "w29", "t": 13.28, "k": true}, {"id": "w30", "t": 13.78, "k": false}, {"id": "w31", "t": 14.04, "k": false}, {"id": "w32", "t": 14.46, "k": false}, {"id": "w33", "t": 14.96, "k": true}, {"id": "w34", "t": 16.0, "k": true}, {"id": "w35", "t": 16.3, "k": false}, {"id": "w36", "t": 16.9, "k": false}, {"id": "w37", "t": 17.14, "k": true}, {"id": "w38", "t": 17.7, "k": true}, {"id": "w39", "t": 18.3, "k": false}, {"id": "w40", "t": 19.02, "k": true}, {"id": "w41", "t": 19.62, "k": false}, {"id": "w42", "t": 19.88, "k": false}, {"id": "w43", "t": 20.04, "k": true}, {"id": "w44", "t": 20.76, "k": false}, {"id": "w45", "t": 20.96, "k": false}, {"id": "w46", "t": 21.02, "k": false}, {"id": "w47", "t": 21.44, "k": true}, {"id": "w57", "t": 21.86, "k": false}, {"id": "w58", "t": 22.2, "k": false}, {"id": "w59", "t": 22.6, "k": false}, {"id": "w60", "t": 22.8, "k": false}, {"id": "w61", "t": 23.1, "k": false}, {"id": "w62", "t": 23.4, "k": false}, {"id": "w87", "t": 28.26, "k": false}, {"id": "w88", "t": 29.04, "k": false}, {"id": "w89", "t": 29.2, "k": true}, {"id": "w90", "t": 29.62, "k": false}, {"id": "w91", "t": 29.86, "k": true}, {"id": "w92", "t": 30.14, "k": false}, {"id": "w93", "t": 30.56, "k": false}, {"id": "w94", "t": 31.06, "k": true}, {"id": "w95", "t": 31.74, "k": false}, {"id": "w96", "t": 31.88, "k": false}, {"id": "w97", "t": 32.06, "k": false}, {"id": "w98", "t": 32.36, "k": true}, {"id": "w99", "t": 32.98, "k": false}, {"id": "w100", "t": 33.24, "k": false}, {"id": "w101", "t": 33.48, "k": false}, {"id": "w102", "t": 33.62, "k": true}, {"id": "w103", "t": 34.4, "k": true}, {"id": "w104", "t": 34.89, "k": false}, {"id": "w105", "t": 35.31, "k": false}, {"id": "w106", "t": 35.93, "k": false}, {"id": "w107", "t": 36.25, "k": false}, {"id": "w108", "t": 36.47, "k": false}, {"id": "w109", "t": 36.77, "k": false}, {"id": "w110", "t": 36.97, "k": false}, {"id": "w111", "t": 37.29, "k": false}, {"id": "w112", "t": 37.49, "k": false}, {"id": "w113", "t": 37.75, "k": false}, {"id": "w114", "t": 37.93, "k": false}, {"id": "w115", "t": 38.23, "k": false}, {"id": "w116", "t": 38.39, "k": false}, {"id": "w117", "t": 38.55, "k": true}, {"id": "w118", "t": 39.31, "k": false}, {"id": "w119", "t": 39.53, "k": false}, {"id": "w120", "t": 39.77, "k": false}, {"id": "w121", "t": 39.89, "k": true}, {"id": "w122", "t": 40.31, "k": false}, {"id": "w123", "t": 40.71, "k": false}, {"id": "w124", "t": 41.35, "k": true}, {"id": "w125", "t": 41.55, "k": true}, {"id": "w126", "t": 41.69, "k": false}, {"id": "w127", "t": 41.99, "k": false}], "g4070": 1.38, "g5060": 3.58, "serie50": 6.04, "melhor": 8.22, "serie40": 8.94, "q40": 9.22, "rtx4070": 10.4, "s40": 12.82, "rtx5060": 14.46, "s50": 17.14, "atencao": 19.02, "geracao": 20.04, "suficiente": 21.44, "comparar": 22.2, "testes": 23.74, "memoria": 25.02, "recursos": 26.12, "jogo": 27.88, "nova": 29.86, "auto": 31.06, "superar": 32.36, "voce": 35.31, "optG": 38.55, "optD": 39.89, "conta": 41.35, "card": 8.280000000000001};
+      const C = T.cuts;
+      const tl = gsap.timeline({ paused: true });
+      const ir = { immediateRender: false };
+      const E0 = C.end[0];
+
+      // ---- câmera: punch-in alternado esconde os cortes ----
+      Object.entries(C).forEach(([id, [s, d, z]]) => {
+        tl.fromTo("#cam", { scale: z[0] }, { scale: z[1], duration: d, ease: id === "c1" ? "expo.out" : "none", ...ir }, s);
+      });
+      Object.entries(C).forEach(([id, [s]]) => {
+        if (id === "c1") return;
+        tl.fromTo("#flash", { opacity: 0 }, { opacity: 0.18, duration: 0.04, ...ir }, s - 0.02).to("#flash", { opacity: 0, duration: 0.18 }, s + 0.02);
+      });
+
+      // ---- legendas ----
+      T.words.forEach((w) => {
+        tl.fromTo("#" + w.id, { opacity: 0, y: 26, scale: w.k ? 1.25 : 1 }, { opacity: 1, y: 0, scale: 1, duration: w.k ? 0.2 : 0.12, ease: w.k ? "back.out(2)" : "power2.out", ...ir }, w.t - 0.05);
+      });
+      // placa some quando um cartão grande cobre a faixa da legenda
+      tl.to("#plate", { opacity: 0, duration: 0.12 }, T.card - 0.05)
+        .set("#plate", { opacity: 1 }, C.c3[0])
+        .to("#plate", { opacity: 0, duration: 0.12 }, C.c7[0] + 0.1)
+        .to("#plate", { opacity: 1, duration: 0.12 }, C.c8[0] - 0.05)
+        .to(["#plate", "#bug"], { opacity: 0, duration: 0.2 }, E0 - 0.05);
+
+      const inL = (sel, t) => tl.fromTo(sel, { opacity: 0, x: -700 }, { opacity: 1, x: 0, duration: 0.3, ease: "power3.out", ...ir }, t);
+      const inR = (sel, t) => tl.fromTo(sel, { opacity: 0, x: 700 }, { opacity: 1, x: 0, duration: 0.3, ease: "power3.out", ...ir }, t);
+      const stamp = (sel, t) => tl.fromTo(sel, { opacity: 0, scale: 2.1, rotation: -8 }, { opacity: 1, scale: 1, rotation: -3, duration: 0.24, ease: "power4.in", ...ir }, t - 0.22);
+      const bump = (sel, t, s = 1.14) => tl.fromTo(sel, { scale: 1 }, { scale: s, duration: 0.09, yoyo: true, repeat: 1, ease: "power1.out", ...ir }, t);
+      const out = (sel, t) => tl.to(sel, { opacity: 0, y: -60, duration: 0.2, ease: "power2.in" }, t);
+      const shake = (t) => tl.fromTo("#cam", { x: 0 }, { keyframes: [{ x: -18 }, { x: 14 }, { x: -9 }, { x: 5 }, { x: 0 }], duration: 0.28, ease: "none", ...ir }, t);
+
+      // ---- 1. VS: no ar desde o 1º quadro; cada placa pulsa quando é falada ----
+      tl.fromTo("#vs-a", { x: -40 }, { x: 0, duration: 0.5, ease: "expo.out", ...ir }, 0)
+        .fromTo("#vs-b", { x: 40 }, { x: 0, duration: 0.5, ease: "expo.out", ...ir }, 0)
+        .fromTo("#vsb", { scale: 1.6, rotation: -30 }, { scale: 1, rotation: 0, duration: 0.45, ease: "back.out(2)", ...ir }, 0);
+      bump("#vs-a", T.g4070 - 0.04); bump("#vs-b", T.g5060 - 0.04);
+      tl.fromTo("#vsb", { rotation: 0 }, { rotation: 360, duration: 0.5, ease: "power2.inOut", ...ir }, T.serie50 - 0.1);
+      out("#vs", T.card - 0.2);
+
+      // ---- 2b. cartão 50 > 40 ? ----
+      tl.fromTo("#c50", { opacity: 0 }, { opacity: 1, duration: 0.12, ...ir }, T.card - 0.06)
+        .fromTo("#g50", { opacity: 0, x: -300 }, { opacity: 1, x: 0, duration: 0.28, ease: "power3.out", ...ir }, T.card)
+        .fromTo("#gt", { opacity: 0, scale: 0.2 }, { opacity: 1, scale: 1, duration: 0.24, ease: "back.out(2.4)", ...ir }, T.card + 0.18)
+        .fromTo("#g40", { opacity: 0, x: 300 }, { opacity: 1, x: 0, duration: 0.28, ease: "power3.out", ...ir }, T.serie40 - 0.12);
+      stamp("#c50-q", T.q40 + 0.2);
+      tl.set("#c50", { opacity: 0 }, C.c3[0]);
+
+      // ---- 2. linha das gerações ----
+      tl.fromTo("#genl", { opacity: 0, y: -50 }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out", ...ir }, C.c3[0] + 0.05);
+      [["#n40", "#p40", T.rtx4070, T.s40], ["#n50", "#p50", T.rtx5060, T.s50]].forEach(([n, p, tp, ts]) => {
+        tl.fromTo(p, { opacity: 0, y: 40, scale: 0.7 }, { opacity: 1, y: 0, scale: 1, duration: 0.26, ease: "back.out(1.8)", ...ir }, tp - 0.08)
+          .fromTo(n, { borderColor: "#ffffff", backgroundColor: "#0d0d0f" }, { borderColor: "#cb2129", backgroundColor: "#cb2129", duration: 0.12, ...ir }, ts - 0.05);
+        bump(n, ts - 0.05, 1.18);
+      });
+      tl.fromTo("#gl-fill", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power2.inOut", ...ir }, C.c4[0])
+        .fromTo("#newer", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.25, ...ir }, C.c4[0] + 0.3);
+      out("#genl", T.atencao - 0.32);
+
+      // ---- 3. atenção ----
+      tl.fromTo("#redfl", { opacity: 0 }, { opacity: 1, duration: 0.06, ...ir }, T.atencao - 0.06).to("#redfl", { opacity: 0, duration: 0.5 }, T.atencao + 0.05);
+      stamp("#warn", T.atencao + 0.02); shake(T.atencao);
+      out("#warn", C.c5[0] - 0.12);
+      inL("#hg-a", T.geracao - 0.1); tl.set("#hg", { opacity: 1 }, T.geracao - 0.1);
+      stamp("#hg-b", T.suficiente + 0.05); shake(T.suficiente + 0.05);
+      out("#hg", C.c6[0] - 0.1);
+
+      // ---- 4. como comparar + checklist ----
+      tl.set("#hc", { opacity: 1 }, T.comparar - 0.1); inR("#hc-a", T.comparar - 0.1);
+      tl.fromTo("#list", { opacity: 0, y: 300 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", ...ir }, C.c7[0] - 0.12);
+      [["#i1", T.testes], ["#i2", T.memoria], ["#i3", T.recursos], ["#i4", T.jogo]].forEach(([s, t]) => {
+        tl.fromTo(s + " .tx", { color: "rgba(255,255,255,0.28)" }, { color: "#ffffff", duration: 0.15, ...ir }, t - 0.06)
+          .fromTo(s + " .ib", { backgroundColor: "#26262b", color: "#b9b9c0" }, { backgroundColor: "#cb2129", color: "#ffffff", duration: 0.15, ...ir }, t - 0.06)
+          .fromTo(s, { x: 0 }, { x: 18, duration: 0.1, yoyo: true, repeat: 1, ease: "power1.out", ...ir }, t - 0.06)
+          .fromTo(s + " .ck", { backgroundColor: "rgba(0,0,0,0)", borderColor: "rgba(255,255,255,0.25)" }, { backgroundColor: "#cb2129", borderColor: "#cb2129", duration: 0.12, ...ir }, t + 0.12)
+          .fromTo(s + " .ck .ic", { opacity: 0, scale: 0.2 }, { opacity: 1, scale: 1, duration: 0.22, ease: "back.out(2.5)", ...ir }, t + 0.12);
+      });
+      tl.to("#list", { opacity: 0, y: 300, duration: 0.25, ease: "power2.in" }, C.c8[0] - 0.2);
+      out("#hc", C.c8[0] - 0.15);
+
+      // ---- 5. mais nova ≠ sempre superior ----
+      tl.set("#hn", { opacity: 1 }, T.nova - 0.1); inL("#hn-a", T.nova - 0.1);
+      stamp("#hn-b", T.superar); shake(T.superar);
+      out("#hn", C.c9[0] - 0.1);
+
+      // ---- 6. enquete (abre com o cartão "E VOCÊ?" sobre o trecho escuro do original) ----
+      tl.set("#cyou", { opacity: 1 }, C.c9[0]).set("#cyou", { opacity: 0 }, C.c9[0] + 0.62);
+      tl.fromTo("#cyou .plt", { scale: 1.8, rotation: -8 }, { scale: 1, rotation: -3, duration: 0.2, ease: "power4.in", ...ir }, C.c9[0]);
+      tl.set("#poll", { opacity: 1 }, T.voce - 0.1);
+      tl.fromTo("#pq", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.26, ease: "back.out(1.8)", ...ir }, T.voce - 0.1);
+      inL("#oA", T.optG - 0.1); inR("#oB", T.optD - 0.1);
+      tl.fromTo("#cmt", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)", ...ir }, T.conta - 0.08)
+        .fromTo("#cmt", { y: 0 }, { y: -16, duration: 0.3, yoyo: true, repeat: 3, ease: "sine.inOut", ...ir }, T.conta + 0.3);
+      tl.to(["#poll", "#cmt"], { opacity: 0, duration: 0.2 }, E0 - 0.15);
+
+      // ---- 7. final ----
+      tl.fromTo("#flash", { opacity: 0 }, { opacity: 0.5, duration: 0.05, ...ir }, E0 - 0.02).to("#flash", { opacity: 0, duration: 0.3 }, E0 + 0.04)
+        .fromTo("#fin", { opacity: 0 }, { opacity: 1, duration: 0.01, ...ir }, E0)
+        .fromTo("#fin-logo", { opacity: 0, scale: 1.4, filter: "blur(14px) drop-shadow(0 12px 30px rgba(0,0,0,0.6))" }, { opacity: 1, scale: 1, filter: "blur(0px) drop-shadow(0 12px 30px rgba(0,0,0,0.6))", duration: 0.45, ease: "expo.out", ...ir }, E0)
+        .fromTo("#fin-k", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.3, ...ir }, E0 + 0.3)
+        .fromTo("#btn", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.32, ease: "back.out(1.8)", ...ir }, E0 + 0.5)
+        .fromTo("#info1", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.25, ...ir }, E0 + 0.8)
+        .fromTo("#info2", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.25, ...ir }, E0 + 0.95)
+        .fromTo("#btn", { scale: 1 }, { scale: 0.94, duration: 0.09, yoyo: true, repeat: 1, ...ir }, E0 + 1.4)
+        .fromTo("#ripple", { opacity: 0.9, scale: 0.5 }, { opacity: 0, scale: 5, duration: 0.6, ease: "power2.out", ...ir }, E0 + 1.45)
+        .fromTo("#btn", { scale: 1 }, { scale: 1.05, duration: 0.45, yoyo: true, repeat: 1, ease: "sine.inOut", ...ir }, E0 + 1.9);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
