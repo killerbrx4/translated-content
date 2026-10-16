@@ -51,7 +51,7 @@ def zoomed(b, z):
 # ---- legendas: blocos de até 3 palavras / 15 letras numa etiqueta compacta que cobre a legenda antiga daquele trecho ----
 caps, words = [], []
 for c in cuts.values():
-    if "w" not in c: continue
+    if "w" not in c or not E.get("captions", True): continue  # V3: usa a legenda queimada do original
     ids = [i for i in range(c["w"][0], c["w"][1] + 1) if not hidden(c["id"], WORDS[i][1])]
     chunks, cur = [], []
     for i in ids:
