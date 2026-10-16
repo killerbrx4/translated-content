@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Gamer Star · 4070 ou 5060 Ti · V4 profissional</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Bebas"; src: url("assets/fonts/bebas-neue-latin-400-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Barlow"; src: url("assets/fonts/barlow-condensed-latin-600-normal.woff2") format("woff2"); font-weight: 600; }
+      @font-face { font-family: "Barlow"; src: url("assets/fonts/barlow-condensed-latin-800-normal.woff2") format("woff2"); font-weight: 800; }
+      /* V4: menos é mais. Um grafismo por vez, só na faixa de cima (acima da cabeça), entra na palavra e sai logo depois */
+      :root { --red: #cb2129; --red-d: #7e0f14; --ink: #0d0d0f; --white: #ffffff; --grey: #b9b9c0; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #000; font-family: "Barlow", sans-serif; color: var(--white); }
+      .ic { width: 1em; height: 1em; display: inline-block; vertical-align: -0.12em; }
+
+      #cam { position: absolute; inset: 0; transform-origin: 50% 40%; }
+      .shot { position: absolute; inset: 0; width: 1080px; height: 1920px; object-fit: cover; }
+      #end { filter: brightness(0.28) saturate(0.7) blur(10px); }
+      #shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 26%); }
+      #bug { position: absolute; left: 50%; top: 92px; width: 220px; margin-left: -110px; opacity: 0.95; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6)); }
+
+      /* ---- etiqueta padrão (lower-third no topo) ---- */
+      .tag { position: absolute; left: 0; right: 0; top: 250px; display: flex; justify-content: center; opacity: 0; }
+      .tag .in { display: flex; flex-direction: column; align-items: flex-start; padding: 16px 34px 12px 28px; border-left: 8px solid var(--red); border-radius: 6px 18px 18px 6px; background: rgba(13,13,15,0.80); backdrop-filter: blur(8px); box-shadow: 0 14px 34px rgba(0,0,0,0.35); }
+      .tag .k { font-weight: 600; font-size: 32px; letter-spacing: 0.16em; color: var(--grey); text-transform: uppercase; }
+      .tag .t { font-weight: 800; font-size: 70px; line-height: 1.02; letter-spacing: 0.01em; text-transform: uppercase; white-space: nowrap; }
+      .tag .t b { color: var(--red); font-weight: 800; }
+      .tag .ic { color: var(--red); margin-right: 12px; }
+      .pair { position: absolute; left: 0; right: 0; top: 250px; display: flex; justify-content: center; align-items: center; gap: 26px; }
+      .pair .tag { position: static; }
+      .pair .vs { font-family: "Bebas"; font-size: 64px; color: var(--grey); opacity: 0; }
+
+      /* ---- cartão sóbrio sobre o efeito cinza do vídeo original ---- */
+      #c50 { position: absolute; inset: 0; background: radial-gradient(circle at 50% 42%, #1c1c21 0%, #08080a 70%); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; opacity: 0; }
+      #c50 .l1, #c50 .l3 { font-family: "Bebas"; font-size: 200px; line-height: 0.9; }
+      #c50 .l3 { color: var(--red); }
+      #c50 .l2 { font-weight: 600; font-size: 54px; letter-spacing: 0.06em; color: var(--grey); text-transform: uppercase; }
+      #c50 .bar { width: 120px; height: 8px; background: var(--red); border-radius: 4px; }
+
+      /* ---- final ---- */
+      #fin { position: absolute; left: 0; right: 0; top: 520px; display: flex; flex-direction: column; align-items: center; opacity: 0; }
+      #fin-logo { width: 820px; filter: drop-shadow(0 12px 30px rgba(0,0,0,0.6)); }
+      #fin-k { margin-top: 70px; font-weight: 600; font-size: 56px; letter-spacing: 0.03em; }
+      #btn { display: inline-flex; align-items: center; gap: 20px; margin-top: 28px; padding: 26px 58px 22px; border-radius: 999px; background: var(--red); font-weight: 800; font-size: 64px; text-transform: uppercase; letter-spacing: 0.02em; box-shadow: 0 12px 0 var(--red-d); }
+      .info { margin-top: 30px; display: flex; align-items: center; gap: 16px; font-weight: 600; font-size: 46px; opacity: 0; }
+      .info .ic { color: var(--red); font-size: 50px; }
+      .info b { font-weight: 800; }
+      #info1 { margin-top: 64px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="__TOTAL__" data-width="1080" data-height="1920">
+      <div id="cam">
+        __VIDEOS__
+      </div>
+      <div id="shade"></div>
+      __CAPTIONS__
+
+      <!-- 1. as duas placas, cada uma na hora em que é falada -->
+      <div class="pair">
+        <div class="tag" id="a4070"><div class="in"><div class="t">RTX 4070</div></div></div>
+        <div class="vs" id="avs">VS</div>
+        <div class="tag" id="a5060"><div class="in"><div class="t"><b>RTX 5060 Ti</b></div></div></div>
+      </div>
+
+      <!-- 2. cartão (substitui o efeito cinza do original) -->
+      <div id="c50"><div class="l1">Série 50</div><div class="l2">é sempre melhor que a</div><div class="l3">Série 40?</div><div class="bar"></div></div>
+
+      <!-- 3. etiquetas: uma por vez -->
+      <div class="tag" id="t40"><div class="in"><div class="k">Série 40</div><div class="t">RTX 4070</div></div></div>
+      <div class="tag" id="t50"><div class="in"><div class="k">Série 50</div><div class="t"><b>RTX 5060 Ti</b></div></div></div>
+      <div class="tag" id="tat"><div class="in"><div class="t">{{lucide:triangle-alert}}Atenção</div></div></div>
+      <div class="tag" id="tger"><div class="in"><div class="t">Só a geração <b>não basta</b></div></div></div>
+      <div class="tag" id="tcmp"><div class="in"><div class="k">Para comparar</div><div class="t">Olhe também…</div></div></div>
+      <div class="tag" id="i1"><div class="in"><div class="k">1 de 4</div><div class="t">{{lucide:gauge}}Testes de desempenho</div></div></div>
+      <div class="tag" id="i2"><div class="in"><div class="k">2 de 4</div><div class="t">{{lucide:memory-stick}}Memória</div></div></div>
+      <div class="tag" id="i3"><div class="in"><div class="k">3 de 4</div><div class="t">{{lucide:cpu}}Recursos disponíveis</div></div></div>
+      <div class="tag" id="i4"><div class="in"><div class="k">4 de 4</div><div class="t">{{lucide:gamepad-2}}Tipo de jogo</div></div></div>
+      <div class="tag" id="tnova"><div class="in"><div class="t">Mais nova <b>≠ sempre superior</b></div></div></div>
+      <div class="tag" id="oA"><div class="in"><div class="k">Opção A</div><div class="t">A geração</div></div></div>
+      <div class="tag" id="oB"><div class="in"><div class="k">Opção B</div><div class="t"><b>O desempenho</b></div></div></div>
+      <div class="tag" id="tcmt"><div class="in"><div class="t">{{lucide:message-circle}}Comenta aqui</div></div></div>
+
+      <img id="bug" src="assets/img/logo-branco.png" alt="Gamer Star Informática" />
+
+      <!-- 4. final -->
+      <div id="fin">
+        <img id="fin-logo" src="assets/img/logo-branco.png" alt="Gamer Star Informática" />
+        <div id="fin-k">Na dúvida entre duas placas?</div>
+        <div id="btn">{{lucide:message-circle}}<span id="btn-l">Enviar mensagem</span></div>
+        <div class="info" id="info1">{{lucide:map-pin}}<span>CLN 406 · Bloco E · Loja 38 · <b>Asa Norte</b></span></div>
+        <div class="info" id="info2">{{lucide:truck}}<span><b>+ de 1.000 pedidos</b> enviados por mês</span></div>
+      </div>
+
+      <audio id="mix" src="assets/audio/mix-v4.wav" data-start="0" data-duration="__TOTAL__" data-track-index="20"></audio>
+    </div>
+
+    <script>
+      const CONFIG = { cta: "Enviar mensagem" }; // espelha o botão do anúncio
+      document.getElementById("btn-l").textContent = CONFIG.cta;
+      const T = __T__;
+      const C = T.cuts;
+      const tl = gsap.timeline({ paused: true });
+      const ir = { immediateRender: false };
+      const E0 = C.end[0];
+      const HOLD = 0.6; // quanto a etiqueta fica depois que a palavra termina
+
+      // ---- câmera: só um punch-in suave alternado (esconde os cortes) ----
+      Object.entries(C).forEach(([id, [s, d, z]]) => {
+        tl.fromTo("#cam", { scale: z[0] }, { scale: z[1], duration: d, ease: "none", ...ir }, s);
+      });
+
+      // entra na palavra (desliza 30 px e aparece), sai depois que ela termina (sobe 20 px e some)
+      const show = (sel, tin, tout) => {
+        tl.fromTo(sel, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", ...ir }, tin - 0.12)
+          .to(sel, { opacity: 0, y: -20, duration: 0.3, ease: "power2.in" }, tout);
+      };
+
+      // ---- 1. RTX 4070 · VS · RTX 5060 Ti ----
+      show("#a4070", T.g4070, T.e_ti + 0.35);
+      show("#avs", T.g5060 - 0.15, T.e_ti + 0.35);
+      show("#a5060", T.g5060, T.e_ti + 0.35);
+
+      // ---- 2. cartão sóbrio ----
+      tl.fromTo("#c50", { opacity: 0 }, { opacity: 1, duration: 0.2, ...ir }, T.card - 0.1)
+        .fromTo("#c50 .l1", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", ...ir }, T.card - 0.05)
+        .fromTo("#c50 .l2", { opacity: 0 }, { opacity: 1, duration: 0.3, ...ir }, T.card + 0.15)
+        .fromTo("#c50 .l3", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", ...ir }, T.serie40 - 0.12)
+        .fromTo("#c50 .bar", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power2.out", ...ir }, T.serie40 + 0.1)
+        .to("#c50", { opacity: 0, duration: 0.15 }, C.c3[0] - 0.12);
+
+      // ---- 3. uma etiqueta por vez ----
+      show("#t40", T.rtx4070, T.e_s40 - 0.1);
+      show("#t50", T.rtx5060, T.e_s50 + 0.2);
+      show("#tat", T.atencao - 0.25, C.c5[0] + 0.15);
+      show("#tger", T.geracao, T.e_suficiente + HOLD * 0.5);
+      show("#tcmp", T.comparar, C.c7[0] - 0.1);
+      show("#i1", T.testes, T.memoria - 0.22);
+      show("#i2", T.memoria, T.recursos - 0.22);
+      show("#i3", T.recursos, T.jogo - 0.22);
+      show("#i4", T.jogo, T.e_jogo + HOLD);
+      show("#tnova", T.nova, T.e_anterior - 0.3);
+      show("#oA", T.optG, T.optD - 0.22);
+      show("#oB", T.optD, T.conta - 0.22);
+      show("#tcmt", T.conta, E0 - 0.35);
+
+      // ---- 4. final ----
+      tl.to("#bug", { opacity: 0, duration: 0.25 }, E0 - 0.1)
+        .fromTo("#fin", { opacity: 0 }, { opacity: 1, duration: 0.01, ...ir }, E0)
+        .fromTo("#fin-logo", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out", ...ir }, E0)
+        .fromTo("#fin-k", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.35, ...ir }, E0 + 0.3)
+        .fromTo("#btn", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", ...ir }, E0 + 0.5)
+        .fromTo("#info1", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.3, ...ir }, E0 + 0.75)
+        .fromTo("#info2", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.3, ...ir }, E0 + 0.9);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

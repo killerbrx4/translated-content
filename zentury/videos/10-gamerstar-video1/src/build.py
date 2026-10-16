@@ -1,5 +1,5 @@
-"""Gera index.html a partir de edl.json + src/words.json + src/template.html.
-Uso: python3 -I src/build.py ."""
+"""Gera index.html a partir de edl.json + src/words.json + um template.
+Uso: python3 -I src/build.py . [src/template.html]   (V4 "profissional": src/template-v4.html)"""
 import json, re, sys, pathlib
 
 P = pathlib.Path(sys.argv[1])
@@ -98,8 +98,15 @@ TRIG = {"g4070": 2, "g5060": 4, "serie50": 11, "melhor": 15, "serie40": 19, "q40
 T = {"total": TOTAL, "cuts": {k: [v["out"], v["d"], v["zoom"]] for k, v in cuts.items()}, "words": words}
 T.update({k: out(i) for k, i in TRIG.items()})
 T["card"] = cuts["c2"]["out"] + (8.50 - cuts["c2"]["src"][0])
+def wend(i):
+    """fim da palavra i = início da próxima no mesmo corte, ou o fim do corte"""
+    for c in cuts.values():
+        if "w" in c and c["w"][0] <= i <= c["w"][1]:
+            return out(i + 1) if i + 1 <= c["w"][1] else round(c["out"] + c["d"], 3)
+T.update({"e_" + k: wend(i) for k, i in {"ti": 5, "s40": 29, "s50": 38, "atencao": 40, "suficiente": 47,
+          "testes": 68, "memoria": 69, "recursos": 72, "jogo": 76, "anterior": 103, "optG": 117, "optD": 123, "conta": 127}.items()})
 
-tpl = (P / "src/template.html").read_text()
+tpl = (P / (sys.argv[2] if len(sys.argv) > 2 else "src/template.html")).read_text()
 tpl = re.sub(r"\{\{lucide:([a-z0-9-]+)(?::([a-z-]+))?\}\}", lambda m: lucide(m.group(1), m.group(2) or "ic"), tpl)
 html = (tpl.replace("__T__", json.dumps(T, ensure_ascii=False))
         .replace("__TOTAL__", str(TOTAL))

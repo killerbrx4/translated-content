@@ -34,3 +34,11 @@
 1. O texto do botão final segue o objetivo do anúncio (mensagem, site ou loja): `CONFIG.cta` no template.
 2. Se o vídeo for orgânico, o cartão final pode trocar o botão por "@gamerstar_informatica".
 3. Não foram usados preço, especificações nem benchmarks das placas (nada disso foi informado).
+
+## V4 "profissional" (pedido do cliente: menos efeitos, nada tampando a modelo)
+- `renders/gamerstar-4070-vs-5060ti-v4-pro.mp4` (45,9 s, -14,1 LUFS). Build: `python3 -I src/build.py . src/template-v4.html` + `python3 -I audio-v4.py`.
+- **Regra:** um grafismo por vez, sempre na faixa de cima (acima da cabeça). Entra na palavra falada e sai ~0,3–0,6 s depois que ela termina. Opções e itens de lista se substituem (1 de 4 → 2 de 4…; Opção A → Opção B → Comenta aqui).
+- Legenda original mantida, sem espelhar.
+- **Saiu:** tremida, flash vermelho, carimbos, VS girando, linha das gerações, checklist grande, enquete fixa, cartão "E VOCÊ?", scanlines e flashes nos cortes.
+- **Ficou:** punch-in suave nos cortes e um cartão sóbrio "Série 50 é sempre melhor que a Série 40?" só sobre o efeito cinza do original (1,4 s).
+- **Som:** trilha contínua e baixa (sem drop nem riser), com um "swish" discreto em cada etiqueta.

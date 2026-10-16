@@ -83,3 +83,5 @@ Para anúncios de cliente gravados pelo próprio cliente (fala + loja). Base té
 7. Cores amostradas da arte do cliente. Nunca inventar condição de oferta: pedir validade/regras e listar em Pendências.
 8. Cada novo vídeo deve **melhorar um ponto em relação ao anterior** (registrar no BRIEF.md o que foi melhorado).
 9. **Preferência do cliente:** o estilo aprovado é o das edições sobre a filmagem real (Jolie 04–07). PhotoCraft (pôster/adesivos/LUT, `docs/photocraft.md`) só quando ele pedir.
+
+10. **Preferência do cliente (Gamer Star, out/2026), padrão "profissional":** menos efeitos. **Um grafismo por vez**, fora do rosto e do produto (faixa de cima). Cada um **entra na palavra falada e sai logo depois que ela termina** (pode segurar ~0,5 s). Listas e opções **se substituem** em vez de empilhar. Nada engraçado, nada de tremida, flash ou carimbo em sequência. Legenda grande cobrindo a pessoa ou o produto: não usar.

@@ -3,110 +3,52 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <title>Gamer Star · 4070 ou 5060 Ti</title>
+    <title>Gamer Star · 4070 ou 5060 Ti · V4 profissional</title>
     <script src="assets/vendor/gsap.min.js"></script>
     <style>
       @font-face { font-family: "Bebas"; src: url("assets/fonts/bebas-neue-latin-400-normal.woff2") format("woff2"); }
       @font-face { font-family: "Barlow"; src: url("assets/fonts/barlow-condensed-latin-600-normal.woff2") format("woff2"); font-weight: 600; }
       @font-face { font-family: "Barlow"; src: url("assets/fonts/barlow-condensed-latin-800-normal.woff2") format("woff2"); font-weight: 800; }
-      /* cores da marca: vermelho amostrado do logo oficial, preto e branco */
+      /* V4: menos é mais. Um grafismo por vez, só na faixa de cima (acima da cabeça), entra na palavra e sai logo depois */
       :root { --red: #cb2129; --red-d: #7e0f14; --ink: #0d0d0f; --white: #ffffff; --grey: #b9b9c0; }
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
-      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #000; font-family: "Bebas", sans-serif; color: var(--white); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #000; font-family: "Barlow", sans-serif; color: var(--white); }
       .ic { width: 1em; height: 1em; display: inline-block; vertical-align: -0.12em; }
 
-      /* a câmera escala a partir da faixa da legenda queimada (y≈83%), para a placa continuar cobrindo */
-      #cam { position: absolute; inset: 0; transform-origin: 50% 83%; }
+      #cam { position: absolute; inset: 0; transform-origin: 50% 40%; }
       .shot { position: absolute; inset: 0; width: 1080px; height: 1920px; object-fit: cover; }
       #end { filter: brightness(0.28) saturate(0.7) blur(10px); }
-      #shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to bottom, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.0) 30%, rgba(0,0,0,0) 62%, rgba(0,0,0,0.35) 100%); }
-      #scan { position: absolute; inset: 0; pointer-events: none; opacity: 0.10; background: repeating-linear-gradient(to bottom, rgba(255,255,255,0.5) 0 1px, transparent 1px 4px); mix-blend-mode: overlay; }
+      #shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 26%); }
+      #bug { position: absolute; left: 50%; top: 92px; width: 220px; margin-left: -110px; opacity: 0.95; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6)); }
 
-      #bug { position: absolute; left: 50%; top: 92px; width: 260px; margin-left: -130px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6)); }
+      /* ---- etiqueta padrão (lower-third no topo) ---- */
+      .tag { position: absolute; left: 0; right: 0; top: 250px; display: flex; justify-content: center; opacity: 0; }
+      .tag .in { display: flex; flex-direction: column; align-items: flex-start; padding: 16px 34px 12px 28px; border-left: 8px solid var(--red); border-radius: 6px 18px 18px 6px; background: rgba(13,13,15,0.80); backdrop-filter: blur(8px); box-shadow: 0 14px 34px rgba(0,0,0,0.35); }
+      .tag .k { font-weight: 600; font-size: 32px; letter-spacing: 0.16em; color: var(--grey); text-transform: uppercase; }
+      .tag .t { font-weight: 800; font-size: 70px; line-height: 1.02; letter-spacing: 0.01em; text-transform: uppercase; white-space: nowrap; }
+      .tag .t b { color: var(--red); font-weight: 800; }
+      .tag .ic { color: var(--red); margin-right: 12px; }
+      .pair { position: absolute; left: 0; right: 0; top: 250px; display: flex; justify-content: center; align-items: center; gap: 26px; }
+      .pair .tag { position: static; }
+      .pair .vs { font-family: "Bebas"; font-size: 64px; color: var(--grey); opacity: 0; }
 
-      /* ---- legenda: etiqueta compacta. do tamanho da legenda antiga daquele trecho (caixa do OCR) ---- */
-      .cap { position: absolute; transform: translate(-50%, -50%); display: flex; align-items: center; justify-content: center; gap: 0 18px; padding: 12px 32px 2px; border-radius: 22px; background: #0d0d0f; box-shadow: inset 0 -7px 0 var(--red), 0 10px 26px rgba(0,0,0,0.4); font-size: 96px; line-height: 1.02; letter-spacing: 0.01em; text-transform: uppercase; white-space: nowrap; }
-      .cw { display: inline-block; color: var(--white); opacity: 0; }
-      .cw.k { color: var(--red); text-shadow: 0 0 26px rgba(203,33,41,0.55); }
+      /* ---- cartão sóbrio sobre o efeito cinza do vídeo original ---- */
+      #c50 { position: absolute; inset: 0; background: radial-gradient(circle at 50% 42%, #1c1c21 0%, #08080a 70%); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; opacity: 0; }
+      #c50 .l1, #c50 .l3 { font-family: "Bebas"; font-size: 200px; line-height: 0.9; }
+      #c50 .l3 { color: var(--red); }
+      #c50 .l2 { font-weight: 600; font-size: 54px; letter-spacing: 0.06em; color: var(--grey); text-transform: uppercase; }
+      #c50 .bar { width: 120px; height: 8px; background: var(--red); border-radius: 4px; }
 
-      /* ---- títulos do topo ---- */
-      .top { position: absolute; left: 0; right: 0; top: 250px; display: flex; flex-direction: column; align-items: center; gap: 14px; opacity: 0; }
-      .row { display: flex; align-items: center; justify-content: center; gap: 18px; }
-      .plt { display: inline-block; padding: 10px 34px 2px; font-size: 112px; line-height: 1; transform: skewX(-10deg); box-shadow: 0 12px 0 rgba(0,0,0,0.55); white-space: nowrap; }
-      .plt > span { display: inline-block; transform: skewX(10deg); }
-      .plt.blk { background: var(--ink); border: 5px solid var(--white); }
-      .plt.red { background: var(--red); }
-      .plt.wht { background: var(--white); color: var(--ink); }
-      .plt.sm { font-size: 84px; }
-      #vsb { width: 132px; height: 132px; border-radius: 50%; background: var(--white); color: var(--red); display: flex; align-items: center; justify-content: center; font-size: 86px; padding-top: 6px; box-shadow: 0 0 0 8px var(--red), 0 14px 0 8px rgba(0,0,0,0.5); z-index: 2; margin: 0 -34px; }
-      #vs { opacity: 1; }
-      .pname, #hg-b, #hn-b, #hg-a, #hn-a, #hc-a, #pq { opacity: 0; }
-
-      /* ---- cartão "50 > 40 ?" (cobre o efeito cinza do original) ---- */
-      #c50 { position: absolute; inset: 0; background: radial-gradient(circle at 50% 45%, #2a0a0d 0%, #0b0b0d 62%); opacity: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-      #c50::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(-55deg, rgba(203,33,41,0.10) 0 26px, transparent 26px 70px); }
-      #c50 .lbl { font-family: "Barlow"; font-weight: 800; font-size: 54px; letter-spacing: 0.24em; color: var(--grey); }
-      #c50-row { display: flex; align-items: center; gap: 30px; margin-top: 10px; }
-      .gen { display: flex; flex-direction: column; align-items: center; }
-      .gen b { font-weight: 400; font-size: 380px; line-height: 0.86; }
-      #gt { font-size: 250px; color: var(--red); line-height: 0; margin-top: 70px; filter: drop-shadow(0 0 30px rgba(203,33,41,0.7)); }
-      #gt .ic { stroke-width: 3.2; }
-      #c50-q { margin-top: 40px; }
-      #c50 .plt { font-size: 130px; }
-
-      #cyou { position: absolute; inset: 0; background: radial-gradient(circle at 50% 45%, #2a0a0d 0%, #0b0b0d 62%); display: flex; align-items: center; justify-content: center; opacity: 0; }
-      #cyou::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(-55deg, rgba(203,33,41,0.10) 0 26px, transparent 26px 70px); }
-      #cyou .plt { font-size: 180px; padding: 20px 54px 6px; }
-
-      /* ---- linha das gerações ---- */
-      #genl { position: absolute; left: 0; right: 0; top: 250px; height: 380px; opacity: 0; }
-      #gl-line { position: absolute; left: 230px; right: 230px; top: 128px; height: 10px; background: rgba(255,255,255,0.35); border-radius: 5px; transform-origin: 0 50%; }
-      #gl-fill { position: absolute; left: 230px; width: 620px; top: 128px; height: 10px; background: var(--red); border-radius: 5px; transform-origin: 0 50%; transform: scaleX(0); }
-      .node { position: absolute; top: 40px; width: 186px; height: 186px; margin-left: -93px; border-radius: 50%; background: var(--ink); border: 8px solid var(--white); display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 14px 0 rgba(0,0,0,0.5); }
-      .node small { font-family: "Barlow"; font-weight: 800; font-size: 30px; letter-spacing: 0.16em; color: var(--grey); margin-bottom: -6px; }
-      .node b { font-weight: 400; font-size: 104px; line-height: 0.9; }
-      #n40 { left: 230px; } #n50 { left: 850px; }
-      .pname { position: absolute; top: 254px; width: 420px; margin-left: -210px; text-align: center; }
-      #p40 { left: 230px; } #p50 { left: 850px; }
-      .pname .plt { font-size: 84px; }
-      #newer { position: absolute; left: 0; right: 0; top: 158px; text-align: center; font-family: "Barlow"; font-weight: 800; font-size: 34px; letter-spacing: 0.12em; color: var(--white); opacity: 0; }
-
-      /* ---- atenção ---- */
-      #redfl { position: absolute; inset: 0; background: radial-gradient(circle, rgba(203,33,41,0) 35%, rgba(203,33,41,0.85) 100%); opacity: 0; pointer-events: none; }
-      #warn { position: absolute; left: 0; right: 0; top: 300px; display: flex; justify-content: center; opacity: 0; }
-      #warn .plt { font-size: 170px; padding: 18px 50px 6px; }
-      #warn .ic { font-size: 140px; margin-right: 18px; vertical-align: -0.08em; }
-
-      /* ---- checklist ---- */
-      #list { position: absolute; left: 50px; right: 50px; top: 1010px; height: 728px; padding: 30px 34px; border-radius: 34px; background: #0d0d0f; border: 4px solid rgba(255,255,255,0.12); border-top: 12px solid var(--red); display: flex; flex-direction: column; justify-content: space-between; opacity: 0; box-shadow: 0 30px 60px rgba(0,0,0,0.55); }
-      .it { display: flex; align-items: center; gap: 30px; height: 150px; padding: 0 22px; border-radius: 22px; background: rgba(255,255,255,0.05); }
-      .it .ib { flex: none; width: 112px; height: 112px; border-radius: 22px; background: #26262b; color: var(--grey); display: flex; align-items: center; justify-content: center; font-size: 66px; }
-      .it .tx { flex: 1; font-size: 84px; line-height: 1; padding-top: 8px; color: rgba(255,255,255,0.28); }
-      .it .ck { flex: none; width: 92px; height: 92px; border-radius: 50%; border: 6px solid rgba(255,255,255,0.25); color: var(--white); display: flex; align-items: center; justify-content: center; font-size: 56px; }
-      .it .ck .ic { opacity: 0; }
-
-      /* ---- enquete ---- */
-      #poll { position: absolute; left: 0; right: 0; top: 250px; display: flex; flex-direction: column; align-items: center; gap: 22px; opacity: 0; }
-      .opt { display: flex; align-items: center; gap: 22px; width: 760px; padding: 18px 26px; border-radius: 28px; background: rgba(13,13,15,0.9); border: 5px solid var(--white); font-size: 96px; line-height: 1; opacity: 0; box-shadow: 0 12px 0 rgba(0,0,0,0.5); }
-      .opt i { font-style: normal; flex: none; width: 96px; height: 96px; border-radius: 20px; background: var(--red); display: flex; align-items: center; justify-content: center; padding-top: 6px; font-size: 76px; }
-      .opt span { padding-top: 8px; }
-      #cmt { position: absolute; right: 70px; top: 1130px; display: flex; align-items: center; gap: 16px; padding: 18px 34px 12px; border-radius: 999px; background: var(--white); color: var(--ink); font-size: 76px; opacity: 0; box-shadow: 0 12px 0 rgba(0,0,0,0.5); }
-      #cmt .ic { color: var(--red); font-size: 70px; }
-
-      /* ---- cartão final ---- */
-      #fin { position: absolute; left: 0; right: 0; top: 420px; display: flex; flex-direction: column; align-items: center; opacity: 0; }
-      #fin-logo { width: 880px; filter: drop-shadow(0 12px 30px rgba(0,0,0,0.6)); }
-      #fin-k { margin-top: 70px; font-family: "Barlow"; font-weight: 800; font-size: 62px; letter-spacing: 0.04em; color: var(--white); }
-      #btn { position: relative; display: inline-flex; align-items: center; gap: 22px; margin-top: 26px; padding: 30px 64px 22px; border-radius: 999px; background: var(--red); font-size: 100px; line-height: 1; box-shadow: 0 16px 0 var(--red-d); }
-      #btn .ic { font-size: 80px; vertical-align: 0; margin-top: -8px; }
-      #ripple { position: absolute; left: 50%; top: 50%; width: 120px; height: 120px; margin: -60px 0 0 -60px; border-radius: 50%; border: 8px solid var(--white); opacity: 0; }
-      .info { margin-top: 30px; display: flex; align-items: center; gap: 16px; font-family: "Barlow"; font-weight: 600; font-size: 50px; color: var(--white); opacity: 0; }
-      .info .ic { color: var(--red); font-size: 54px; }
+      /* ---- final ---- */
+      #fin { position: absolute; left: 0; right: 0; top: 520px; display: flex; flex-direction: column; align-items: center; opacity: 0; }
+      #fin-logo { width: 820px; filter: drop-shadow(0 12px 30px rgba(0,0,0,0.6)); }
+      #fin-k { margin-top: 70px; font-weight: 600; font-size: 56px; letter-spacing: 0.03em; }
+      #btn { display: inline-flex; align-items: center; gap: 20px; margin-top: 28px; padding: 26px 58px 22px; border-radius: 999px; background: var(--red); font-weight: 800; font-size: 64px; text-transform: uppercase; letter-spacing: 0.02em; box-shadow: 0 12px 0 var(--red-d); }
+      .info { margin-top: 30px; display: flex; align-items: center; gap: 16px; font-weight: 600; font-size: 46px; opacity: 0; }
+      .info .ic { color: var(--red); font-size: 50px; }
       .info b { font-weight: 800; }
       #info1 { margin-top: 64px; }
-
-      #flash { position: absolute; inset: 0; background: var(--white); opacity: 0; pointer-events: none; }
     </style>
   </head>
   <body>
@@ -124,37 +66,29 @@
         <img id="end" class="shot clip" src="assets/img/fim.jpg" alt="" data-start="42.73" data-duration="3.2" data-track-index="1" />
       </div>
       <div id="shade"></div>
-      <div id="redfl"></div>
-      <!-- cobre o fade para preto que o vídeo original tem no início da pergunta final -->
-      <div id="cyou"><div class="plt red"><span>E VOCÊ?</span></div></div>
-
       
 
-      <!-- 1. gancho: o confronto já está na tela no 1º quadro -->
-      <div class="top" id="vs"><div class="row"><div class="plt blk" id="vs-a"><span>RTX 4070</span></div><div id="vsb">VS</div><div class="plt red" id="vs-b"><span>RTX 5060 Ti</span></div></div></div>
-
-      <!-- 2. linha das gerações -->
-      <div id="genl">
-        <div id="newer">GERAÇÃO MAIS NOVA →</div>
-        <div id="gl-line"></div><div id="gl-fill"></div>
-        <div class="node" id="n40"><small>SÉRIE</small><b>40</b></div>
-        <div class="node" id="n50"><small>SÉRIE</small><b>50</b></div>
-        <div class="pname" id="p40"><div class="plt wht"><span>RTX 4070</span></div></div>
-        <div class="pname" id="p50"><div class="plt red"><span>RTX 5060 Ti</span></div></div>
+      <!-- 1. as duas placas, cada uma na hora em que é falada -->
+      <div class="pair">
+        <div class="tag" id="a4070"><div class="in"><div class="t">RTX 4070</div></div></div>
+        <div class="vs" id="avs">VS</div>
+        <div class="tag" id="a5060"><div class="in"><div class="t"><b>RTX 5060 Ti</b></div></div></div>
       </div>
 
-      <!-- 3. atenção / só a geração não basta -->
-      <div id="warn"><div class="plt red"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
-  <path d="M12 9v4" />
-  <path d="M12 17h.01" /></svg>ATENÇÃO!</span></div></div>
-      <div class="top" id="hg"><div class="plt blk" id="hg-a"><span>OLHAR SÓ A GERAÇÃO</span></div><div class="plt red" id="hg-b"><span>NÃO BASTA!</span></div></div>
+      <!-- 2. cartão (substitui o efeito cinza do original) -->
+      <div id="c50"><div class="l1">Série 50</div><div class="l2">é sempre melhor que a</div><div class="l3">Série 40?</div><div class="bar"></div></div>
 
-      <!-- 4. como comparar -->
-      <div class="top" id="hc"><div class="plt wht" id="hc-a"><span>COMO COMPARAR?</span></div></div>
-      <div id="list">
-        <div class="it" id="i1"><div class="ib"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 14 4-4" />
-  <path d="M3.34 19a10 10 0 1 1 17.32 0" /></svg></div><div class="tx">TESTES DE DESEMPENHO</div><div class="ck"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg></div></div>
-        <div class="it" id="i2"><div class="ib"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 12v-2" />
+      <!-- 3. etiquetas: uma por vez -->
+      <div class="tag" id="t40"><div class="in"><div class="k">Série 40</div><div class="t">RTX 4070</div></div></div>
+      <div class="tag" id="t50"><div class="in"><div class="k">Série 50</div><div class="t"><b>RTX 5060 Ti</b></div></div></div>
+      <div class="tag" id="tat"><div class="in"><div class="t"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
+  <path d="M12 9v4" />
+  <path d="M12 17h.01" /></svg>Atenção</div></div></div>
+      <div class="tag" id="tger"><div class="in"><div class="t">Só a geração <b>não basta</b></div></div></div>
+      <div class="tag" id="tcmp"><div class="in"><div class="k">Para comparar</div><div class="t">Olhe também…</div></div></div>
+      <div class="tag" id="i1"><div class="in"><div class="k">1 de 4</div><div class="t"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 14 4-4" />
+  <path d="M3.34 19a10 10 0 1 1 17.32 0" /></svg>Testes de desempenho</div></div></div>
+      <div class="tag" id="i2"><div class="in"><div class="k">2 de 4</div><div class="t"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 12v-2" />
   <path d="M12 18v-2" />
   <path d="M16 12v-2" />
   <path d="M16 18v-2" />
@@ -164,8 +98,8 @@
   <path d="M4 18v-2" />
   <path d="M8 12v-2" />
   <path d="M8 18v-2" />
-  <rect x="2" y="6" width="20" height="10" rx="2" /></svg></div><div class="tx">MEMÓRIA</div><div class="ck"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg></div></div>
-        <div class="it" id="i3"><div class="ib"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v2" />
+  <rect x="2" y="6" width="20" height="10" rx="2" /></svg>Memória</div></div></div>
+      <div class="tag" id="i3"><div class="in"><div class="k">3 de 4</div><div class="t"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v2" />
   <path d="M12 2v2" />
   <path d="M17 20v2" />
   <path d="M17 2v2" />
@@ -178,43 +112,24 @@
   <path d="M7 20v2" />
   <path d="M7 2v2" />
   <rect x="4" y="4" width="16" height="16" rx="2" />
-  <rect x="8" y="8" width="8" height="8" rx="1" /></svg></div><div class="tx">RECURSOS DISPONÍVEIS</div><div class="ck"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg></div></div>
-        <div class="it" id="i4"><div class="ib"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" x2="10" y1="11" y2="11" />
+  <rect x="8" y="8" width="8" height="8" rx="1" /></svg>Recursos disponíveis</div></div></div>
+      <div class="tag" id="i4"><div class="in"><div class="k">4 de 4</div><div class="t"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" x2="10" y1="11" y2="11" />
   <line x1="8" x2="8" y1="9" y2="13" />
   <line x1="15" x2="15.01" y1="12" y2="12" />
   <line x1="18" x2="18.01" y1="10" y2="10" />
-  <path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z" /></svg></div><div class="tx">TIPO DE JOGO</div><div class="ck"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg></div></div>
-      </div>
+  <path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z" /></svg>Tipo de jogo</div></div></div>
+      <div class="tag" id="tnova"><div class="in"><div class="t">Mais nova <b>≠ sempre superior</b></div></div></div>
+      <div class="tag" id="oA"><div class="in"><div class="k">Opção A</div><div class="t">A geração</div></div></div>
+      <div class="tag" id="oB"><div class="in"><div class="k">Opção B</div><div class="t"><b>O desempenho</b></div></div></div>
+      <div class="tag" id="tcmt"><div class="in"><div class="t"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" /></svg>Comenta aqui</div></div></div>
 
-      <!-- 5. mais nova ≠ sempre superior -->
-      <div class="top" id="hn"><div class="plt blk" id="hn-a"><span>GERAÇÃO MAIS NOVA</span></div><div class="plt red" id="hn-b"><span>≠ SEMPRE SUPERIOR</span></div></div>
-
-      <!-- 6. enquete para os comentários -->
-      <div id="poll">
-        <div class="plt wht" id="pq"><span>E VOCÊ, OLHA PRIMEIRO…</span></div>
-        <div class="opt" id="oA"><i>A</i><span>A GERAÇÃO</span></div>
-        <div class="opt" id="oB"><i>B</i><span>O DESEMPENHO</span></div>
-      </div>
-      <div id="cmt"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" /></svg><span>COMENTA AQUI</span></div>
-
-      <!-- 2b. cartão 50 > 40 ? -->
-      <div id="c50">
-        <div id="c50-row">
-          <div class="gen" id="g50"><div class="lbl">SÉRIE</div><b>50</b></div>
-          <div id="gt"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg></div>
-          <div class="gen" id="g40"><div class="lbl">SÉRIE</div><b>40</b></div>
-        </div>
-        <div id="c50-q"><div class="plt red"><span>SEMPRE?</span></div></div>
-      </div>
-
-      <!-- logo oficial (versão negativa: preto → branco, vermelho original) -->
       <img id="bug" src="assets/img/logo-branco.png" alt="Gamer Star Informática" />
 
-      <!-- 7. final -->
+      <!-- 4. final -->
       <div id="fin">
         <img id="fin-logo" src="assets/img/logo-branco.png" alt="Gamer Star Informática" />
         <div id="fin-k">Na dúvida entre duas placas?</div>
-        <div id="btn"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" /></svg><span id="btn-l">Enviar mensagem</span><div id="ripple"></div></div>
+        <div id="btn"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" /></svg><span id="btn-l">Enviar mensagem</span></div>
         <div class="info" id="info1"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
   <circle cx="12" cy="10" r="3" /></svg><span>CLN 406 · Bloco E · Loja 38 · <b>Asa Norte</b></span></div>
         <div class="info" id="info2"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" />
@@ -224,116 +139,66 @@
   <circle cx="7" cy="18" r="2" /></svg><span><b>+ de 1.000 pedidos</b> enviados por mês</span></div>
       </div>
 
-      <div id="scan"></div>
-      <div id="flash"></div>
-      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="45.93" data-track-index="20"></audio>
+      <audio id="mix" src="assets/audio/mix-v4.wav" data-start="0" data-duration="45.93" data-track-index="20"></audio>
     </div>
 
     <script>
-      const CONFIG = { cta: "Enviar mensagem" }; // espelha o botão do anúncio (ex.: "Comprar agora", "Saiba mais")
+      const CONFIG = { cta: "Enviar mensagem" }; // espelha o botão do anúncio
       document.getElementById("btn-l").textContent = CONFIG.cta;
-      const T = {"total": 45.93, "cuts": {"c1": [0.0, 4.74, [1.1, 1.0]], "c2": [4.74, 4.99, [1.0, 1.06]], "c3": [9.73, 3.75, [1.08, 1.12]], "c4": [13.48, 5.9, [1.0, 1.05]], "c5": [19.38, 2.26, [1.1, 1.14]], "c6": [21.64, 1.88, [1.0, 1.03]], "c7": [23.52, 4.5, [1.04, 1.08]], "c8": [28.02, 6.73, [1.0, 1.06]], "c9": [34.75, 7.98, [1.08, 1.02]], "end": [42.73, 3.2, [1.06, 1.12]]}, "words": [], "g4070": 1.38, "g5060": 3.58, "serie50": 6.04, "melhor": 8.22, "serie40": 8.94, "q40": 9.22, "rtx4070": 10.4, "s40": 12.82, "rtx5060": 14.46, "s50": 17.14, "atencao": 19.02, "geracao": 20.04, "suficiente": 21.44, "comparar": 22.2, "testes": 23.74, "memoria": 25.02, "recursos": 26.12, "jogo": 27.88, "nova": 29.86, "auto": 31.06, "superar": 32.36, "voce": 35.31, "optG": 38.55, "optD": 39.89, "conta": 41.35, "card": 8.280000000000001};
+      const T = {"total": 45.93, "cuts": {"c1": [0.0, 4.74, [1.1, 1.0]], "c2": [4.74, 4.99, [1.0, 1.06]], "c3": [9.73, 3.75, [1.08, 1.12]], "c4": [13.48, 5.9, [1.0, 1.05]], "c5": [19.38, 2.26, [1.1, 1.14]], "c6": [21.64, 1.88, [1.0, 1.03]], "c7": [23.52, 4.5, [1.04, 1.08]], "c8": [28.02, 6.73, [1.0, 1.06]], "c9": [34.75, 7.98, [1.08, 1.02]], "end": [42.73, 3.2, [1.06, 1.12]]}, "words": [], "g4070": 1.38, "g5060": 3.58, "serie50": 6.04, "melhor": 8.22, "serie40": 8.94, "q40": 9.22, "rtx4070": 10.4, "s40": 12.82, "rtx5060": 14.46, "s50": 17.14, "atencao": 19.02, "geracao": 20.04, "suficiente": 21.44, "comparar": 22.2, "testes": 23.74, "memoria": 25.02, "recursos": 26.12, "jogo": 27.88, "nova": 29.86, "auto": 31.06, "superar": 32.36, "voce": 35.31, "optG": 38.55, "optD": 39.89, "conta": 41.35, "card": 8.280000000000001, "e_ti": 4.74, "e_s40": 13.48, "e_s50": 18.3, "e_atencao": 19.38, "e_suficiente": 21.64, "e_testes": 25.02, "e_memoria": 25.8, "e_recursos": 27.22, "e_jogo": 28.02, "e_anterior": 34.75, "e_optG": 39.31, "e_optD": 41.35, "e_conta": 42.73};
       const C = T.cuts;
       const tl = gsap.timeline({ paused: true });
       const ir = { immediateRender: false };
       const E0 = C.end[0];
+      const HOLD = 0.6; // quanto a etiqueta fica depois que a palavra termina
 
-      // ---- câmera: punch-in alternado esconde os cortes ----
+      // ---- câmera: só um punch-in suave alternado (esconde os cortes) ----
       Object.entries(C).forEach(([id, [s, d, z]]) => {
-        tl.fromTo("#cam", { scale: z[0] }, { scale: z[1], duration: d, ease: id === "c1" ? "expo.out" : "none", ...ir }, s);
-      });
-      Object.entries(C).forEach(([id, [s]]) => {
-        if (id === "c1") return;
-        tl.fromTo("#flash", { opacity: 0 }, { opacity: 0.18, duration: 0.04, ...ir }, s - 0.02).to("#flash", { opacity: 0, duration: 0.18 }, s + 0.02);
+        tl.fromTo("#cam", { scale: z[0] }, { scale: z[1], duration: d, ease: "none", ...ir }, s);
       });
 
-      // ---- legendas ----
-      T.words.forEach((w) => {
-        tl.fromTo("#" + w.id, { opacity: 0, y: 26, scale: w.k ? 1.25 : 1 }, { opacity: 1, y: 0, scale: 1, duration: w.k ? 0.2 : 0.12, ease: w.k ? "back.out(2)" : "power2.out", ...ir }, w.t - 0.05);
-      });
-      tl.to("#bug", { opacity: 0, duration: 0.2 }, E0 - 0.05);
+      // entra na palavra (desliza 30 px e aparece), sai depois que ela termina (sobe 20 px e some)
+      const show = (sel, tin, tout) => {
+        tl.fromTo(sel, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", ...ir }, tin - 0.12)
+          .to(sel, { opacity: 0, y: -20, duration: 0.3, ease: "power2.in" }, tout);
+      };
 
-      const inL = (sel, t) => tl.fromTo(sel, { opacity: 0, x: -700 }, { opacity: 1, x: 0, duration: 0.3, ease: "power3.out", ...ir }, t);
-      const inR = (sel, t) => tl.fromTo(sel, { opacity: 0, x: 700 }, { opacity: 1, x: 0, duration: 0.3, ease: "power3.out", ...ir }, t);
-      const stamp = (sel, t) => tl.fromTo(sel, { opacity: 0, scale: 2.1, rotation: -8 }, { opacity: 1, scale: 1, rotation: -3, duration: 0.24, ease: "power4.in", ...ir }, t - 0.22);
-      const bump = (sel, t, s = 1.14) => tl.fromTo(sel, { scale: 1 }, { scale: s, duration: 0.09, yoyo: true, repeat: 1, ease: "power1.out", ...ir }, t);
-      const out = (sel, t) => tl.to(sel, { opacity: 0, y: -60, duration: 0.2, ease: "power2.in" }, t);
-      const shake = (t) => tl.fromTo("#cam", { x: 0 }, { keyframes: [{ x: -18 }, { x: 14 }, { x: -9 }, { x: 5 }, { x: 0 }], duration: 0.28, ease: "none", ...ir }, t);
+      // ---- 1. RTX 4070 · VS · RTX 5060 Ti ----
+      show("#a4070", T.g4070, T.e_ti + 0.35);
+      show("#avs", T.g5060 - 0.15, T.e_ti + 0.35);
+      show("#a5060", T.g5060, T.e_ti + 0.35);
 
-      // ---- 1. VS: no ar desde o 1º quadro; cada placa pulsa quando é falada ----
-      tl.fromTo("#vs-a", { x: -40 }, { x: 0, duration: 0.5, ease: "expo.out", ...ir }, 0)
-        .fromTo("#vs-b", { x: 40 }, { x: 0, duration: 0.5, ease: "expo.out", ...ir }, 0)
-        .fromTo("#vsb", { scale: 1.6, rotation: -30 }, { scale: 1, rotation: 0, duration: 0.45, ease: "back.out(2)", ...ir }, 0);
-      bump("#vs-a", T.g4070 - 0.04); bump("#vs-b", T.g5060 - 0.04);
-      tl.fromTo("#vsb", { rotation: 0 }, { rotation: 360, duration: 0.5, ease: "power2.inOut", ...ir }, T.serie50 - 0.1);
-      out("#vs", T.card - 0.2);
+      // ---- 2. cartão sóbrio ----
+      tl.fromTo("#c50", { opacity: 0 }, { opacity: 1, duration: 0.2, ...ir }, T.card - 0.1)
+        .fromTo("#c50 .l1", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", ...ir }, T.card - 0.05)
+        .fromTo("#c50 .l2", { opacity: 0 }, { opacity: 1, duration: 0.3, ...ir }, T.card + 0.15)
+        .fromTo("#c50 .l3", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", ...ir }, T.serie40 - 0.12)
+        .fromTo("#c50 .bar", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power2.out", ...ir }, T.serie40 + 0.1)
+        .to("#c50", { opacity: 0, duration: 0.15 }, C.c3[0] - 0.12);
 
-      // ---- 2b. cartão 50 > 40 ? ----
-      tl.fromTo("#c50", { opacity: 0 }, { opacity: 1, duration: 0.12, ...ir }, T.card - 0.06)
-        .fromTo("#g50", { opacity: 0, x: -300 }, { opacity: 1, x: 0, duration: 0.28, ease: "power3.out", ...ir }, T.card)
-        .fromTo("#gt", { opacity: 0, scale: 0.2 }, { opacity: 1, scale: 1, duration: 0.24, ease: "back.out(2.4)", ...ir }, T.card + 0.18)
-        .fromTo("#g40", { opacity: 0, x: 300 }, { opacity: 1, x: 0, duration: 0.28, ease: "power3.out", ...ir }, T.serie40 - 0.12);
-      stamp("#c50-q", T.q40 + 0.2);
-      tl.set("#c50", { opacity: 0 }, C.c3[0]);
+      // ---- 3. uma etiqueta por vez ----
+      show("#t40", T.rtx4070, T.e_s40 - 0.1);
+      show("#t50", T.rtx5060, T.e_s50 + 0.2);
+      show("#tat", T.atencao - 0.25, C.c5[0] + 0.15);
+      show("#tger", T.geracao, T.e_suficiente + HOLD * 0.5);
+      show("#tcmp", T.comparar, C.c7[0] - 0.1);
+      show("#i1", T.testes, T.memoria - 0.22);
+      show("#i2", T.memoria, T.recursos - 0.22);
+      show("#i3", T.recursos, T.jogo - 0.22);
+      show("#i4", T.jogo, T.e_jogo + HOLD);
+      show("#tnova", T.nova, T.e_anterior - 0.3);
+      show("#oA", T.optG, T.optD - 0.22);
+      show("#oB", T.optD, T.conta - 0.22);
+      show("#tcmt", T.conta, E0 - 0.35);
 
-      // ---- 2. linha das gerações ----
-      tl.fromTo("#genl", { opacity: 0, y: -50 }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out", ...ir }, C.c3[0] + 0.05);
-      [["#n40", "#p40", T.rtx4070, T.s40], ["#n50", "#p50", T.rtx5060, T.s50]].forEach(([n, p, tp, ts]) => {
-        tl.fromTo(p, { opacity: 0, y: 40, scale: 0.7 }, { opacity: 1, y: 0, scale: 1, duration: 0.26, ease: "back.out(1.8)", ...ir }, tp - 0.08)
-          .fromTo(n, { borderColor: "#ffffff", backgroundColor: "#0d0d0f" }, { borderColor: "#cb2129", backgroundColor: "#cb2129", duration: 0.12, ...ir }, ts - 0.05);
-        bump(n, ts - 0.05, 1.18);
-      });
-      tl.fromTo("#gl-fill", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power2.inOut", ...ir }, C.c4[0])
-        .fromTo("#newer", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.25, ...ir }, C.c4[0] + 0.3);
-      out("#genl", T.atencao - 0.32);
-
-      // ---- 3. atenção ----
-      tl.fromTo("#redfl", { opacity: 0 }, { opacity: 1, duration: 0.06, ...ir }, T.atencao - 0.06).to("#redfl", { opacity: 0, duration: 0.5 }, T.atencao + 0.05);
-      stamp("#warn", T.atencao + 0.02); shake(T.atencao);
-      out("#warn", C.c5[0] - 0.12);
-      inL("#hg-a", T.geracao - 0.1); tl.set("#hg", { opacity: 1 }, T.geracao - 0.1);
-      stamp("#hg-b", T.suficiente + 0.05); shake(T.suficiente + 0.05);
-      out("#hg", C.c6[0] - 0.1);
-
-      // ---- 4. como comparar + checklist ----
-      tl.set("#hc", { opacity: 1 }, T.comparar - 0.1); inR("#hc-a", T.comparar - 0.1);
-      tl.fromTo("#list", { opacity: 0, y: 300 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", ...ir }, C.c7[0] - 0.12);
-      [["#i1", T.testes], ["#i2", T.memoria], ["#i3", T.recursos], ["#i4", T.jogo]].forEach(([s, t]) => {
-        tl.fromTo(s + " .tx", { color: "rgba(255,255,255,0.28)" }, { color: "#ffffff", duration: 0.15, ...ir }, t - 0.06)
-          .fromTo(s + " .ib", { backgroundColor: "#26262b", color: "#b9b9c0" }, { backgroundColor: "#cb2129", color: "#ffffff", duration: 0.15, ...ir }, t - 0.06)
-          .fromTo(s, { x: 0 }, { x: 18, duration: 0.1, yoyo: true, repeat: 1, ease: "power1.out", ...ir }, t - 0.06)
-          .fromTo(s + " .ck", { backgroundColor: "rgba(0,0,0,0)", borderColor: "rgba(255,255,255,0.25)" }, { backgroundColor: "#cb2129", borderColor: "#cb2129", duration: 0.12, ...ir }, t + 0.12)
-          .fromTo(s + " .ck .ic", { opacity: 0, scale: 0.2 }, { opacity: 1, scale: 1, duration: 0.22, ease: "back.out(2.5)", ...ir }, t + 0.12);
-      });
-      tl.to("#list", { opacity: 0, y: 300, duration: 0.25, ease: "power2.in" }, C.c8[0] - 0.2);
-      out("#hc", C.c8[0] - 0.15);
-
-      // ---- 5. mais nova ≠ sempre superior ----
-      tl.set("#hn", { opacity: 1 }, T.nova - 0.1); inL("#hn-a", T.nova - 0.1);
-      stamp("#hn-b", T.superar); shake(T.superar);
-      out("#hn", C.c9[0] - 0.1);
-
-      // ---- 6. enquete (abre com o cartão "E VOCÊ?" sobre o trecho escuro do original) ----
-      tl.set("#cyou", { opacity: 1 }, C.c9[0]).set("#cyou", { opacity: 0 }, C.c9[0] + 0.62);
-      tl.fromTo("#cyou .plt", { scale: 1.8, rotation: -8 }, { scale: 1, rotation: -3, duration: 0.2, ease: "power4.in", ...ir }, C.c9[0]);
-      tl.set("#poll", { opacity: 1 }, T.voce - 0.1);
-      tl.fromTo("#pq", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.26, ease: "back.out(1.8)", ...ir }, T.voce - 0.1);
-      inL("#oA", T.optG - 0.1); inR("#oB", T.optD - 0.1);
-      tl.fromTo("#cmt", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)", ...ir }, T.conta - 0.08)
-        .fromTo("#cmt", { y: 0 }, { y: -16, duration: 0.3, yoyo: true, repeat: 3, ease: "sine.inOut", ...ir }, T.conta + 0.3);
-      tl.to(["#poll", "#cmt"], { opacity: 0, duration: 0.2 }, E0 - 0.15);
-
-      // ---- 7. final ----
-      tl.fromTo("#flash", { opacity: 0 }, { opacity: 0.5, duration: 0.05, ...ir }, E0 - 0.02).to("#flash", { opacity: 0, duration: 0.3 }, E0 + 0.04)
+      // ---- 4. final ----
+      tl.to("#bug", { opacity: 0, duration: 0.25 }, E0 - 0.1)
         .fromTo("#fin", { opacity: 0 }, { opacity: 1, duration: 0.01, ...ir }, E0)
-        .fromTo("#fin-logo", { opacity: 0, scale: 1.4, filter: "blur(14px) drop-shadow(0 12px 30px rgba(0,0,0,0.6))" }, { opacity: 1, scale: 1, filter: "blur(0px) drop-shadow(0 12px 30px rgba(0,0,0,0.6))", duration: 0.45, ease: "expo.out", ...ir }, E0)
-        .fromTo("#fin-k", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.3, ...ir }, E0 + 0.3)
-        .fromTo("#btn", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.32, ease: "back.out(1.8)", ...ir }, E0 + 0.5)
-        .fromTo("#info1", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.25, ...ir }, E0 + 0.8)
-        .fromTo("#info2", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.25, ...ir }, E0 + 0.95)
-        .fromTo("#btn", { scale: 1 }, { scale: 0.94, duration: 0.09, yoyo: true, repeat: 1, ...ir }, E0 + 1.4)
-        .fromTo("#ripple", { opacity: 0.9, scale: 0.5 }, { opacity: 0, scale: 5, duration: 0.6, ease: "power2.out", ...ir }, E0 + 1.45)
-        .fromTo("#btn", { scale: 1 }, { scale: 1.05, duration: 0.45, yoyo: true, repeat: 1, ease: "sine.inOut", ...ir }, E0 + 1.9);
+        .fromTo("#fin-logo", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out", ...ir }, E0)
+        .fromTo("#fin-k", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.35, ...ir }, E0 + 0.3)
+        .fromTo("#btn", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", ...ir }, E0 + 0.5)
+        .fromTo("#info1", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.3, ...ir }, E0 + 0.75)
+        .fromTo("#info2", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.3, ...ir }, E0 + 0.9);
 
       window.__timelines = window.__timelines || {};
       window.__timelines["main"] = tl;

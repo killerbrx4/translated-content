@@ -116,6 +116,19 @@
   "optG": 38.55,
   "optD": 39.89,
   "conta": 41.35,
-  "card": 8.280000000000001
+  "card": 8.280000000000001,
+  "e_ti": 4.74,
+  "e_s40": 13.48,
+  "e_s50": 18.3,
+  "e_atencao": 19.38,
+  "e_suficiente": 21.64,
+  "e_testes": 25.02,
+  "e_memoria": 25.8,
+  "e_recursos": 27.22,
+  "e_jogo": 28.02,
+  "e_anterior": 34.75,
+  "e_optG": 39.31,
+  "e_optD": 41.35,
+  "e_conta": 42.73
  }
 }
