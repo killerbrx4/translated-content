@@ -11,6 +11,7 @@ ZENTURY · Diretor criativo de performance · v1 (16/out/2026)
 | 03 | `03-matriz-75-dias.md` | fases, peso de verba e pares de teste |
 | 04 | `04-biblioteca-de-ganchos.md` | ~30 ganchos organizados por mecanismo |
 | 05 | `05-menu-romantico.md` | 6 conceitos (ROM-A1…B3) com roteiros completos |
+| 05b | `05b-romantico-por-tom.md` | 8 roteiros por tom: comédia, sentimental, forte, venda direta, UGC, mistério, ASMR, chef contando |
 | 06 | `06-menu-executivo.md` | 5 conceitos (EXE-A1…B2) |
 | 07 | `07-festival-risoto.md` | 5 conceitos (RIS-A1…B2) |
 | 08 | `08-eventos-confraternizacoes.md` | 5 conceitos (EVT-A1…B2) + roteiro de qualificação no WhatsApp |
