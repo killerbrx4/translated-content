@@ -78,7 +78,7 @@ O chef Gabriel fala direto com quem organiza: aquela pessoa que vira planilha am
 - Ação: abrir conversa no WhatsApp e pedir orçamento
 - Botão Meta: **Enviar mensagem** (Click-to-WhatsApp)
 - Fala: "Me chama no WhatsApp com a data e quantas pessoas. Te passo o orçamento."
-- Copy Meta — texto principal (113 car.): *Confraternização sem planilha: você manda a lista, o chef Gabriel cuida da mesa. Peça seu orçamento no WhatsApp.*
+- Copy Meta — texto principal (112 car.): *Confraternização sem planilha: você manda a lista, o chef Gabriel cuida da mesa. Peça seu orçamento no WhatsApp.*
 - Título (23 car.): *Orçamento pelo WhatsApp*
 - Mensagem pré-preenchida: `Olá! Vi o anúncio EVT-A1 e quero um orçamento para confraternização. Data: __ · Pessoas: __`
 
@@ -215,7 +215,7 @@ Transparência de processo: o chef mostra os 5 dados que precisa e explica que, 
 - Ação: abrir conversa com a mensagem estruturada
 - Botão Meta: **Enviar mensagem**
 - Fala: "Toca no botão: a mensagem já vai pronta."
-- Copy Meta — texto principal (119 car.): *Orçamento em 1 mensagem: data, nº de pessoas, tipo de evento, almoço ou jantar e valor por pessoa. A gente responde.*
+- Copy Meta — texto principal (116 car.): *Orçamento em 1 mensagem: data, nº de pessoas, tipo de evento, almoço ou jantar e valor por pessoa. A gente responde.*
 - Título (18 car.): *Peça seu orçamento*
 - Mensagem pré-preenchida: `Olá! Vi o anúncio EVT-A3. Data: __ · Pessoas: __ · Tipo de evento: __ · Almoço ou jantar: __ · Valor por pessoa: __`
 
@@ -279,9 +279,8 @@ Timelapse em formato de bastidor: toalha, louça, taças, pratos saindo da cozin
 - Ação: conversar no WhatsApp (botão) / no orgânico, "me chama no direct"
 - Botão Meta: **Enviar mensagem**
 - Fala: "Quer fazer a sua aqui?"
-- Copy Meta — texto principal (117 car.): *Antes da turma chegar, o chef Gabriel já está montando a mesa. Confraternizações no Bla's Cozinha Criativa. Fale com a gente.*
-  → se passar de 125 com acentos, usar: *Antes da turma chegar, o chef Gabriel já está montando a mesa. Confraternizações no Bla's. Fale com a gente.*
-- Título (21 car.): *Confraternize no Bla's*
+- Copy Meta — texto principal (108 car.): *Antes da turma chegar, o chef Gabriel já está montando a mesa. Confraternizações no Bla's. Fale com a gente.*
+- Título (22 car.): *Confraternize no Bla's*
 - Mensagem pré-preenchida: `Olá! Vi o vídeo EVT-B1 e quero saber como fazer meu evento no Bla's.`
 
 **7. Materiais necessários**
