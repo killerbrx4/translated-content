@@ -24,7 +24,7 @@
 ## O que é testado em cada fase
 ### F1 · Descoberta (20/out → 03/nov)
 - **Dia 1–3:** receber confirmações (pendências do `01-diagnostico.md`), configurar as **mensagens de WhatsApp com código por anúncio** e a planilha de reservas (ver `12-mensuracao`).
-- **Dia 2–5:** 1 diária de gravação (ver `10-plano-gravacao-edicao.md`). Prioridade: RIS-A1, RIS-B1, EVT-A1, EVT-B1, ROM-A1, ROM-B1, EXE-A1.
+- **Dia 2–5:** 1 diária de gravação (ver `10-plano-gravacao-edicao.md`). Prioridade: RIS-B1, RIS-A1, RIS-A2, EVT-A1, EVT-A3, EVT-B1, ROM-A1, ROM-B2, EXE-A1, EXE-A3, EXE-B2 (todos só com o chef; os que precisam de pessoas reais vêm na diária 2).
 - **Dia 6–15:** subir **pares A × B por oferta** (mesmo público, mesma verba, mesmo período). Linha de base: conversas/dia e reservas/semana **antes** dos anúncios.
 - Saída da fase: lista de conceitos com conversa qualificada > 0 e uma leitura de qualidade dos contatos (o atendimento do Bla's classifica cada um).
 
@@ -50,8 +50,8 @@
 |---|---|---|---|
 | Risoto | RIS-A1 | RIS-B1 | mostrar oferta e dia vende mais que a cena sensorial do chef? |
 | Eventos | EVT-A1 | EVT-B1 | o organizador responde melhor ao alívio ("a gente cuida") ou ao espaço pronto? |
-| Romântico | ROM-A1 | ROM-B1 | preço do casal na cara ou a experiência de chegar primeiro? |
-| Executivo | EXE-A1 | EXE-B1 | escada de preços ou descoberta na rotina? |
+| Romântico | ROM-A1 | ROM-B2 | preço do casal na cara ou o chef montando o jantar? (os dois sem casal em cena: gravação mais simples) |
+| Executivo | EXE-A1 | EXE-B2 | escada de preços ou curiosidade pelo ingrediente brasileiro? |
 | Ceia (F2) | NAT-A1 | NAT-B1 | lineup com preço ou o chef preparando? |
 
 Os códigos dos conceitos estão em `05`–`09`. A comparação segue `11-matriz-testes-direta-vs-ugc.md`.

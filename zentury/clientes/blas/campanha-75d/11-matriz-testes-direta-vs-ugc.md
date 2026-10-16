@@ -35,6 +35,6 @@ Um par A × B só é comparável se tiver **a mesma oferta, o mesmo público, o 
 |---|---|---|---|
 | H1 | Para o risoto, a cena sensorial do chef (B) dá mais **reserva** que o anúncio com dia e preço (A), porque o desejo vem antes da informação | RIS-A1 × RIS-B1 | custo por reserva B ≤ A |
 | H2 | Para eventos, o **alívio do organizador** converte mais que mostrar o espaço | EVT-A1 × EVT-B1 | custo por orçamento qualificado |
-| H3 | No romântico, **preço do casal visível** reduz a objeção "deve ser caro" e aumenta reservas | ROM-A1 × ROM-B1 | conversas que já perguntam data (não preço) |
-| H4 | No executivo, mostrar a **escada R$ 59,90/69,90/79,90** (❓) tira o medo de "restaurante chique" | EXE-A1 × EXE-B1 | conversas e visitas de almoço |
+| H3 | No romântico, **preço do casal visível** reduz a objeção "deve ser caro" e aumenta reservas | ROM-A1 × ROM-B2 | conversas que já perguntam data (não preço) |
+| H4 | No executivo, mostrar a **escada R$ 59,90/69,90/79,90** (❓) tira o medo de "restaurante chique" melhor que a curiosidade pelo jambu/tucupi | EXE-A1 × EXE-B2 | conversas e visitas de almoço |
 | H5 | O **chef como rosto** retém mais nos 3 primeiros segundos do que abrir só com o prato | todos (variação de gancho) | retenção de 3 s |
