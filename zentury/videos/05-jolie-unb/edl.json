@@ -1,0 +1,24 @@
+{
+  "source": "VIDEO-2026-10-11-01-19-20.mov (cliente: Jolie Sorveteria e Café, campanha UnB, 576x1024, 16,3 s)",
+  "cuts": [
+    {"id": "c1", "src": [0.65, 2.98],  "zoom": [1.18, 1.03], "note": "gancho UnB com texto atrás das meninas (recorte)"},
+    {"id": "c2", "src": [3.30, 6.68],  "zoom": [1.14, 1.18], "note": "10% (drop) + sorveteria Jolie"},
+    {"id": "c3", "src": [6.70, 10.62], "zoom": [1.00, 1.06], "note": "não é só sorvete → cardápio (fusão para a loja no fim)"},
+    {"id": "c4", "src": [10.62, 13.60], "zoom": [1.04, 1.08], "note": "fome depois da aula, em frente à loja"},
+    {"id": "c5", "src": [13.64, 16.15], "zoom": [1.16, 1.20], "note": "punch-in: vem na Jolie"},
+    {"id": "card", "img": "assets/img/cartao-jolie.png", "dur": 2.0, "zoom": [1.00, 1.03], "note": "arte final do cliente"},
+    {"id": "cta", "img": "assets/img/cartao-jolie.png", "dur": 2.9, "zoom": [1.08, 1.10], "note": "CTA"}
+  ],
+  "phrases": [
+    {"cut": "c1", "y": 1250, "nocap": true, "words": [["Você",0.80],["é",1.02],["professor",1.12],["ou",1.92],["aluno",2.08],["da",2.34],["UnB?",2.46,"k"]], "end": 2.98},
+    {"cut": "c2", "y": 1250, "words": [["Sabia",3.38],["que",3.58],["você",3.78],["tem",4.00],["10%",4.24,"k"],["de",4.78],["desconto",5.08]], "end": 5.50},
+    {"cut": "c2", "y": 1250, "words": [["na",5.52],["sorveteria",5.68],["Jolie?",6.20,"k"]], "end": 6.68},
+    {"cut": "c3", "y": 1250, "words": [["E",6.74],["não",6.80],["é",6.92],["só",7.02,"k"],["no",7.10],["sorvete",7.28],["não!",7.60]], "end": 7.98},
+    {"cut": "c3", "y": 1250, "words": [["É",8.02],["no",8.12],["sorvete,",8.38,"k"],["no",8.94],["açaí",9.04,"k"]], "end": 9.46},
+    {"cut": "c3", "y": 1250, "words": [["e",9.48],["no",9.60],["nosso",9.78],["cardápio.",9.98,"k"]], "end": 10.62},
+    {"cut": "c4", "y": 1250, "words": [["Ou",10.72],["seja,",11.00],["deu",11.50],["aquela",11.80],["fome",12.04,"k"]], "end": 12.36},
+    {"cut": "c4", "y": 1250, "words": [["depois",12.38],["da",12.64],["aula?",12.84,"k"]], "end": 13.60},
+    {"cut": "c5", "y": 1250, "words": [["Vem",13.72],["na",13.92],["Jolie",14.06,"k"],["aproveitar",14.54]], "end": 14.90},
+    {"cut": "c5", "y": 1250, "words": [["os",14.90],["seus",14.98],["10%",15.22,"k"],["de",15.72],["desconto!",15.96]], "end": 16.15}
+  ]
+}
