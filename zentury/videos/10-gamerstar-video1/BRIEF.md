@@ -42,3 +42,9 @@
 - **Saiu:** tremida, flash vermelho, carimbos, VS girando, linha das gerações, checklist grande, enquete fixa, cartão "E VOCÊ?", scanlines e flashes nos cortes.
 - **Ficou:** punch-in suave nos cortes e um cartão sóbrio "Série 50 é sempre melhor que a Série 40?" só sobre o efeito cinza do original (1,4 s).
 - **Som:** trilha contínua e baixa (sem drop nem riser), com um "swish" discreto em cada etiqueta.
+
+## V5 "O Duelo" (sem material novo; plano completo em `V5-PLANO-higgsfield.md`)
+- `renders/gamerstar-v5-duelo-ganchoA.mp4` (duelo das caixas) e `…-ganchoB.mp4` (ela no 1º quadro + "Não compre a placa errada"), 46,5 s cada. Build: `python3 -I src/build.py . src/template-v5.html A|B` + `HOOK=A|B python3 -I audio-v5.py`.
+- **Sem Higgsfield:** o movimento estilo Higgsfield (órbita/bullet time, dolly-in, luz varrendo, reflexo no chão) foi recriado em 3D CSS com as **caixas reais recortadas da própria gravação**: `assets/img/caixa-4070.png` (1,2 s) e `caixa-5060ti.png` (7,2 s). Imagem espelhada de volta para a leitura correta, um resto de legenda queimada removido com inpainting. Produto sem nenhuma alteração.
+- **Estrutura:** duelo (gancho) → pergunta → "Será que a nova é sempre melhor?" (substitui o efeito cinza do original) → explicação no padrão V4 → **cartão de oferta** com as duas caixas, "Preço no direct", botão, prova (+1.000 pedidos/mês) e endereço (3,8 s).
+- **Falta confirmar:** preços (`CONFIG.price4070/price5060`), estoque das duas ("As duas estão aqui"), botão do anúncio e endereço. Com os vídeos do Higgsfield, as cenas 3D podem ser trocadas por eles.

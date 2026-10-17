@@ -1,5 +1,5 @@
 """Gera index.html a partir de edl.json + src/words.json + um template.
-Uso: python3 -I src/build.py . [src/template.html]   (V4 "profissional": src/template-v4.html)"""
+Uso: python3 -I src/build.py . [src/template.html] [gancho A|B]   (V4: src/template-v4.html · V5: src/template-v5.html A|B)"""
 import json, re, sys, pathlib
 
 P = pathlib.Path(sys.argv[1])
@@ -108,7 +108,7 @@ T.update({"e_" + k: wend(i) for k, i in {"ti": 5, "s40": 29, "s50": 38, "atencao
 
 tpl = (P / (sys.argv[2] if len(sys.argv) > 2 else "src/template.html")).read_text()
 tpl = re.sub(r"\{\{lucide:([a-z0-9-]+)(?::([a-z-]+))?\}\}", lambda m: lucide(m.group(1), m.group(2) or "ic"), tpl)
-html = (tpl.replace("__T__", json.dumps(T, ensure_ascii=False))
+html = (tpl.replace("__HOOK__", sys.argv[3] if len(sys.argv) > 3 else "A").replace("__T__", json.dumps(T, ensure_ascii=False))
         .replace("__TOTAL__", str(TOTAL))
         .replace("__VIDEOS__", "\n        ".join(vids))
         .replace("__CAPTIONS__", "\n      ".join(caps)))
