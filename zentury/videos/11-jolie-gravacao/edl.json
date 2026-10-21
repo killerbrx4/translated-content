@@ -326,59 +326,6 @@
    "fade": 0.25
   }
  ],
- "lines": [
-  {
-   "file": "Pato__2",
-   "text": "Você achou que a Jolie era só sorvete? Então deixa eu te mostrar uma coisa.",
-   "start": 3.23
-  },
-  {
-   "file": "Pato__5",
-   "text": "São tantas opções gostosas, que fica até difícil escolher uma só.",
-   "start": 3.75
-  },
-  {
-   "file": "Pato__6",
-   "text": "E hoje eu escolhi uma das minhas favoritas.",
-   "start": 3.13
-  },
-  {
-   "file": "Pato__4",
-   "text": "E uma dessas opções é a nossa tapioca, perfeita para quem quer fazer um lanche delicioso.",
-   "start": 0.81
-  },
-  {
-   "file": "Avenida_Cln_2",
-   "text": "Tapioca de frango com mussarela. Olha só essa combinação deliciosa.",
-   "start": 0.79
-  },
-  {
-   "file": "Avenida_Cln_3",
-   "text": "Aqui na Jolie você encontra várias opções de cuscuz para deixar seu lanche ainda mais gostoso.",
-   "start": 1.14
-  },
-  {
-   "file": "Pato__7",
-   "text": "Gente, olha só esse cuscuz da Jolie. Quem aí também ama?",
-   "start": 3.22
-  }
- ],
- "keys": [
-  "Jolie",
-  "sorvete?",
-  "opções",
-  "gostosas,",
-  "favoritas.",
-  "tapioca,",
-  "lanche",
-  "delicioso.",
-  "frango",
-  "mussarela.",
-  "deliciosa.",
-  "cuscuz",
-  "gostoso.",
-  "ama?"
- ],
  "xfade": {
   "dur": 0.3,
   "at": [
@@ -389,5 +336,112 @@
    "G",
    "END"
   ]
+ },
+ "name": "nao-e-so-sorvete",
+ "title": "Jolie · Não é só sorvete",
+ "overlays": [
+  {
+   "id": "hk",
+   "style": "hook",
+   "a": "Você achou que a Jolie",
+   "b": "era só <span>sorvete?</span>",
+   "in": 0,
+   "out": {
+    "w": [
+     0,
+     "mostrar"
+    ],
+    "d": -0.1
+   },
+   "flash": {
+    "w": [
+     0,
+     "sorvete?"
+    ]
+   }
+  },
+  {
+   "id": "tT",
+   "style": "tag",
+   "k": "Lanche na Jolie",
+   "t": "Tapioca",
+   "in": {
+    "w": [
+     3,
+     "tapioca,"
+    ]
+   },
+   "out": {
+    "g": [
+     "TF",
+     0
+    ],
+    "d": -0.35
+   }
+  },
+  {
+   "id": "tF",
+   "style": "tag",
+   "k": "Tapioca",
+   "t": "Frango com mussarela",
+   "in": {
+    "w": [
+     4,
+     "frango"
+    ]
+   },
+   "out": {
+    "g": [
+     "C",
+     0
+    ],
+    "d": -0.35
+   }
+  },
+  {
+   "id": "tC",
+   "style": "tag",
+   "k": "Várias opções de",
+   "t": "Cuscuz",
+   "in": {
+    "w": [
+     5,
+     "cuscuz"
+    ]
+   },
+   "out": {
+    "g": [
+     "G",
+     0
+    ],
+    "d": -0.35
+   }
+  },
+  {
+   "id": "tA",
+   "style": "tag",
+   "t": "{{lucide:message-circle}}Quem aí também ama?",
+   "in": {
+    "w": [
+     6,
+     "quem"
+    ]
+   },
+   "out": {
+    "end": -0.3
+   }
+  }
+ ],
+ "bug": {
+  "w": [
+   0,
+   "mostrar"
+  ],
+  "d": 0.3
+ },
+ "end": {
+  "k": "Sorvete, tapioca, cuscuz e muito mais.",
+  "c": "Venha conhecer a Jolie!",
+  "a": "CLN 407, Bloco A, Lojas 1 e 5 — Asa Norte"
  }
 }

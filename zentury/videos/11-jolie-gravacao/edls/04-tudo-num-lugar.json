@@ -1,0 +1,312 @@
+{
+ "name": "tudo-num-lugar",
+ "title": "Jolie · Tudo num só lugar",
+ "groups": [
+  {
+   "id": "H",
+   "voice": [
+    "Pato__2",
+    3.12
+   ],
+   "line": 0,
+   "clips": [
+    [
+     "v23",
+     1.55,
+     3.73,
+     [
+      1.06,
+      1.0
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "O",
+   "voice": [
+    "Pato__5",
+    3.64
+   ],
+   "line": 1,
+   "clips": [
+    [
+     "old/06",
+     21.5,
+     0.9,
+     [
+      1.0,
+      1.06
+     ]
+    ],
+    [
+     "old/07",
+     5.5,
+     0.85,
+     [
+      1.06,
+      1.0
+     ]
+    ],
+    [
+     "v11",
+     6.6,
+     0.85,
+     [
+      1.0,
+      1.06
+     ]
+    ],
+    [
+     "v20",
+     26.3,
+     0.9,
+     [
+      1.06,
+      1.0
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "F",
+   "voice": [
+    "Pato__6",
+    3.01
+   ],
+   "line": 2,
+   "clips": [
+    [
+     "v26",
+     0.7,
+     3.5,
+     [
+      1.04,
+      1.0
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "TF",
+   "voice": [
+    "Avenida_Cln_2",
+    0.62
+   ],
+   "line": 4,
+   "amb": 0.22,
+   "clips": [
+    [
+     "v11",
+     6.5,
+     1.1,
+     [
+      1.0,
+      1.06
+     ]
+    ],
+    [
+     "img:assets/img/fotos/f03.jpg",
+     0,
+     1.6,
+     [
+      1.04,
+      1.12
+     ]
+    ],
+    [
+     "v27",
+     0.6,
+     2.0,
+     [
+      1.04,
+      1.0
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "END",
+   "clips": [
+    [
+     "img:assets/img/fotos/f01.jpg",
+     0,
+     4.4,
+     [
+      1.04,
+      1.12
+     ]
+    ]
+   ]
+  }
+ ],
+ "cutaways": [
+  {
+   "at": [
+    "H",
+    1.4
+   ],
+   "clip": [
+    "v01",
+    2.0,
+    0.85,
+    [
+     1.06,
+     1.0
+    ]
+   ],
+   "why": "'só sorvete?' → as cubas de sorvete"
+  }
+ ],
+ "xfade": {
+  "dur": 0.3,
+  "at": [
+   "O",
+   "F",
+   "TF",
+   "END"
+  ]
+ },
+ "overlays": [
+  {
+   "id": "hk",
+   "style": "hook",
+   "a": "Você achou que a Jolie",
+   "b": "era só <span>sorvete?</span>",
+   "in": 0,
+   "out": {
+    "w": [
+     0,
+     "mostrar"
+    ],
+    "d": -0.1
+   },
+   "flash": {
+    "w": [
+     0,
+     "sorvete?"
+    ]
+   }
+  },
+  {
+   "id": "o1",
+   "style": "tag",
+   "t": "Sorvete",
+   "in": {
+    "g": [
+     "O",
+     0.12
+    ]
+   },
+   "out": {
+    "g": [
+     "O",
+     0.72
+    ]
+   }
+  },
+  {
+   "id": "o2",
+   "style": "tag",
+   "t": "Açaí",
+   "in": {
+    "g": [
+     "O",
+     1.02
+    ]
+   },
+   "out": {
+    "g": [
+     "O",
+     1.57
+    ]
+   }
+  },
+  {
+   "id": "o3",
+   "style": "tag",
+   "t": "Tapioca",
+   "in": {
+    "g": [
+     "O",
+     1.87
+    ]
+   },
+   "out": {
+    "g": [
+     "O",
+     2.42
+    ]
+   }
+  },
+  {
+   "id": "o4",
+   "style": "tag",
+   "t": "Cuscuz",
+   "in": {
+    "g": [
+     "O",
+     2.72
+    ]
+   },
+   "out": {
+    "g": [
+     "O",
+     -0.25
+    ]
+   }
+  },
+  {
+   "id": "tF",
+   "style": "tag",
+   "k": "Tapioca",
+   "t": "Frango com mussarela",
+   "in": {
+    "w": [
+     4,
+     "frango"
+    ]
+   },
+   "out": {
+    "g": [
+     "END",
+     0
+    ],
+    "d": -0.35
+   }
+  }
+ ],
+ "bug": {
+  "w": [
+   0,
+   "mostrar"
+  ],
+  "d": 0.3
+ },
+ "end": {
+  "k": "Sorvete, tapioca, cuscuz e muito mais.",
+  "c": "Venha conhecer a Jolie!",
+  "a": "CLN 407, Bloco A, Lojas 1 e 5 — Asa Norte"
+ },
+ "sync": {
+  "v23": [
+   "Pato__2",
+   1.5665
+  ],
+  "v22": [
+   "Avenida_Cln",
+   2.1068
+  ],
+  "v25": [
+   "Pato__5",
+   2.3417
+  ],
+  "v26": [
+   "Pato__6",
+   2.308
+  ],
+  "v29": [
+   "Pato__7",
+   2.078
+  ]
+ }
+}

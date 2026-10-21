@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <title>Jolie · Não é só sorvete</title>
+    <title>__TITLE__</title>
     <script src="assets/vendor/gsap.min.js"></script>
     <style>
       @font-face { font-family: "Montserrat"; src: url("assets/fonts/montserrat-latin-700-normal.woff2") format("woff2"); font-weight: 700; }
@@ -25,10 +25,10 @@
       .cw.k { color: var(--orange); }
 
       /* ---- gancho: título no 1º quadro ---- */
-      #hook { position: absolute; left: 0; right: 0; top: 250px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
-      #hook .a { font-weight: 700; font-size: 46px; letter-spacing: 0.02em; color: var(--white); text-shadow: 0 4px 14px rgba(0,0,0,0.45); }
-      #hook .b { display: inline-block; padding: 8px 30px 12px; border-radius: 22px; background: var(--navy); font-weight: 900; font-size: 92px; letter-spacing: -0.03em; box-shadow: 0 10px 0 rgba(229,25,28,0.95); }
-      #hook .b span { color: var(--orange); }
+      .hook { position: absolute; left: 0; right: 0; top: 250px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+      .hook .a { font-weight: 700; font-size: 46px; letter-spacing: 0.02em; color: var(--white); text-shadow: 0 4px 14px rgba(0,0,0,0.45); }
+      .hook .b { display: inline-block; padding: 8px 30px 12px; border-radius: 22px; background: var(--navy); font-weight: 900; font-size: 92px; letter-spacing: -0.03em; box-shadow: 0 10px 0 rgba(229,25,28,0.95); }
+      .hook .b span { color: var(--orange); }
 
       /* ---- etiqueta de seção (topo, uma por vez) ---- */
       .tag { position: absolute; left: 0; right: 0; top: 250px; display: flex; justify-content: center; opacity: 0; }
@@ -51,11 +51,7 @@
       __VIDEOS__
       <div id="shade"></div>
 
-      <div id="hook"><div class="a">Você achou que a Jolie</div><div class="b">era só <span>sorvete?</span></div></div>
-      <div class="tag" id="tT"><div class="in"><div class="k">Lanche na Jolie</div><div class="t">Tapioca</div></div></div>
-      <div class="tag" id="tF"><div class="in"><div class="k">Tapioca</div><div class="t">Frango com mussarela</div></div></div>
-      <div class="tag" id="tC"><div class="in"><div class="k">Várias opções de</div><div class="t">Cuscuz</div></div></div>
-      <div class="tag" id="tA"><div class="in"><div class="t">{{lucide:message-circle}}Quem aí também ama?</div></div></div>
+      __OVERLAYS__
 
       __CAPTIONS__
 
@@ -64,9 +60,9 @@
       <div id="fin-shade"></div>
       <div id="fin">
         <img id="fin-logo" src="assets/img/logo-jolie.png" alt="Jolie Sorveteria e Café" />
-        <div id="fin-k">Sorvete, tapioca, cuscuz e muito mais.</div>
-        <div id="fin-c">Venha conhecer a Jolie!</div>
-        <div id="fin-a">CLN 407, Bloco A, Lojas 1 e 5 — Asa Norte</div>
+        <div id="fin-k">__FIN_K__</div>
+        <div id="fin-c">__FIN_C__</div>
+        <div id="fin-a">__FIN_A__</div>
       </div>
 
       <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="__TOTAL__" data-track-index="20"></audio>
@@ -93,19 +89,22 @@
           .to(sel, { opacity: 0, y: -18, duration: 0.3, ease: "power2.in" }, tout);
       };
 
-      // ---- gancho: no ar desde o 1º quadro, sai depois de "só sorvete?" ----
-      tl.fromTo("#hook .b", { scale: 0.92 }, { scale: 1, duration: 0.5, ease: "expo.out", ...ir }, 0)
-        .fromTo("#hook .b span", { color: "#ffffff" }, { color: "#f39222", duration: 0.15, ...ir }, T.sorvete - 0.05)
-        .to("#hook", { opacity: 0, y: -20, duration: 0.3, ease: "power2.in" }, T.mostrar - 0.1);
-
-      // ---- etiquetas: entram na palavra, saem pouco depois ----
-      show("#tT", T.tapioca, T.g.TF[0] - 0.35);
-      show("#tF", T.frango, T.g.C[0] - 0.35);
-      show("#tC", T.cuscuz, T.g.G[0] - 0.35);
-      show("#tA", T.ama, END - 0.3);
-      tl.fromTo("#bug", { opacity: 0 }, { opacity: 0.95, duration: 0.4, ...ir }, T.mostrar + 0.3).to("#bug", { opacity: 0, duration: 0.25 }, END - 0.15);
+      // ---- gancho e etiquetas: um por vez; entram na palavra e saem pouco depois ----
+      T.ov.forEach(([id, tin, tout, style, flash]) => {
+        const sel = "#" + id;
+        if (style === "hook") {
+          tl.fromTo(sel + " .b", { scale: 0.92 }, { scale: 1, duration: 0.5, ease: "expo.out", ...ir }, tin);
+          if (flash !== null) tl.fromTo(sel + " .b span", { color: "#ffffff" }, { color: "#f39222", duration: 0.15, ...ir }, flash - 0.05);
+          if (tin > 0.05) tl.fromTo(sel, { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", ...ir }, tin - 0.12);
+          tl.to(sel, { opacity: 0, y: -20, duration: 0.3, ease: "power2.in" }, tout);
+        } else show(sel, tin, tout);
+      });
+      if (T.bug) tl.fromTo("#bug", { opacity: 0 }, { opacity: 0.95, duration: 0.4, ...ir }, T.bug[0]).to("#bug", { opacity: 0, duration: 0.25 }, T.bug[1]);
 
       // ---- final ----
+      if (T.min) {  // versão mínima: o encerramento só aparece, sem animação de entrada
+        tl.fromTo(["#fin-shade", "#fin"], { opacity: 0 }, { opacity: 1, duration: 0.4, ...ir }, END);
+      } else
       tl.fromTo("#fin-shade", { opacity: 0 }, { opacity: 1, duration: 0.45, ...ir }, END)
         .set("#fin", { opacity: 1 }, END)
         .fromTo("#fin-logo", { opacity: 0, scale: 0.85, rotation: -6 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.6, ease: "back.out(1.6)", ...ir }, END + 0.1)

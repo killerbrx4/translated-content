@@ -38,3 +38,17 @@ As falas sem par na câmera (Pato_4, Avenida_Cln_2, Avenida_Cln_3) viraram narra
 - **Sem repetição:** a tapioca servida (v27) aparece uma vez só; a foto da tapioca ficou mais tempo.
 - **Encerramento:** mesma foto, mesma entrada da logo e mesmo degradê. Saíram o botão, o ícone e "Como chegar". Texto: "Sorvete, tapioca, cuscuz e muito mais." / **"Venha conhecer a Jolie!"** (destaque laranja) / "CLN 407, Bloco A, Lojas 1 e 5 — Asa Norte". O endereço fica 3,7 s na tela; o encerramento passou de 3,6 para 4,6 s.
 - A logo oficial já traz "Jolie · sorveteria e café", por isso esse texto não foi repetido embaixo dela.
+
+## Pacote de 6 vídeos (autorização total do cliente)
+Roteiros em `edls/`; gerar com `./render-all.sh`. Saída em `renders/jolie-<nome>.mp4` + `-celular.mp4`.
+
+| # | Vídeo | Material | Duração | Ideia |
+|---|---|---|---|---|
+| 01 | **Tapioca** | 100% novo | 17,6 s | Laura com a tapioca ("uma das minhas favoritas") → preparo inteiro → frango com mussarela aberta → final na foto do pôr do sol |
+| 02 | **Cuscuz** | 100% novo | 17,5 s | abre na reação dela ("Quem aí também ama cuscuz?") → preparo → queijo derretendo → final |
+| 03 | **Só legenda** | 100% novo | 38,1 s | o mesmo roteiro do principal, sem nenhum grafismo: sem etiquetas, sem zoom, sem transições, sem logo no canto; só cortes secos, legenda e o cartão final aparecendo sem animação |
+| 04 | **Tudo num só lugar** | mistura | 19,8 s | gancho "era só sorvete?" → "São tantas opções…" vira montagem sorvete → açaí → tapioca → cuscuz (uma etiqueta por plano) → favorita → tapioca de frango |
+| 05 | **Do preparo à mesa** | mistura, sem fala | 16,5 s | som ambiente da cozinha + trilha: tapioca, cuscuz e, de sobremesa, sorvete e açaí |
+| 06 | **Fim de tarde** | mistura, sem fala | 15,7 s | fotos do pôr do sol + meninas na mesa + Laura com o cuscuz; "Seu fim de tarde tem endereço" |
+
+Todos terminam no encerramento aprovado na V2 (logo + "Venha conhecer a Jolie!" + endereço, sem "Como chegar").

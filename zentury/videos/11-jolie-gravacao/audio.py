@@ -24,7 +24,7 @@ for g in TL["groups"]:
         place(voice, fades(read(HERE / f"assets/audio/clean/{f}.wav", vs, g["d"])), g["out"])
     if "amb" in g:
         for c in TL["clips"]:
-            if c["id"].startswith(g["id"]) and c["id"][len(g["id"]):].isdigit() and not c["src"].startswith("img:"):
+            if c["id"].startswith(g["id"]) and c["id"][len(g["id"]):].isdigit() and not c["src"].startswith("img:") and "/" not in c["src"]:
                 place(amb, fades(read(HERE / f"assets/footage/n/{c['src']}.mp4", c["ms"], c["d"]), 0.04, 0.06), c["out"], g["amb"])
 voice = voice / (np.abs(voice).max() + 1e-9) * 0.9
 amb = np.convolve(amb, [0.5, 0.5], "same")  # tira um pouco do chiado
@@ -62,9 +62,11 @@ music *= (0.85 * (1 - 0.72 * np.clip(ve / 0.035, 0, 1)))[:, None]
 
 def swish(d=0.3):
     n = int(d * SR); x = np.convolve(rng.standard_normal(n), np.ones(50) / 50, "same").astype(np.float32); return x * np.sin(np.pi * np.arange(n) / n) ** 2 * 1.6
-for key in ("tapioca", "frango", "cuscuz", "ama"): put(swish(), T[key] - 0.2, 0.06)
+if not TL.get("min"):
+    for _id, tin, _tout, style, _f in T["ov"]:
+        if style == "tag": put(swish(), tin - 0.32, 0.06)
 END = next(g["out"] for g in TL["groups"] if g["id"] == "END")
-put(swish(0.45), END - 0.2, 0.08)
+if not TL.get("min"): put(swish(0.45), END - 0.2, 0.08)
 for i, f in enumerate((587.33, 739.99, 880.0, 1174.66)): put(tone(f, 1.2, 0.45), END + 0.15 + i * 0.07, 0.05)
 
 mix = np.tanh(music + (voice + amb)[:, None] * 0.95).astype(np.float32)
