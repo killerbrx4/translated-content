@@ -3,6 +3,25 @@
  "title": "Jolie · Tapioca",
  "groups": [
   {
+   "id": "H",
+   "voice": [
+    "Pato__2",
+    3.12
+   ],
+   "line": 0,
+   "clips": [
+    [
+     "v23",
+     1.55,
+     3.73,
+     [
+      1.06,
+      1.0
+     ]
+    ]
+   ]
+  },
+  {
    "id": "F",
    "voice": [
     "Pato__6",
@@ -142,6 +161,7 @@
  "xfade": {
   "dur": 0.3,
   "at": [
+   "F",
    "T",
    "END"
   ]
@@ -150,9 +170,34 @@
   {
    "id": "hk",
    "style": "hook",
-   "a": "Hoje no lanche da Jolie:",
-   "b": "<span>Tapioca</span>",
+   "a": "Você achou que a Jolie",
+   "b": "era só <span>sorvete?</span>",
    "in": 0,
+   "out": {
+    "w": [
+     0,
+     "mostrar"
+    ],
+    "d": -0.1
+   },
+   "flash": {
+    "w": [
+     0,
+     "sorvete?"
+    ]
+   }
+  },
+  {
+   "id": "tH",
+   "style": "tag",
+   "k": "Hoje no lanche",
+   "t": "Tapioca",
+   "in": {
+    "g": [
+     "F",
+     0.25
+    ]
+   },
    "out": {
     "g": [
      "F",
@@ -200,10 +245,11 @@
   }
  ],
  "bug": {
-  "g": [
-   "F",
-   -0.3
-  ]
+  "w": [
+   0,
+   "mostrar"
+  ],
+  "d": 0.3
  },
  "end": {
   "k": "Tapioca, cuscuz, sorvete e muito mais.",
@@ -231,5 +277,23 @@
    "Pato__7",
    2.078
   ]
- }
+ },
+ "cutaways": [
+  {
+   "at": [
+    "H",
+    1.4
+   ],
+   "clip": [
+    "v01",
+    2.0,
+    0.85,
+    [
+     1.06,
+     1.0
+    ]
+   ],
+   "why": "'só sorvete?' → as cubas de sorvete"
+  }
+ ]
 }
