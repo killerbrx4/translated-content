@@ -1,33 +1,393 @@
 {
  "source": "Jolie · gravação 20/10/2026: 31 vídeos (WhatsApp, 464x832 60 fps), 13 fotos, falas gravadas no celular (.m4a) e sincronizadas por correlação de forma de onda",
- "sync": {"v23": ["Pato__2", 1.5665], "v22": ["Avenida_Cln", 2.1068], "v25": ["Pato__5", 2.3417], "v26": ["Pato__6", 2.3080], "v29": ["Pato__7", 2.0780]},
+ "sync": {
+  "v23": [
+   "Pato__2",
+   1.5665
+  ],
+  "v22": [
+   "Avenida_Cln",
+   2.1068
+  ],
+  "v25": [
+   "Pato__5",
+   2.3417
+  ],
+  "v26": [
+   "Pato__6",
+   2.308
+  ],
+  "v29": [
+   "Pato__7",
+   2.078
+  ]
+ },
  "groups": [
-  {"id": "H", "voice": ["Pato__2", 3.12], "line": 0, "clips": [["v23", 1.55, 3.73, [1.06, 1.0]]]},
-  {"id": "O", "voice": ["Pato__5", 3.64], "line": 1, "clips": [["v25", 1.30, 3.50, [1.0, 1.05]]]},
-  {"id": "F", "voice": ["Pato__6", 3.01], "line": 2, "clips": [["v26", 0.70, 3.50, [1.04, 1.0]]]},
-  {"id": "T", "voice": ["Pato__4", 0.70], "line": 3, "amb": 0.22, "clips": [
-    ["v05", 4.0, 0.80, [1.0, 1.06]], ["v06", 20.0, 0.90, [1.08, 1.02]], ["v07", 0.6, 0.80, [1.0, 1.06]],
-    ["v08", 2.3, 0.90, [1.06, 1.0]], ["v10", 7.5, 0.80, [1.0, 1.06]], ["v11", 2.2, 0.75, [1.04, 1.0]]]},
-  {"id": "TF", "voice": ["Avenida_Cln_2", 0.62], "line": 4, "amb": 0.22, "clips": [
-    ["v11", 6.5, 1.10, [1.0, 1.06]], ["v27", 0.6, 1.40, [1.04, 1.0]], ["img:assets/img/fotos/f03.jpg", 0, 1.00, [1.06, 1.12]], ["v27", 4.0, 1.20, [1.0, 1.05]]]},
-  {"id": "C", "voice": ["Avenida_Cln_3", 0.95], "line": 5, "amb": 0.22, "clips": [
-    ["v12", 0.6, 0.90, [1.0, 1.06]], ["v14", 13.2, 0.80, [1.05, 1.0]], ["v17", 9.0, 1.00, [1.0, 1.05]],
-    ["v18", 5.5, 0.90, [1.06, 1.0]], ["v20", 5.8, 1.40, [1.0, 1.06]], ["v30", 4.5, 0.70, [1.05, 1.0]], ["v20", 26.0, 2.40, [1.0, 1.08]]]},
-  {"id": "G", "voice": ["Pato__7", 3.10], "line": 6, "clips": [["v29", 1.02, 5.00, [1.0, 1.05]]]},
-  {"id": "END", "clips": [["img:assets/img/fotos/f04.jpg", 0, 3.60, [1.04, 1.12]]]}
+  {
+   "id": "H",
+   "voice": [
+    "Pato__2",
+    3.12
+   ],
+   "line": 0,
+   "clips": [
+    [
+     "v23",
+     1.55,
+     3.73,
+     [
+      1.06,
+      1.0
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "O",
+   "voice": [
+    "Pato__5",
+    3.64
+   ],
+   "line": 1,
+   "clips": [
+    [
+     "v25",
+     1.3,
+     3.5,
+     [
+      1.0,
+      1.05
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "F",
+   "voice": [
+    "Pato__6",
+    3.01
+   ],
+   "line": 2,
+   "clips": [
+    [
+     "v26",
+     0.7,
+     3.5,
+     [
+      1.04,
+      1.0
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "T",
+   "voice": [
+    "Pato__4",
+    0.7
+   ],
+   "line": 3,
+   "amb": 0.22,
+   "clips": [
+    [
+     "v05",
+     4.0,
+     0.8,
+     [
+      1.0,
+      1.06
+     ]
+    ],
+    [
+     "v06",
+     20.0,
+     0.9,
+     [
+      1.08,
+      1.02
+     ]
+    ],
+    [
+     "v07",
+     0.6,
+     0.8,
+     [
+      1.0,
+      1.06
+     ]
+    ],
+    [
+     "v08",
+     2.3,
+     0.9,
+     [
+      1.06,
+      1.0
+     ]
+    ],
+    [
+     "v10",
+     7.5,
+     0.8,
+     [
+      1.0,
+      1.06
+     ]
+    ],
+    [
+     "v11",
+     2.2,
+     0.75,
+     [
+      1.04,
+      1.0
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "TF",
+   "voice": [
+    "Avenida_Cln_2",
+    0.62
+   ],
+   "line": 4,
+   "amb": 0.22,
+   "clips": [
+    [
+     "v11",
+     6.5,
+     1.1,
+     [
+      1.0,
+      1.06
+     ]
+    ],
+    [
+     "img:assets/img/fotos/f03.jpg",
+     0,
+     1.6,
+     [
+      1.04,
+      1.12
+     ]
+    ],
+    [
+     "v27",
+     0.6,
+     2.0,
+     [
+      1.04,
+      1.0
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "C",
+   "voice": [
+    "Avenida_Cln_3",
+    0.95
+   ],
+   "line": 5,
+   "amb": 0.22,
+   "clips": [
+    [
+     "v12",
+     0.6,
+     0.9,
+     [
+      1.0,
+      1.06
+     ]
+    ],
+    [
+     "v14",
+     13.2,
+     0.8,
+     [
+      1.05,
+      1.0
+     ]
+    ],
+    [
+     "v17",
+     9.0,
+     1.0,
+     [
+      1.0,
+      1.05
+     ]
+    ],
+    [
+     "v18",
+     5.5,
+     0.9,
+     [
+      1.06,
+      1.0
+     ]
+    ],
+    [
+     "v20",
+     5.8,
+     1.4,
+     [
+      1.0,
+      1.06
+     ]
+    ],
+    [
+     "v30",
+     4.5,
+     0.7,
+     [
+      1.05,
+      1.0
+     ]
+    ],
+    [
+     "v20",
+     26.0,
+     2.4,
+     [
+      1.0,
+      1.08
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "G",
+   "voice": [
+    "Pato__7",
+    3.1
+   ],
+   "line": 6,
+   "clips": [
+    [
+     "v29",
+     1.02,
+     5.0,
+     [
+      1.0,
+      1.05
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "END",
+   "clips": [
+    [
+     "img:assets/img/fotos/f04.jpg",
+     0,
+     4.6,
+     [
+      1.04,
+      1.12
+     ]
+    ]
+   ]
+  }
  ],
  "cutaways": [
-  {"at": ["H", 1.40], "clip": ["v01", 2.0, 0.85, [1.06, 1.0]], "why": "'só sorvete?' → as cubas de sorvete"},
-  {"at": ["O", 1.55], "clip": ["v24", 0.5, 1.25, [1.0, 1.06]], "why": "'opções gostosas' → o cardápio"}
+  {
+   "at": [
+    "H",
+    1.4
+   ],
+   "clip": [
+    "v01",
+    2.0,
+    0.85,
+    [
+     1.06,
+     1.0
+    ]
+   ],
+   "why": "'só sorvete?' → as cubas de sorvete"
+  },
+  {
+   "at": [
+    "O",
+    1.45
+   ],
+   "clip": [
+    "v24",
+    0.4,
+    2.05,
+    [
+     1.0,
+     1.07
+    ]
+   ],
+   "why": "'opções gostosas… escolher uma só' → o cardápio (bloco do cardápio)",
+   "fade": 0.25
+  }
  ],
  "lines": [
-  {"file": "Pato__2", "text": "Você achou que a Jolie era só sorvete? Então deixa eu te mostrar uma coisa.", "start": 3.23},
-  {"file": "Pato__5", "text": "São tantas opções gostosas, que fica até difícil escolher uma só.", "start": 3.75},
-  {"file": "Pato__6", "text": "E hoje eu escolhi uma das minhas favoritas.", "start": 3.13},
-  {"file": "Pato__4", "text": "E uma dessas opções é a nossa tapioca, perfeita para quem quer fazer um lanche delicioso.", "start": 0.81},
-  {"file": "Avenida_Cln_2", "text": "Tapioca de frango com mussarela. Olha só essa combinação deliciosa.", "start": 0.79},
-  {"file": "Avenida_Cln_3", "text": "Aqui na Jolie você encontra várias opções de cuscuz para deixar seu lanche ainda mais gostoso.", "start": 1.14},
-  {"file": "Pato__7", "text": "Gente, olha só esse cuscuz da Jolie. Quem aí também ama?", "start": 3.22}
+  {
+   "file": "Pato__2",
+   "text": "Você achou que a Jolie era só sorvete? Então deixa eu te mostrar uma coisa.",
+   "start": 3.23
+  },
+  {
+   "file": "Pato__5",
+   "text": "São tantas opções gostosas, que fica até difícil escolher uma só.",
+   "start": 3.75
+  },
+  {
+   "file": "Pato__6",
+   "text": "E hoje eu escolhi uma das minhas favoritas.",
+   "start": 3.13
+  },
+  {
+   "file": "Pato__4",
+   "text": "E uma dessas opções é a nossa tapioca, perfeita para quem quer fazer um lanche delicioso.",
+   "start": 0.81
+  },
+  {
+   "file": "Avenida_Cln_2",
+   "text": "Tapioca de frango com mussarela. Olha só essa combinação deliciosa.",
+   "start": 0.79
+  },
+  {
+   "file": "Avenida_Cln_3",
+   "text": "Aqui na Jolie você encontra várias opções de cuscuz para deixar seu lanche ainda mais gostoso.",
+   "start": 1.14
+  },
+  {
+   "file": "Pato__7",
+   "text": "Gente, olha só esse cuscuz da Jolie. Quem aí também ama?",
+   "start": 3.22
+  }
  ],
- "keys": ["Jolie", "sorvete?", "opções", "gostosas,", "favoritas.", "tapioca,", "lanche", "delicioso.", "frango", "mussarela.", "deliciosa.", "cuscuz", "gostoso.", "ama?"]
+ "keys": [
+  "Jolie",
+  "sorvete?",
+  "opções",
+  "gostosas,",
+  "favoritas.",
+  "tapioca,",
+  "lanche",
+  "delicioso.",
+  "frango",
+  "mussarela.",
+  "deliciosa.",
+  "cuscuz",
+  "gostoso.",
+  "ama?"
+ ],
+ "xfade": {
+  "dur": 0.3,
+  "at": [
+   "O",
+   "F",
+   "T",
+   "C",
+   "G",
+   "END"
+  ]
+ }
 }

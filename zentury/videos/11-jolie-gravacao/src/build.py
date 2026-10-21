@@ -17,8 +17,22 @@ for g in E["groups"]:
         gd += d
     g["d"] = round(gd, 3); groups[g["id"]] = g; t += gd
 TOTAL = round(t, 3)
+# transição suave na troca de bloco: o plano anterior continua por baixo por XD s e o novo entra em fade
+XF = E.get("xfade", {}); XD = XF.get("dur", 0); XAT = set(XF.get("at", []))
+for i, c in enumerate(clips):
+    c["fade"] = 0.0; c["dd"] = c["d"]
+for i, c in enumerate(clips):
+    if i and c["id"] == f"{c['g']}0" and c["g"] in XAT:
+        c["fade"] = XD; clips[i - 1]["dd"] = round(clips[i - 1]["d"] + XD, 3)
 cuts = [dict(id=f"x{i}", src=c["clip"][0], ms=c["clip"][1], d=c["clip"][2], z=c["clip"][3],
              out=round(groups[c["at"][0]]["out"] + c["at"][1], 3)) for i, c in enumerate(E["cutaways"])]
+for c in cuts:  # cutaway que termina junto com o bloco também segura por baixo da transição
+    end = round(c["out"] + c["d"], 3); c["fade"] = E["cutaways"][int(c["id"][1:])].get("fade", 0.0)
+    c["dd"] = c["d"]; c["fout"] = 0.0
+    nxt = next((g for g in groups.values() if g["id"] in XAT and abs(end - g["out"]) < 1e-3), None)
+    if nxt:  # cutaway termina na troca de bloco: ele mesmo sai em fade por cima do bloco novo (que entra já visível)
+        c["dd"] = round(c["d"] + XD, 3); c["fout"] = XD
+        next(k for k in clips if k["id"] == f"{nxt['id']}0")["fade"] = 0.0
 
 # ---- palavras de cada fala: texto revisado + tempos do Whisper (alinhados por sequência) ----
 def line_words(li):
@@ -59,7 +73,7 @@ for g in groups.values():
 
 # ---- mídia ----
 def media(c, track):
-    common = f'id="{c["id"]}" class="shot clip" data-start="{c["out"]}" data-duration="{c["d"]}" data-track-index="{track}"'
+    common = f'id="{c["id"]}" class="shot clip" data-start="{c["out"]}" data-duration="{c["dd"]}" data-track-index="{track}"'
     if c["src"].startswith("img:"):
         return f'<img {common} src="{c["src"][4:]}" alt="" />'
     return f'<video {common} src="assets/footage/n/{c["src"]}.mp4" muted playsinline data-media-start="{c["ms"]}"></video>'
@@ -72,7 +86,7 @@ def lucide(name, cls="ic"):
 
 G = {k: [v["out"], v["d"]] for k, v in groups.items()}
 T = {"total": TOTAL, "g": G, "words": words,
-     "clips": [[c["id"], c["out"], c["d"], c["z"]] for c in clips + cuts],
+     "clips": [[c["id"], c["out"], c["dd"], c["z"], c["fade"], c.get("fout", 0.0)] for c in clips + cuts],
      "tapioca": trig["3:tapioca"], "frango": trig["4:frango"], "cuscuz": trig["5:cuscuz"], "ama": trig["6:quem"],
      "sorvete": trig["0:sorvete"], "mostrar": trig["0:mostrar"]}
 tpl = (P / "src/template.html").read_text()

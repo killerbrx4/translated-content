@@ -30,3 +30,11 @@ As falas sem par na câmera (Pato_4, Avenida_Cln_2, Avenida_Cln_3) viraram narra
 1. **Preços:** o cardápio aparece, mas os valores não foram usados (não estão legíveis com certeza).
 2. **Botão do anúncio:** `CONFIG.cta` no template ("Como chegar"; pode trocar por "Enviar mensagem").
 3. **Material não usado ainda:** v02 (coberturas), v03 (picolés e bombons), v04/v28 (fachada), v15 (cozinheira explicando, horizontal), v21, v22 (2º take do gancho) e mais 11 fotos. Dá para fazer cortes curtos só de tapioca, só de cuscuz e de sorvete.
+
+## V2 (ajustes pedidos pelo cliente: organização dos blocos + novo encerramento)
+- `renders/jolie-nao-e-so-sorvete-v2.mp4` (38,1 s, -14,2 LUFS).
+- **Blocos:** apresentação da Laura → cardápio (agora um bloco próprio de 2 s, até o fim de "escolher uma só") → Laura com a tapioca → preparo da tapioca → preparo do cuscuz → Laura com o cuscuz → final.
+- **Transições:** fusão suave de 0,3 s **só na troca de bloco** (`edl.json → xfade`). Dentro de cada bloco, os cortes continuam secos, no ritmo da fala. O cardápio entra e sai em fusão.
+- **Sem repetição:** a tapioca servida (v27) aparece uma vez só; a foto da tapioca ficou mais tempo.
+- **Encerramento:** mesma foto, mesma entrada da logo e mesmo degradê. Saíram o botão, o ícone e "Como chegar". Texto: "Sorvete, tapioca, cuscuz e muito mais." / **"Venha conhecer a Jolie!"** (destaque laranja) / "CLN 407, Bloco A, Lojas 1 e 5 — Asa Norte". O endereço fica 3,7 s na tela; o encerramento passou de 3,6 para 4,6 s.
+- A logo oficial já traz "Jolie · sorveteria e café", por isso esse texto não foi repetido embaixo dela.

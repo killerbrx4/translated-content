@@ -41,12 +41,9 @@
       #fin-shade { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(23,18,100,0.15) 0%, rgba(23,18,100,0.05) 35%, rgba(10,8,40,0.82) 70%, rgba(10,8,40,0.92) 100%); opacity: 0; }
       #fin { position: absolute; left: 0; right: 0; top: 0; bottom: 0; opacity: 0; }
       #fin-logo { position: absolute; left: 50%; top: 170px; width: 420px; margin-left: -210px; filter: drop-shadow(0 16px 30px rgba(0,0,0,0.4)); }
-      #fin-k { position: absolute; left: 0; right: 0; top: 1180px; text-align: center; font-weight: 900; font-size: 64px; line-height: 1.1; letter-spacing: -0.02em; }
-      #fin-k span { color: var(--orange); }
-      #fin-b { position: absolute; left: 0; right: 0; top: 1380px; display: flex; justify-content: center; }
-      #btn { display: inline-flex; align-items: center; gap: 20px; padding: 26px 56px; border-radius: 999px; background: var(--orange); color: var(--navy); font-weight: 900; font-size: 60px; box-shadow: 0 12px 0 rgba(0,0,0,0.25); }
-      #fin-a { position: absolute; left: 0; right: 0; top: 1560px; text-align: center; font-weight: 700; font-size: 40px; color: var(--cream); }
-      #fin-a b { font-weight: 900; color: var(--white); }
+      #fin-k { position: absolute; left: 20px; right: 20px; top: 1090px; text-align: center; font-weight: 700; font-size: 44px; white-space: nowrap; line-height: 1.2; color: var(--cream); text-shadow: 0 4px 14px rgba(0,0,0,0.4); }
+      #fin-c { position: absolute; left: 20px; right: 20px; top: 1190px; text-align: center; font-weight: 900; font-size: 76px; white-space: nowrap; line-height: 1.05; letter-spacing: -0.03em; color: var(--orange); -webkit-text-stroke: 8px rgba(23,18,100,0.9); paint-order: stroke fill; text-shadow: 0 8px 24px rgba(0,0,0,0.35); }
+      #fin-a { position: absolute; left: 20px; right: 20px; top: 1330px; text-align: center; font-weight: 700; font-size: 40px; white-space: nowrap; line-height: 1.3; color: var(--white); text-shadow: 0 3px 10px rgba(0,0,0,0.5); }
     </style>
   </head>
   <body>
@@ -67,24 +64,26 @@
       <div id="fin-shade"></div>
       <div id="fin">
         <img id="fin-logo" src="assets/img/logo-jolie.png" alt="Jolie Sorveteria e Café" />
-        <div id="fin-k">Sorvete, tapioca, cuscuz<br /><span>e muito mais.</span></div>
-        <div id="fin-b"><div id="btn">{{lucide:navigation}}<span id="btn-l">Como chegar</span></div></div>
-        <div id="fin-a">CLN 407, Bloco A, Lojas 1 e 5 · <b>Asa Norte</b></div>
+        <div id="fin-k">Sorvete, tapioca, cuscuz e muito mais.</div>
+        <div id="fin-c">Venha conhecer a Jolie!</div>
+        <div id="fin-a">CLN 407, Bloco A, Lojas 1 e 5 — Asa Norte</div>
       </div>
 
       <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="__TOTAL__" data-track-index="20"></audio>
     </div>
 
     <script>
-      const CONFIG = { cta: "Como chegar" }; // espelha o botão do anúncio ("Enviar mensagem", "Pedir agora"…)
-      document.getElementById("btn-l").textContent = CONFIG.cta;
       const T = __T__;
       const tl = gsap.timeline({ paused: true });
       const ir = { immediateRender: false };
       const END = T.g.END[0];
 
       // ---- movimento suave em cada plano (Ken Burns) ----
-      T.clips.forEach(([id, s, d, z]) => tl.fromTo("#" + id, { scale: z[0] }, { scale: z[1], duration: d, ease: "none", ...ir }, s));
+      T.clips.forEach(([id, s, d, z, f, fo]) => {
+        if (fo) tl.fromTo("#" + id, { opacity: 1 }, { opacity: 0, duration: fo, ease: "sine.inOut", ...ir }, s + d - fo);
+        tl.fromTo("#" + id, { scale: z[0] }, { scale: z[1], duration: d, ease: "none", ...ir }, s);
+        if (f) tl.fromTo("#" + id, { opacity: 0 }, { opacity: 1, duration: f, ease: "sine.inOut", ...ir }, s); // troca de bloco
+      });
 
       // ---- legendas ----
       T.words.forEach((w) => tl.fromTo("#" + w.id, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.16, ease: "power2.out", ...ir }, w.t - 0.04));
@@ -111,9 +110,8 @@
         .set("#fin", { opacity: 1 }, END)
         .fromTo("#fin-logo", { opacity: 0, scale: 0.85, rotation: -6 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.6, ease: "back.out(1.6)", ...ir }, END + 0.1)
         .fromTo("#fin-k", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out", ...ir }, END + 0.35)
-        .fromTo("#fin-b", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out", ...ir }, END + 0.6)
-        .fromTo("#fin-a", { opacity: 0 }, { opacity: 1, duration: 0.4, ...ir }, END + 0.85)
-        .fromTo("#btn", { scale: 1 }, { scale: 1.05, duration: 0.45, yoyo: true, repeat: 2, ease: "sine.inOut", ...ir }, END + 1.3);
+        .fromTo("#fin-c", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out", ...ir }, END + 0.65)
+        .fromTo("#fin-a", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out", ...ir }, END + 0.9);
 
       window.__timelines = window.__timelines || {};
       window.__timelines["main"] = tl;
