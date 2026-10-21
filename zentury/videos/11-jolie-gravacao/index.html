@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Jolie · Não é só sorvete</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Montserrat"; src: url("assets/fonts/montserrat-latin-700-normal.woff2") format("woff2"); font-weight: 700; }
+      @font-face { font-family: "Montserrat"; src: url("assets/fonts/montserrat-latin-900-normal.woff2") format("woff2"); font-weight: 900; }
+      /* cores amostradas do logo oficial */
+      :root { --navy: #171264; --red: #e5191c; --orange: #f39222; --cream: #fff8f0; --white: #ffffff; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #000; font-family: "Montserrat", sans-serif; color: var(--white); }
+      .ic { width: 1em; height: 1em; display: inline-block; vertical-align: -0.14em; }
+
+      .shot { position: absolute; inset: 0; width: 1080px; height: 1920px; object-fit: cover; transform-origin: 50% 45%; }
+      #shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to bottom, rgba(23,18,100,0.38) 0%, rgba(23,18,100,0) 22%, rgba(0,0,0,0) 68%, rgba(0,0,0,0.38) 100%); }
+      #bug { position: absolute; left: 56px; top: 86px; width: 132px; filter: drop-shadow(0 6px 14px rgba(0,0,0,0.35)); opacity: 0; }
+
+      /* ---- legendas: limpas, embaixo, palavra a palavra ---- */
+      .cap { position: absolute; left: 70px; right: 70px; top: 1500px; text-align: center; font-weight: 900; font-size: 70px; line-height: 1.15; letter-spacing: -0.01em; }
+      .cw { display: inline-block; color: var(--white); -webkit-text-stroke: 10px rgba(23,18,100,0.92); paint-order: stroke fill; text-shadow: 0 6px 18px rgba(0,0,0,0.35); opacity: 0; }
+      .cw.k { color: var(--orange); }
+
+      /* ---- gancho: título no 1º quadro ---- */
+      #hook { position: absolute; left: 0; right: 0; top: 250px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+      #hook .a { font-weight: 700; font-size: 46px; letter-spacing: 0.02em; color: var(--white); text-shadow: 0 4px 14px rgba(0,0,0,0.45); }
+      #hook .b { display: inline-block; padding: 8px 30px 12px; border-radius: 22px; background: var(--navy); font-weight: 900; font-size: 92px; letter-spacing: -0.03em; box-shadow: 0 10px 0 rgba(229,25,28,0.95); }
+      #hook .b span { color: var(--orange); }
+
+      /* ---- etiqueta de seção (topo, uma por vez) ---- */
+      .tag { position: absolute; left: 0; right: 0; top: 250px; display: flex; justify-content: center; opacity: 0; }
+      .tag .in { display: flex; flex-direction: column; align-items: flex-start; padding: 16px 34px 16px 28px; border-left: 10px solid var(--orange); border-radius: 8px 22px 22px 8px; background: rgba(255,248,240,0.94); box-shadow: 0 14px 34px rgba(0,0,0,0.25); }
+      .tag .k { font-weight: 700; font-size: 30px; letter-spacing: 0.14em; color: var(--red); text-transform: uppercase; }
+      .tag .t { font-weight: 900; font-size: 66px; line-height: 1.04; color: var(--navy); letter-spacing: -0.02em; white-space: nowrap; }
+      .tag .ic { color: var(--orange); margin-right: 10px; }
+
+      /* ---- final ---- */
+      #fin-shade { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(23,18,100,0.15) 0%, rgba(23,18,100,0.05) 35%, rgba(10,8,40,0.82) 70%, rgba(10,8,40,0.92) 100%); opacity: 0; }
+      #fin { position: absolute; left: 0; right: 0; top: 0; bottom: 0; opacity: 0; }
+      #fin-logo { position: absolute; left: 50%; top: 170px; width: 420px; margin-left: -210px; filter: drop-shadow(0 16px 30px rgba(0,0,0,0.4)); }
+      #fin-k { position: absolute; left: 0; right: 0; top: 1180px; text-align: center; font-weight: 900; font-size: 64px; line-height: 1.1; letter-spacing: -0.02em; }
+      #fin-k span { color: var(--orange); }
+      #fin-b { position: absolute; left: 0; right: 0; top: 1380px; display: flex; justify-content: center; }
+      #btn { display: inline-flex; align-items: center; gap: 20px; padding: 26px 56px; border-radius: 999px; background: var(--orange); color: var(--navy); font-weight: 900; font-size: 60px; box-shadow: 0 12px 0 rgba(0,0,0,0.25); }
+      #fin-a { position: absolute; left: 0; right: 0; top: 1560px; text-align: center; font-weight: 700; font-size: 40px; color: var(--cream); }
+      #fin-a b { font-weight: 900; color: var(--white); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="37.08" data-width="1080" data-height="1920">
+      <video id="H0" class="shot clip" data-start="0.0" data-duration="3.73" data-track-index="0" src="assets/footage/n/v23.mp4" muted playsinline data-media-start="1.55"></video>
+        <video id="O0" class="shot clip" data-start="3.73" data-duration="3.5" data-track-index="1" src="assets/footage/n/v25.mp4" muted playsinline data-media-start="1.3"></video>
+        <video id="F0" class="shot clip" data-start="7.23" data-duration="3.5" data-track-index="0" src="assets/footage/n/v26.mp4" muted playsinline data-media-start="0.7"></video>
+        <video id="T0" class="shot clip" data-start="10.73" data-duration="0.8" data-track-index="1" src="assets/footage/n/v05.mp4" muted playsinline data-media-start="4.0"></video>
+        <video id="T1" class="shot clip" data-start="11.53" data-duration="0.9" data-track-index="0" src="assets/footage/n/v06.mp4" muted playsinline data-media-start="20.0"></video>
+        <video id="T2" class="shot clip" data-start="12.43" data-duration="0.8" data-track-index="1" src="assets/footage/n/v07.mp4" muted playsinline data-media-start="0.6"></video>
+        <video id="T3" class="shot clip" data-start="13.23" data-duration="0.9" data-track-index="0" src="assets/footage/n/v08.mp4" muted playsinline data-media-start="2.3"></video>
+        <video id="T4" class="shot clip" data-start="14.13" data-duration="0.8" data-track-index="1" src="assets/footage/n/v10.mp4" muted playsinline data-media-start="7.5"></video>
+        <video id="T5" class="shot clip" data-start="14.93" data-duration="0.75" data-track-index="0" src="assets/footage/n/v11.mp4" muted playsinline data-media-start="2.2"></video>
+        <video id="TF0" class="shot clip" data-start="15.68" data-duration="1.1" data-track-index="1" src="assets/footage/n/v11.mp4" muted playsinline data-media-start="6.5"></video>
+        <video id="TF1" class="shot clip" data-start="16.78" data-duration="1.4" data-track-index="0" src="assets/footage/n/v27.mp4" muted playsinline data-media-start="0.6"></video>
+        <img id="TF2" class="shot clip" data-start="18.18" data-duration="1.0" data-track-index="1" src="assets/img/fotos/f03.jpg" alt="" />
+        <video id="TF3" class="shot clip" data-start="19.18" data-duration="1.2" data-track-index="0" src="assets/footage/n/v27.mp4" muted playsinline data-media-start="4.0"></video>
+        <video id="C0" class="shot clip" data-start="20.38" data-duration="0.9" data-track-index="1" src="assets/footage/n/v12.mp4" muted playsinline data-media-start="0.6"></video>
+        <video id="C1" class="shot clip" data-start="21.28" data-duration="0.8" data-track-index="0" src="assets/footage/n/v14.mp4" muted playsinline data-media-start="13.2"></video>
+        <video id="C2" class="shot clip" data-start="22.08" data-duration="1.0" data-track-index="1" src="assets/footage/n/v17.mp4" muted playsinline data-media-start="9.0"></video>
+        <video id="C3" class="shot clip" data-start="23.08" data-duration="0.9" data-track-index="0" src="assets/footage/n/v18.mp4" muted playsinline data-media-start="5.5"></video>
+        <video id="C4" class="shot clip" data-start="23.98" data-duration="1.4" data-track-index="1" src="assets/footage/n/v20.mp4" muted playsinline data-media-start="5.8"></video>
+        <video id="C5" class="shot clip" data-start="25.38" data-duration="0.7" data-track-index="0" src="assets/footage/n/v30.mp4" muted playsinline data-media-start="4.5"></video>
+        <video id="C6" class="shot clip" data-start="26.08" data-duration="2.4" data-track-index="1" src="assets/footage/n/v20.mp4" muted playsinline data-media-start="26.0"></video>
+        <video id="G0" class="shot clip" data-start="28.48" data-duration="5.0" data-track-index="0" src="assets/footage/n/v29.mp4" muted playsinline data-media-start="1.02"></video>
+        <img id="END0" class="shot clip" data-start="33.48" data-duration="3.6" data-track-index="1" src="assets/img/fotos/f04.jpg" alt="" />
+        <video id="x0" class="shot clip" data-start="1.4" data-duration="0.85" data-track-index="2" src="assets/footage/n/v01.mp4" muted playsinline data-media-start="2.0"></video>
+        <video id="x1" class="shot clip" data-start="5.28" data-duration="1.25" data-track-index="2" src="assets/footage/n/v24.mp4" muted playsinline data-media-start="0.5"></video>
+      <div id="shade"></div>
+
+      <div id="hook"><div class="a">Você achou que a Jolie</div><div class="b">era só <span>sorvete?</span></div></div>
+      <div class="tag" id="tT"><div class="in"><div class="k">Lanche na Jolie</div><div class="t">Tapioca</div></div></div>
+      <div class="tag" id="tF"><div class="in"><div class="k">Tapioca</div><div class="t">Frango com mussarela</div></div></div>
+      <div class="tag" id="tC"><div class="in"><div class="k">Várias opções de</div><div class="t">Cuscuz</div></div></div>
+      <div class="tag" id="tA"><div class="in"><div class="t"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" /></svg>Quem aí também ama?</div></div></div>
+
+      <div class="cap clip" id="cap0" data-start="0.06" data-duration="0.67" data-track-index="9"><span id="w0_0" class="cw">Você</span> <span id="w0_1" class="cw">achou</span> <span id="w0_2" class="cw">que</span></div>
+      <div class="cap clip" id="cap1" data-start="0.73" data-duration="0.52" data-track-index="9"><span id="w0_3" class="cw">a</span> <span id="w0_4" class="cw k">Jolie</span> <span id="w0_5" class="cw">era</span></div>
+      <div class="cap clip" id="cap2" data-start="1.25" data-duration="1.04" data-track-index="9"><span id="w0_6" class="cw">só</span> <span id="w0_7" class="cw k">sorvete?</span></div>
+      <div class="cap clip" id="cap3" data-start="2.29" data-duration="0.5" data-track-index="9"><span id="w0_8" class="cw">Então</span> <span id="w0_9" class="cw">deixa</span> <span id="w0_10" class="cw">eu</span></div>
+      <div class="cap clip" id="cap4" data-start="2.79" data-duration="0.68" data-track-index="9"><span id="w0_11" class="cw">te</span> <span id="w0_12" class="cw">mostrar</span> <span id="w0_13" class="cw">uma</span></div>
+      <div class="cap clip" id="cap5" data-start="3.47" data-duration="0.21" data-track-index="9"><span id="w0_14" class="cw">coisa.</span></div>
+      <div class="cap clip" id="cap6" data-start="3.79" data-duration="0.97" data-track-index="9"><span id="w1_0" class="cw">São</span> <span id="w1_1" class="cw">tantas</span> <span id="w1_2" class="cw k">opções</span></div>
+      <div class="cap clip" id="cap7" data-start="4.76" data-duration="0.72" data-track-index="9"><span id="w1_3" class="cw k">gostosas,</span></div>
+      <div class="cap clip" id="cap8" data-start="5.48" data-duration="0.5" data-track-index="9"><span id="w1_4" class="cw">que</span> <span id="w1_5" class="cw">fica</span> <span id="w1_6" class="cw">até</span></div>
+      <div class="cap clip" id="cap9" data-start="5.98" data-duration="0.76" data-track-index="9"><span id="w1_7" class="cw">difícil</span> <span id="w1_8" class="cw">escolher</span></div>
+      <div class="cap clip" id="cap10" data-start="6.74" data-duration="0.44" data-track-index="9"><span id="w1_9" class="cw">uma</span> <span id="w1_10" class="cw">só.</span></div>
+      <div class="cap clip" id="cap11" data-start="7.3" data-duration="0.45" data-track-index="9"><span id="w2_0" class="cw">E</span> <span id="w2_1" class="cw">hoje</span> <span id="w2_2" class="cw">eu</span></div>
+      <div class="cap clip" id="cap12" data-start="7.75" data-duration="0.54" data-track-index="9"><span id="w2_3" class="cw">escolhi</span> <span id="w2_4" class="cw">uma</span> <span id="w2_5" class="cw">das</span></div>
+      <div class="cap clip" id="cap13" data-start="8.29" data-duration="1.37" data-track-index="9"><span id="w2_6" class="cw">minhas</span> <span id="w2_7" class="cw k">favoritas.</span></div>
+      <div class="cap clip" id="cap14" data-start="10.79" data-duration="0.61" data-track-index="9"><span id="w3_0" class="cw">E</span> <span id="w3_1" class="cw">uma</span> <span id="w3_2" class="cw">dessas</span></div>
+      <div class="cap clip" id="cap15" data-start="11.4" data-duration="0.74" data-track-index="9"><span id="w3_3" class="cw k">opções</span> <span id="w3_4" class="cw">é</span> <span id="w3_5" class="cw">a</span></div>
+      <div class="cap clip" id="cap16" data-start="12.14" data-duration="0.76" data-track-index="9"><span id="w3_6" class="cw">nossa</span> <span id="w3_7" class="cw k">tapioca,</span></div>
+      <div class="cap clip" id="cap17" data-start="12.9" data-duration="1.0" data-track-index="9"><span id="w3_8" class="cw">perfeita</span> <span id="w3_9" class="cw">para</span> <span id="w3_10" class="cw">quem</span></div>
+      <div class="cap clip" id="cap18" data-start="13.9" data-duration="0.74" data-track-index="9"><span id="w3_11" class="cw">quer</span> <span id="w3_12" class="cw">fazer</span> <span id="w3_13" class="cw">um</span></div>
+      <div class="cap clip" id="cap19" data-start="14.64" data-duration="0.99" data-track-index="9"><span id="w3_14" class="cw k">lanche</span> <span id="w3_15" class="cw k">delicioso.</span></div>
+      <div class="cap clip" id="cap20" data-start="15.8" data-duration="1.17" data-track-index="9"><span id="w4_0" class="cw">Tapioca</span> <span id="w4_1" class="cw">de</span> <span id="w4_2" class="cw k">frango</span></div>
+      <div class="cap clip" id="cap21" data-start="16.97" data-duration="1.0" data-track-index="9"><span id="w4_3" class="cw">com</span> <span id="w4_4" class="cw k">mussarela.</span></div>
+      <div class="cap clip" id="cap22" data-start="17.97" data-duration="0.78" data-track-index="9"><span id="w4_5" class="cw">Olha</span> <span id="w4_6" class="cw">só</span> <span id="w4_7" class="cw">essa</span></div>
+      <div class="cap clip" id="cap23" data-start="18.75" data-duration="0.5" data-track-index="9"><span id="w4_8" class="cw">combinação</span></div>
+      <div class="cap clip" id="cap24" data-start="19.25" data-duration="1.08" data-track-index="9"><span id="w4_9" class="cw k">deliciosa.</span></div>
+      <div class="cap clip" id="cap25" data-start="20.52" data-duration="0.96" data-track-index="9"><span id="w5_0" class="cw">Aqui</span> <span id="w5_1" class="cw">na</span> <span id="w5_2" class="cw k">Jolie</span></div>
+      <div class="cap clip" id="cap26" data-start="21.48" data-duration="0.8" data-track-index="9"><span id="w5_3" class="cw">você</span> <span id="w5_4" class="cw">encontra</span></div>
+      <div class="cap clip" id="cap27" data-start="22.28" data-duration="1.02" data-track-index="9"><span id="w5_5" class="cw">várias</span> <span id="w5_6" class="cw k">opções</span> <span id="w5_7" class="cw">de</span></div>
+      <div class="cap clip" id="cap28" data-start="23.3" data-duration="1.24" data-track-index="9"><span id="w5_8" class="cw k">cuscuz</span> <span id="w5_9" class="cw">para</span> <span id="w5_10" class="cw">deixar</span></div>
+      <div class="cap clip" id="cap29" data-start="24.54" data-duration="0.82" data-track-index="9"><span id="w5_11" class="cw">seu</span> <span id="w5_12" class="cw k">lanche</span> <span id="w5_13" class="cw">ainda</span></div>
+      <div class="cap clip" id="cap30" data-start="25.36" data-duration="1.45" data-track-index="9"><span id="w5_14" class="cw">mais</span> <span id="w5_15" class="cw k">gostoso.</span></div>
+      <div class="cap clip" id="cap31" data-start="28.55" data-duration="0.38" data-track-index="9"><span id="w6_0" class="cw">Gente,</span></div>
+      <div class="cap clip" id="cap32" data-start="28.93" data-duration="0.94" data-track-index="9"><span id="w6_1" class="cw">olha</span> <span id="w6_2" class="cw">só</span> <span id="w6_3" class="cw">esse</span></div>
+      <div class="cap clip" id="cap33" data-start="29.87" data-duration="1.3" data-track-index="9"><span id="w6_4" class="cw k">cuscuz</span> <span id="w6_5" class="cw">da</span> <span id="w6_6" class="cw">Jolie.</span></div>
+      <div class="cap clip" id="cap34" data-start="31.17" data-duration="0.8" data-track-index="9"><span id="w6_7" class="cw">Quem</span> <span id="w6_8" class="cw">aí</span> <span id="w6_9" class="cw">também</span></div>
+      <div class="cap clip" id="cap35" data-start="31.97" data-duration="1.15" data-track-index="9"><span id="w6_10" class="cw k">ama?</span></div>
+
+      <img id="bug" src="assets/img/logo-jolie.png" alt="Jolie Sorveteria e Café" />
+
+      <div id="fin-shade"></div>
+      <div id="fin">
+        <img id="fin-logo" src="assets/img/logo-jolie.png" alt="Jolie Sorveteria e Café" />
+        <div id="fin-k">Sorvete, tapioca, cuscuz<br /><span>e muito mais.</span></div>
+        <div id="fin-b"><div id="btn"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="3 11 22 2 13 21 11 13 3 11" /></svg><span id="btn-l">Como chegar</span></div></div>
+        <div id="fin-a">CLN 407, Bloco A, Lojas 1 e 5 · <b>Asa Norte</b></div>
+      </div>
+
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="37.08" data-track-index="20"></audio>
+    </div>
+
+    <script>
+      const CONFIG = { cta: "Como chegar" }; // espelha o botão do anúncio ("Enviar mensagem", "Pedir agora"…)
+      document.getElementById("btn-l").textContent = CONFIG.cta;
+      const T = {"total": 37.08, "g": {"H": [0.0, 3.73], "O": [3.73, 3.5], "F": [7.23, 3.5], "T": [10.73, 4.95], "TF": [15.68, 4.7], "C": [20.38, 8.1], "G": [28.48, 5.0], "END": [33.48, 3.6]}, "words": [{"id": "w0_0", "t": 0.11, "k": false}, {"id": "w0_1", "t": 0.32, "k": false}, {"id": "w0_2", "t": 0.64, "k": false}, {"id": "w0_3", "t": 0.78, "k": false}, {"id": "w0_4", "t": 0.95, "k": true}, {"id": "w0_5", "t": 1.12, "k": false}, {"id": "w0_6", "t": 1.3, "k": false}, {"id": "w0_7", "t": 1.48, "k": true}, {"id": "w0_8", "t": 2.34, "k": false}, {"id": "w0_9", "t": 2.5, "k": false}, {"id": "w0_10", "t": 2.72, "k": false}, {"id": "w0_11", "t": 2.84, "k": false}, {"id": "w0_12", "t": 2.92, "k": false}, {"id": "w0_13", "t": 3.22, "k": false}, {"id": "w0_14", "t": 3.52, "k": false}, {"id": "w1_0", "t": 3.84, "k": false}, {"id": "w1_1", "t": 4.215, "k": false}, {"id": "w1_2", "t": 4.59, "k": true}, {"id": "w1_3", "t": 4.81, "k": true}, {"id": "w1_4", "t": 5.53, "k": false}, {"id": "w1_5", "t": 5.59, "k": false}, {"id": "w1_6", "t": 5.83, "k": false}, {"id": "w1_7", "t": 6.03, "k": false}, {"id": "w1_8", "t": 6.37, "k": false}, {"id": "w1_9", "t": 6.79, "k": false}, {"id": "w1_10", "t": 7.07, "k": false}, {"id": "w2_0", "t": 7.35, "k": false}, {"id": "w2_1", "t": 7.34, "k": false}, {"id": "w2_2", "t": 7.6, "k": false}, {"id": "w2_3", "t": 7.8, "k": false}, {"id": "w2_4", "t": 8.0, "k": false}, {"id": "w2_5", "t": 8.2, "k": false}, {"id": "w2_6", "t": 8.34, "k": false}, {"id": "w2_7", "t": 8.56, "k": true}, {"id": "w3_0", "t": 10.84, "k": false}, {"id": "w3_1", "t": 11.03, "k": false}, {"id": "w3_2", "t": 11.21, "k": false}, {"id": "w3_3", "t": 11.45, "k": true}, {"id": "w3_4", "t": 11.89, "k": false}, {"id": "w3_5", "t": 12.09, "k": false}, {"id": "w3_6", "t": 12.19, "k": false}, {"id": "w3_7", "t": 12.39, "k": true}, {"id": "w3_8", "t": 12.95, "k": false}, {"id": "w3_9", "t": 13.45, "k": false}, {"id": "w3_10", "t": 13.73, "k": false}, {"id": "w3_11", "t": 13.95, "k": false}, {"id": "w3_12", "t": 14.17, "k": false}, {"id": "w3_13", "t": 14.49, "k": false}, {"id": "w3_14", "t": 14.69, "k": true}, {"id": "w3_15", "t": 14.91, "k": true}, {"id": "w4_0", "t": 15.85, "k": false}, {"id": "w4_1", "t": 16.5, "k": false}, {"id": "w4_2", "t": 16.8, "k": true}, {"id": "w4_3", "t": 17.02, "k": false}, {"id": "w4_4", "t": 17.24, "k": true}, {"id": "w4_5", "t": 18.02, "k": false}, {"id": "w4_6", "t": 18.32, "k": false}, {"id": "w4_7", "t": 18.6, "k": false}, {"id": "w4_8", "t": 18.8, "k": false}, {"id": "w4_9", "t": 19.3, "k": true}, {"id": "w5_0", "t": 20.57, "k": false}, {"id": "w5_1", "t": 20.91, "k": false}, {"id": "w5_2", "t": 21.13, "k": true}, {"id": "w5_3", "t": 21.53, "k": false}, {"id": "w5_4", "t": 21.91, "k": false}, {"id": "w5_5", "t": 22.33, "k": false}, {"id": "w5_6", "t": 22.65, "k": true}, {"id": "w5_7", "t": 23.09, "k": false}, {"id": "w5_8", "t": 23.35, "k": true}, {"id": "w5_9", "t": 23.87, "k": false}, {"id": "w5_10", "t": 24.29, "k": false}, {"id": "w5_11", "t": 24.59, "k": false}, {"id": "w5_12", "t": 24.81, "k": true}, {"id": "w5_13", "t": 25.09, "k": false}, {"id": "w5_14", "t": 25.41, "k": false}, {"id": "w5_15", "t": 25.71, "k": true}, {"id": "w6_0", "t": 28.6, "k": false}, {"id": "w6_1", "t": 28.98, "k": false}, {"id": "w6_2", "t": 29.24, "k": false}, {"id": "w6_3", "t": 29.54, "k": false}, {"id": "w6_4", "t": 29.92, "k": true}, {"id": "w6_5", "t": 30.34, "k": false}, {"id": "w6_6", "t": 30.5, "k": false}, {"id": "w6_7", "t": 31.22, "k": false}, {"id": "w6_8", "t": 31.48, "k": false}, {"id": "w6_9", "t": 31.72, "k": false}, {"id": "w6_10", "t": 32.02, "k": true}], "clips": [["H0", 0.0, 3.73, [1.06, 1.0]], ["O0", 3.73, 3.5, [1.0, 1.05]], ["F0", 7.23, 3.5, [1.04, 1.0]], ["T0", 10.73, 0.8, [1.0, 1.06]], ["T1", 11.53, 0.9, [1.08, 1.02]], ["T2", 12.43, 0.8, [1.0, 1.06]], ["T3", 13.23, 0.9, [1.06, 1.0]], ["T4", 14.13, 0.8, [1.0, 1.06]], ["T5", 14.93, 0.75, [1.04, 1.0]], ["TF0", 15.68, 1.1, [1.0, 1.06]], ["TF1", 16.78, 1.4, [1.04, 1.0]], ["TF2", 18.18, 1.0, [1.06, 1.12]], ["TF3", 19.18, 1.2, [1.0, 1.05]], ["C0", 20.38, 0.9, [1.0, 1.06]], ["C1", 21.28, 0.8, [1.05, 1.0]], ["C2", 22.08, 1.0, [1.0, 1.05]], ["C3", 23.08, 0.9, [1.06, 1.0]], ["C4", 23.98, 1.4, [1.0, 1.06]], ["C5", 25.38, 0.7, [1.05, 1.0]], ["C6", 26.08, 2.4, [1.0, 1.08]], ["G0", 28.48, 5.0, [1.0, 1.05]], ["END0", 33.48, 3.6, [1.04, 1.12]], ["x0", 1.4, 0.85, [1.06, 1.0]], ["x1", 5.28, 1.25, [1.0, 1.06]]], "tapioca": 12.39, "frango": 16.8, "cuscuz": 23.35, "ama": 31.22, "sorvete": 1.48, "mostrar": 2.92};
+      const tl = gsap.timeline({ paused: true });
+      const ir = { immediateRender: false };
+      const END = T.g.END[0];
+
+      // ---- movimento suave em cada plano (Ken Burns) ----
+      T.clips.forEach(([id, s, d, z]) => tl.fromTo("#" + id, { scale: z[0] }, { scale: z[1], duration: d, ease: "none", ...ir }, s));
+
+      // ---- legendas ----
+      T.words.forEach((w) => tl.fromTo("#" + w.id, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.16, ease: "power2.out", ...ir }, w.t - 0.04));
+
+      const show = (sel, tin, tout) => {
+        tl.fromTo(sel, { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", ...ir }, tin - 0.12)
+          .to(sel, { opacity: 0, y: -18, duration: 0.3, ease: "power2.in" }, tout);
+      };
+
+      // ---- gancho: no ar desde o 1º quadro, sai depois de "só sorvete?" ----
+      tl.fromTo("#hook .b", { scale: 0.92 }, { scale: 1, duration: 0.5, ease: "expo.out", ...ir }, 0)
+        .fromTo("#hook .b span", { color: "#ffffff" }, { color: "#f39222", duration: 0.15, ...ir }, T.sorvete - 0.05)
+        .to("#hook", { opacity: 0, y: -20, duration: 0.3, ease: "power2.in" }, T.mostrar - 0.1);
+
+      // ---- etiquetas: entram na palavra, saem pouco depois ----
+      show("#tT", T.tapioca, T.g.TF[0] - 0.35);
+      show("#tF", T.frango, T.g.C[0] - 0.35);
+      show("#tC", T.cuscuz, T.g.G[0] - 0.35);
+      show("#tA", T.ama, END - 0.3);
+      tl.fromTo("#bug", { opacity: 0 }, { opacity: 0.95, duration: 0.4, ...ir }, T.mostrar + 0.3).to("#bug", { opacity: 0, duration: 0.25 }, END - 0.15);
+
+      // ---- final ----
+      tl.fromTo("#fin-shade", { opacity: 0 }, { opacity: 1, duration: 0.45, ...ir }, END)
+        .set("#fin", { opacity: 1 }, END)
+        .fromTo("#fin-logo", { opacity: 0, scale: 0.85, rotation: -6 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.6, ease: "back.out(1.6)", ...ir }, END + 0.1)
+        .fromTo("#fin-k", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out", ...ir }, END + 0.35)
+        .fromTo("#fin-b", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out", ...ir }, END + 0.6)
+        .fromTo("#fin-a", { opacity: 0 }, { opacity: 1, duration: 0.4, ...ir }, END + 0.85)
+        .fromTo("#btn", { scale: 1 }, { scale: 1.05, duration: 0.45, yoyo: true, repeat: 2, ease: "sine.inOut", ...ir }, END + 1.3);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

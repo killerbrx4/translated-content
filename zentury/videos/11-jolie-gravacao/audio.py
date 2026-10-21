@@ -34,7 +34,7 @@ def tone(f, dur, d=0.25, a=0.004):
     n = int(dur * SR); t = np.arange(n) / SR; return (np.sin(2 * np.pi * f * t) * env(n, a, d)).astype(np.float32)
 def noise(dur, d=0.03):
     n = int(dur * SR); return (np.diff(rng.standard_normal(n + 1)) * env(n, 0.001, d)).astype(np.float32)
-def pluck(f): return tone(f, 0.45, 0.18) + 0.35 * tone(2 * f, 0.3, 0.08) + 0.12 * tone(3 * f, 0.2, 0.05)
+def pluck(f): return tone(f, 0.45, 0.18) + 0.35 * tone(2 * f, 0.45, 0.08) + 0.12 * tone(3 * f, 0.45, 0.05)
 
 music = np.zeros((N, 2), np.float32)
 def put(sig, t, g=1.0, pan=0.0):
