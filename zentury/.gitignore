@@ -15,3 +15,6 @@ videos/*/photocraft/*.png
 videos/*/assets/audio/voice-*
 clientes/*/estaticos/saida/
 videos/*/assets/img/fim*
+videos/*/assets/audio/raw/
+videos/*/assets/audio/clean/
+videos/*/assets/img/fotos/

@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Jolie · Não é só sorvete</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Montserrat"; src: url("assets/fonts/montserrat-latin-700-normal.woff2") format("woff2"); font-weight: 700; }
+      @font-face { font-family: "Montserrat"; src: url("assets/fonts/montserrat-latin-900-normal.woff2") format("woff2"); font-weight: 900; }
+      /* cores amostradas do logo oficial */
+      :root { --navy: #171264; --red: #e5191c; --orange: #f39222; --cream: #fff8f0; --white: #ffffff; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #000; font-family: "Montserrat", sans-serif; color: var(--white); }
+      .ic { width: 1em; height: 1em; display: inline-block; vertical-align: -0.14em; }
+
+      .shot { position: absolute; inset: 0; width: 1080px; height: 1920px; object-fit: cover; transform-origin: 50% 45%; }
+      #shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to bottom, rgba(23,18,100,0.38) 0%, rgba(23,18,100,0) 22%, rgba(0,0,0,0) 68%, rgba(0,0,0,0.38) 100%); }
+      #bug { position: absolute; left: 56px; top: 86px; width: 132px; filter: drop-shadow(0 6px 14px rgba(0,0,0,0.35)); opacity: 0; }
+
+      /* ---- legendas: limpas, embaixo, palavra a palavra ---- */
+      .cap { position: absolute; left: 70px; right: 70px; top: 1500px; text-align: center; font-weight: 900; font-size: 70px; line-height: 1.15; letter-spacing: -0.01em; }
+      .cw { display: inline-block; color: var(--white); -webkit-text-stroke: 10px rgba(23,18,100,0.92); paint-order: stroke fill; text-shadow: 0 6px 18px rgba(0,0,0,0.35); opacity: 0; }
+      .cw.k { color: var(--orange); }
+
+      /* ---- gancho: título no 1º quadro ---- */
+      #hook { position: absolute; left: 0; right: 0; top: 250px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+      #hook .a { font-weight: 700; font-size: 46px; letter-spacing: 0.02em; color: var(--white); text-shadow: 0 4px 14px rgba(0,0,0,0.45); }
+      #hook .b { display: inline-block; padding: 8px 30px 12px; border-radius: 22px; background: var(--navy); font-weight: 900; font-size: 92px; letter-spacing: -0.03em; box-shadow: 0 10px 0 rgba(229,25,28,0.95); }
+      #hook .b span { color: var(--orange); }
+
+      /* ---- etiqueta de seção (topo, uma por vez) ---- */
+      .tag { position: absolute; left: 0; right: 0; top: 250px; display: flex; justify-content: center; opacity: 0; }
+      .tag .in { display: flex; flex-direction: column; align-items: flex-start; padding: 16px 34px 16px 28px; border-left: 10px solid var(--orange); border-radius: 8px 22px 22px 8px; background: rgba(255,248,240,0.94); box-shadow: 0 14px 34px rgba(0,0,0,0.25); }
+      .tag .k { font-weight: 700; font-size: 30px; letter-spacing: 0.14em; color: var(--red); text-transform: uppercase; }
+      .tag .t { font-weight: 900; font-size: 66px; line-height: 1.04; color: var(--navy); letter-spacing: -0.02em; white-space: nowrap; }
+      .tag .ic { color: var(--orange); margin-right: 10px; }
+
+      /* ---- final ---- */
+      #fin-shade { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(23,18,100,0.15) 0%, rgba(23,18,100,0.05) 35%, rgba(10,8,40,0.82) 70%, rgba(10,8,40,0.92) 100%); opacity: 0; }
+      #fin { position: absolute; left: 0; right: 0; top: 0; bottom: 0; opacity: 0; }
+      #fin-logo { position: absolute; left: 50%; top: 170px; width: 420px; margin-left: -210px; filter: drop-shadow(0 16px 30px rgba(0,0,0,0.4)); }
+      #fin-k { position: absolute; left: 0; right: 0; top: 1180px; text-align: center; font-weight: 900; font-size: 64px; line-height: 1.1; letter-spacing: -0.02em; }
+      #fin-k span { color: var(--orange); }
+      #fin-b { position: absolute; left: 0; right: 0; top: 1380px; display: flex; justify-content: center; }
+      #btn { display: inline-flex; align-items: center; gap: 20px; padding: 26px 56px; border-radius: 999px; background: var(--orange); color: var(--navy); font-weight: 900; font-size: 60px; box-shadow: 0 12px 0 rgba(0,0,0,0.25); }
+      #fin-a { position: absolute; left: 0; right: 0; top: 1560px; text-align: center; font-weight: 700; font-size: 40px; color: var(--cream); }
+      #fin-a b { font-weight: 900; color: var(--white); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="__TOTAL__" data-width="1080" data-height="1920">
+      __VIDEOS__
+      <div id="shade"></div>
+
+      <div id="hook"><div class="a">Você achou que a Jolie</div><div class="b">era só <span>sorvete?</span></div></div>
+      <div class="tag" id="tT"><div class="in"><div class="k">Lanche na Jolie</div><div class="t">Tapioca</div></div></div>
+      <div class="tag" id="tF"><div class="in"><div class="k">Tapioca</div><div class="t">Frango com mussarela</div></div></div>
+      <div class="tag" id="tC"><div class="in"><div class="k">Várias opções de</div><div class="t">Cuscuz</div></div></div>
+      <div class="tag" id="tA"><div class="in"><div class="t">{{lucide:message-circle}}Quem aí também ama?</div></div></div>
+
+      __CAPTIONS__
+
+      <img id="bug" src="assets/img/logo-jolie.png" alt="Jolie Sorveteria e Café" />
+
+      <div id="fin-shade"></div>
+      <div id="fin">
+        <img id="fin-logo" src="assets/img/logo-jolie.png" alt="Jolie Sorveteria e Café" />
+        <div id="fin-k">Sorvete, tapioca, cuscuz<br /><span>e muito mais.</span></div>
+        <div id="fin-b"><div id="btn">{{lucide:navigation}}<span id="btn-l">Como chegar</span></div></div>
+        <div id="fin-a">CLN 407, Bloco A, Lojas 1 e 5 · <b>Asa Norte</b></div>
+      </div>
+
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="__TOTAL__" data-track-index="20"></audio>
+    </div>
+
+    <script>
+      const CONFIG = { cta: "Como chegar" }; // espelha o botão do anúncio ("Enviar mensagem", "Pedir agora"…)
+      document.getElementById("btn-l").textContent = CONFIG.cta;
+      const T = __T__;
+      const tl = gsap.timeline({ paused: true });
+      const ir = { immediateRender: false };
+      const END = T.g.END[0];
+
+      // ---- movimento suave em cada plano (Ken Burns) ----
+      T.clips.forEach(([id, s, d, z]) => tl.fromTo("#" + id, { scale: z[0] }, { scale: z[1], duration: d, ease: "none", ...ir }, s));
+
+      // ---- legendas ----
+      T.words.forEach((w) => tl.fromTo("#" + w.id, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.16, ease: "power2.out", ...ir }, w.t - 0.04));
+
+      const show = (sel, tin, tout) => {
+        tl.fromTo(sel, { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", ...ir }, tin - 0.12)
+          .to(sel, { opacity: 0, y: -18, duration: 0.3, ease: "power2.in" }, tout);
+      };
+
+      // ---- gancho: no ar desde o 1º quadro, sai depois de "só sorvete?" ----
+      tl.fromTo("#hook .b", { scale: 0.92 }, { scale: 1, duration: 0.5, ease: "expo.out", ...ir }, 0)
+        .fromTo("#hook .b span", { color: "#ffffff" }, { color: "#f39222", duration: 0.15, ...ir }, T.sorvete - 0.05)
+        .to("#hook", { opacity: 0, y: -20, duration: 0.3, ease: "power2.in" }, T.mostrar - 0.1);
+
+      // ---- etiquetas: entram na palavra, saem pouco depois ----
+      show("#tT", T.tapioca, T.g.TF[0] - 0.35);
+      show("#tF", T.frango, T.g.C[0] - 0.35);
+      show("#tC", T.cuscuz, T.g.G[0] - 0.35);
+      show("#tA", T.ama, END - 0.3);
+      tl.fromTo("#bug", { opacity: 0 }, { opacity: 0.95, duration: 0.4, ...ir }, T.mostrar + 0.3).to("#bug", { opacity: 0, duration: 0.25 }, END - 0.15);
+
+      // ---- final ----
+      tl.fromTo("#fin-shade", { opacity: 0 }, { opacity: 1, duration: 0.45, ...ir }, END)
+        .set("#fin", { opacity: 1 }, END)
+        .fromTo("#fin-logo", { opacity: 0, scale: 0.85, rotation: -6 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.6, ease: "back.out(1.6)", ...ir }, END + 0.1)
+        .fromTo("#fin-k", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out", ...ir }, END + 0.35)
+        .fromTo("#fin-b", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out", ...ir }, END + 0.6)
+        .fromTo("#fin-a", { opacity: 0 }, { opacity: 1, duration: 0.4, ...ir }, END + 0.85)
+        .fromTo("#btn", { scale: 1 }, { scale: 1.05, duration: 0.45, yoyo: true, repeat: 2, ease: "sine.inOut", ...ir }, END + 1.3);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
