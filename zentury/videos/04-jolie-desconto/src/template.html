@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Jolie · 10% de desconto</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Montserrat"; src: url("assets/fonts/montserrat-latin-700-normal.woff2") format("woff2"); font-weight: 700; }
+      @font-face { font-family: "Montserrat"; src: url("assets/fonts/montserrat-latin-900-normal.woff2") format("woff2"); font-weight: 900; }
+      /* cores amostradas da arte do cliente */
+      :root { --navy: #0b1d47; --red: #e61a27; --orange: #f39a1e; --cream: #f6ece3; --white: #ffffff; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #000; font-family: "Montserrat", sans-serif; font-weight: 900; color: var(--white); }
+      .ic { width: 1em; height: 1em; display: inline-block; vertical-align: -0.14em; }
+
+      #cam { position: absolute; inset: 0; transform-origin: 50% 40%; }
+      .shot { position: absolute; inset: 0; width: 1080px; height: 1920px; object-fit: cover; }
+      /* leve escurecimento no topo e na base para os textos lerem sobre qualquer fundo */
+      #shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to bottom, rgba(11,29,71,0.35) 0%, rgba(11,29,71,0) 26%, rgba(11,29,71,0) 56%, rgba(11,29,71,0.45) 82%, rgba(11,29,71,0.2) 100%); }
+
+      /* ---- legendas ---- */
+      .cap { position: absolute; left: 70px; right: 70px; text-align: center; font-size: 74px; line-height: 1.22; letter-spacing: -0.015em; }
+      .cw { display: inline-block; color: var(--white); -webkit-text-stroke: 12px var(--navy); paint-order: stroke fill; opacity: 0; text-shadow: 0 6px 18px rgba(0,0,0,0.35); }
+      .cw.k { position: relative; -webkit-text-stroke: 0; padding: 0 18px 4px; border-radius: 20px; background: var(--red); text-shadow: none; box-shadow: 0 10px 0 rgba(11,29,71,0.9); }
+
+      /* ---- chips de bairro ---- */
+      .areas { position: absolute; left: 0; right: 0; top: 300px; display: flex; justify-content: center; gap: 26px; }
+      .area { display: flex; align-items: center; gap: 12px; padding: 22px 34px; border-radius: 999px; font-size: 52px; letter-spacing: -0.01em; box-shadow: 0 14px 0 rgba(0,0,0,0.25); opacity: 0; }
+      .area .ic { font-size: 50px; }
+      .area.sul { background: var(--navy); color: var(--white); border: 5px solid var(--white); }
+      .area.norte { background: var(--red); color: var(--white); border: 5px solid var(--white); }
+
+      /* ---- selo 10% ---- */
+      #seal { position: absolute; left: 280px; top: 170px; width: 520px; height: 520px; opacity: 0; }
+      #seal svg { position: absolute; inset: 0; width: 520px; height: 520px; }
+      #seal-txt { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--navy); }
+      #seal-n { font-size: 190px; line-height: 0.9; letter-spacing: -0.05em; }
+      #seal-n small { font-size: 110px; }
+      #seal-l { margin-top: 6px; font-size: 40px; font-weight: 700; color: var(--red); letter-spacing: 0.02em; text-transform: uppercase; }
+
+      /* ---- cardápio ---- */
+      #menu { position: absolute; left: 0; right: 0; top: 300px; display: flex; justify-content: center; gap: 22px; }
+      .item { display: flex; flex-direction: column; align-items: center; gap: 12px; width: 288px; padding: 30px 0 26px; border-radius: 40px; background: var(--cream); color: var(--navy); font-size: 46px; box-shadow: 0 14px 0 rgba(11,29,71,0.55); opacity: 0; }
+      .item .ic { font-size: 110px; color: var(--red); }
+
+      /* ---- pino + endereço ---- */
+      #pin { position: absolute; left: 0; right: 0; top: 230px; display: flex; flex-direction: column; align-items: center; opacity: 0; }
+      #pin-ic { font-size: 210px; color: var(--red); filter: drop-shadow(0 16px 0 rgba(11,29,71,0.6)); }
+      #pin-ic .ic { fill: var(--cream); stroke: var(--red); }
+      #pin-l { margin-top: 10px; padding: 18px 38px; border-radius: 999px; background: var(--cream); color: var(--navy); font-size: 52px; }
+      #pin-l b { color: var(--red); }
+      #addr { position: absolute; left: 90px; right: 90px; top: 1240px; padding: 40px 34px; border-radius: 44px; background: var(--navy); border: 5px solid var(--cream); text-align: center; opacity: 0; box-shadow: 0 18px 0 rgba(0,0,0,0.3); }
+      #addr-a { display: inline-block; padding: 12px 34px; border-radius: 22px; background: var(--red); font-size: 56px; }
+      #addr-l { margin-top: 20px; font-size: 48px; font-weight: 700; color: var(--cream); }
+
+      #flash { position: absolute; inset: 0; background: var(--cream); opacity: 0; pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="__TOTAL__" data-width="1080" data-height="1920">
+      <div id="cam">
+        __VIDEOS__
+      </div>
+      <div id="shade"></div>
+
+      <!-- 1 · Asa Sul ou Asa Norte? -->
+      <div class="areas" id="areas">
+        <div class="area sul" id="a-sul">{{lucide:map-pin}} Asa Sul</div>
+        <div class="area norte" id="a-norte">{{lucide:map-pin}} Asa Norte</div>
+      </div>
+
+      <!-- 2 · selo 10% -->
+      <div id="seal">
+        <svg viewBox="0 0 520 520" aria-hidden="true">
+          <path d="__SEAL_OUT__" fill="#e61a27" />
+          <circle cx="260" cy="260" r="212" fill="#f39a1e" />
+          <circle cx="260" cy="260" r="200" fill="none" stroke="#fff" stroke-width="5" stroke-dasharray="2 26" stroke-linecap="round" />
+          <circle cx="260" cy="260" r="180" fill="#f6ece3" />
+        </svg>
+        <div id="seal-txt"><div id="seal-n">10<small>%</small></div><div id="seal-l">de desconto</div></div>
+      </div>
+
+      <!-- 3 · cardápio -->
+      <div id="menu">
+        <div class="item" id="m1">{{lucide:ice-cream-cone}}Sorvetes</div>
+        <div class="item" id="m2">{{lucide:ice-cream-bowl}}Açaí</div>
+        <div class="item" id="m3">{{lucide:coffee}}Café</div>
+      </div>
+
+      <!-- 5 · onde parar -->
+      <div id="pin"><div id="pin-ic">{{lucide:map-pin}}</div><div id="pin-l">Jolie · <b>Asa Norte</b></div></div>
+      <!-- 6 · endereço (mesmo texto da arte do cliente) -->
+      <div id="addr"><div id="addr-a">Asa Norte</div><div id="addr-l">CLN 407, Bloco A, Lojas 1 e 5</div></div>
+
+      __CAPTIONS__
+
+      <div id="flash"></div>
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="__TOTAL__" data-track-index="20"></audio>
+    </div>
+
+    <script>
+      const T = __T__;
+      const tl = gsap.timeline({ paused: true });
+      const ir = { immediateRender: false };
+
+      // ---- câmera: zoom lento dentro de cada corte; punch-in alterna entre cortes ----
+      Object.entries(T.cuts).forEach(([id, [s, d, z]]) => {
+        tl.fromTo("#cam", { scale: z[0] }, { scale: z[1], duration: d, ease: "none", ...ir }, s);
+      });
+      // flash curto só na entrada da arte final
+      tl.fromTo("#flash", { opacity: 0.0 }, { opacity: 0.55, duration: 0.06, ...ir }, T.cuts.card[0] - 0.03)
+        .to("#flash", { opacity: 0, duration: 0.3, ease: "power2.out" }, T.cuts.card[0] + 0.03);
+
+      // ---- legendas: cada palavra entra quando é dita ----
+      T.words.forEach((w) => {
+        tl.fromTo("#" + w.id, { opacity: 0, scale: w.k ? 0.7 : 0.88 }, { opacity: 1, scale: 1, duration: w.k ? 0.22 : 0.14, ease: w.k ? "back.out(1.6)" : "power2.out", ...ir }, w.t - 0.04);
+      });
+
+      // ---- 1 · Asa Sul / Asa Norte (corredor) ----
+      const pop = (sel, t, from) => tl.fromTo(sel, { opacity: 0, scale: 0.6, ...from }, { opacity: 1, scale: 1, x: 0, y: 0, rotation: 0, duration: 0.32, ease: "back.out(1.5)", ...ir }, t);
+      pop("#a-sul", T.sul - 0.08, { y: -40, rotation: -6 });
+      pop("#a-norte", T.norte - 0.08, { y: -40, rotation: 6 });
+      tl.to("#a-sul", { x: -620, opacity: 0, duration: 0.3, ease: "power3.in" }, T.praVoce - 0.15)
+        .to("#a-norte", { x: 620, opacity: 0, duration: 0.3, ease: "power3.in" }, T.praVoce - 0.15);
+
+      // ---- 2 · selo 10% bate como carimbo ----
+      tl.fromTo("#seal", { opacity: 0, scale: 2.2, rotation: -24 }, { opacity: 1, scale: 1, rotation: -8, duration: 0.3, ease: "power4.in", ...ir }, T.dez - 0.26)
+        .fromTo("#seal", { scale: 1 }, { scale: 1.05, duration: 0.08, yoyo: true, repeat: 1, ease: "power1.out", ...ir }, T.dez + 0.04)
+        .fromTo("#seal", { rotation: -8 }, { rotation: -3, duration: 2.2, ease: "sine.inOut", ...ir }, T.dez + 0.2)
+        .to("#seal", { scale: 0.4, y: -500, opacity: 0, duration: 0.32, ease: "power3.in" }, T.cuts.c3[0] - 0.2);
+
+      // ---- 3 · cardápio, um por palavra ----
+      [["#m1", T.sorv], ["#m2", T.acai], ["#m3", T.cafe]].forEach(([s, t]) => pop(s, t - 0.1, { y: 60 }));
+      tl.to("#menu", { y: -420, opacity: 0, duration: 0.3, ease: "power3.in" }, T.cuts.c4[0] - 0.18);
+
+      // ---- 4 · Asa Sul / Asa Norte de novo, agora entrando pelas laterais ----
+      tl.set("#areas", { y: 0 }, T.cuts.c4[0]);
+      tl.fromTo("#a-sul", { opacity: 0, x: -620 }, { opacity: 1, x: 0, duration: 0.3, ease: "power3.out", ...ir }, T.sul2 - 0.12)
+        .fromTo("#a-norte", { opacity: 0, x: 620 }, { opacity: 1, x: 0, duration: 0.3, ease: "power3.out", ...ir }, T.norte2 - 0.12)
+        .to(["#a-sul", "#a-norte"], { y: -360, opacity: 0, duration: 0.28, ease: "power3.in" }, T.cuts.c5[0] - 0.1);
+
+      // ---- 5 · pino cai em "onde parar" e vira o cartão de endereço na fachada ----
+      tl.fromTo("#pin", { opacity: 0, y: -520 }, { opacity: 1, y: 0, duration: 0.42, ease: "back.out(1.3)", ...ir }, T.parar - 0.3)
+        .fromTo("#pin-l", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.28, ease: "back.out(1.5)", ...ir }, T.parar + 0.12)
+        .fromTo("#pin", { y: 0 }, { y: -14, duration: 0.5, yoyo: true, repeat: 3, ease: "sine.inOut", ...ir }, T.parar + 0.5)
+        .to("#pin", { opacity: 0, scale: 0.7, duration: 0.25, ease: "power2.in" }, T.cuts.c6[0] - 0.12);
+      tl.fromTo("#addr", { opacity: 0, y: 260 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out", ...ir }, T.cuts.c6[0] + 0.05)
+        .to("#addr", { opacity: 0, y: 200, duration: 0.25, ease: "power2.in" }, T.cuts.c7[0] - 0.1);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

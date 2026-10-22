@@ -1,0 +1,20 @@
+# Mídia pessoal e renders ficam fora do Git (repositório pode ser público)
+videos/*/assets/footage/
+videos/*/assets/audio/voice.*
+videos/*/assets/img/freeze*
+videos/*/renders/
+videos/*/snapshots/
+videos/*/.hyperframes/
+node_modules/
+videos/*/assets/audio/mix*.wav
+videos/*/assets/audio/lines/
+videos/*/assets/img/cartao*
+videos/*/assets/photocraft/
+videos/*/photocraft/*.psd
+videos/*/photocraft/*.png
+videos/*/assets/audio/voice-*
+clientes/*/estaticos/saida/
+videos/*/assets/img/fim*
+videos/*/assets/audio/raw/
+videos/*/assets/audio/clean/
+videos/*/assets/img/fotos/
