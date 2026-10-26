@@ -124,7 +124,7 @@ html = (tpl.replace("__T__", json.dumps(T, ensure_ascii=False)).replace("__TOTAL
         .replace("__FIN_K__", END["k"]).replace("__FIN_C__", END["c"]).replace("__FIN_A__", END["a"]))
 html = re.sub(r"\{\{lucide:([a-z0-9-]+)(?::([a-z-]+))?\}\}", lambda m: lucide(m.group(1), m.group(2) or "ic"), html)
 (P / "index.html").write_text(html)
-json.dump({"name": E.get("name", "main"), "total": TOTAL, "min": MIN,
+json.dump({"name": E.get("name", "main"), "total": TOTAL, "min": MIN, "music": E.get("music", "soft"),
            "groups": [{k: g[k] for k in ("id", "out", "d")} | ({"voice": g["voice"]} if "voice" in g else {}) | ({"amb": g["amb"]} if "amb" in g else {}) for g in groups.values()],
            "clips": [{k: c[k] for k in ("id", "src", "ms", "d", "out")} for c in clips],
            "T": {"ov": ovs}}, open(P / "timeline.json", "w"), indent=1)

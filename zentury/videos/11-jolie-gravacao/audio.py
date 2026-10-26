@@ -1,5 +1,5 @@
 """Mix: falas do celular (limpas, sincronizadas) + som ambiente da câmera nos planos de preparo (baixo, dá textura)
-+ trilha pop leve sintetizada (100 BPM, Ré maior) com ducking + SFX discretos nas etiquetas. Saída -14 LUFS."""
++ trilha pop sintetizada (100 BPM "soft" ou 118 BPM "hype", Ré maior) com ducking + SFX discretos nas etiquetas. Saída -14 LUFS."""
 import json, subprocess, wave
 from pathlib import Path
 import numpy as np
@@ -41,24 +41,39 @@ def put(sig, t, g=1.0, pan=0.0):
     i0 = int(t * SR)
     if 0 <= i0 < N:
         s = sig[: N - i0] * g; music[i0:i0 + len(s), 0] += s * (1 - max(0, pan)); music[i0:i0 + len(s), 1] += s * (1 + min(0, pan))
-BEAT = 60 / 100; BAR = 4 * BEAT
+HYPE = TL.get("music") == "hype"  # trilha que chama atenção: mais rápida, batida cheia, gancho de melodia e "drop" na abertura
+BEAT = 60 / (118 if HYPE else 100); BAR = 4 * BEAT
 CH = [[293.66, 369.99, 440.0], [220.0, 277.18, 329.63], [246.94, 293.66, 369.99], [196.0, 246.94, 293.66]]  # D A Bm G
 BASS = [73.42, 55.0, 61.74, 49.0]
+HOOK = [587.33, 739.99, 880.0, 739.99, 987.77, 880.0, 739.99, 587.33]  # motivo de 8 notas (colcheias), repete a cada compasso
 def kick(): n = int(0.3 * SR); t = np.arange(n) / SR; return (np.sin(2 * np.pi * (48 + 70 * np.exp(-t * 30)) * t) * env(n, 0.001, 0.11)).astype(np.float32)
+def clap(): return (noise(0.14, 0.035) * 0.8 + noise(0.14, 0.012) * 0.6).astype(np.float32)
+def bell(f): return tone(f, 0.5, 0.22) + 0.5 * tone(2 * f, 0.5, 0.09) + 0.2 * tone(4.01 * f, 0.5, 0.05)
+def sub(f, d): n = int(d * SR); x = np.arange(n) / SR; return (np.tanh(2.5 * np.sin(2 * np.pi * f * x)) * env(n, 0.005, d * 0.6)).astype(np.float32)
 t = 0.0; k = 0
 while t < TOTAL - 0.2:
     bar = k // 4; ch = CH[bar % 4]; bb = k % 4
-    put(kick(), t, 0.45)
-    if bb in (1, 3): put(noise(0.12, 0.03) * 0.7, t, 0.18, 0.1)
-    for h in (0.25, 0.75): put(noise(0.04, 0.008), t + h * BEAT, 0.10, 0.35 if h > 0.5 else -0.35)
-    if bb == 0: put(tone(BASS[bar % 4], BAR * 0.95, 1.2, 0.02), t, 0.28)
+    put(kick(), t, 0.6 if HYPE else 0.45)
+    if bb in (1, 3): put(clap() if HYPE else noise(0.12, 0.03) * 0.7, t, 0.26 if HYPE else 0.18, 0.1)
+    for h in ((0.25, 0.5, 0.75) if HYPE else (0.25, 0.75)): put(noise(0.04, 0.008), t + h * BEAT, 0.10, 0.35 if h > 0.5 else -0.35)
+    if HYPE:
+        for h in (0.5,): put(sub(BASS[bar % 4] * 2, BEAT * 0.45), t + h * BEAT, 0.22)  # baixo pulsando no contratempo
+        if bb == 0: put(tone(BASS[bar % 4], BAR * 0.9, 0.9, 0.02), t, 0.30)
+        for e in (0, 1): put(bell(HOOK[(bb * 2 + e) % 8]), t + e * BEAT / 2, 0.075, (-0.25, 0.25)[e])
+    else:
+        if bb == 0: put(tone(BASS[bar % 4], BAR * 0.95, 1.2, 0.02), t, 0.28)
     for j, f in enumerate(ch): put(pluck(f), t + BEAT / 2 + j * 0.015, 0.06, (-0.3, 0, 0.3)[j])
     if bb == 2: put(pluck(ch[-1] * 2), t + BEAT * 0.75, 0.035, 0.4)
     t += BEAT; k += 1
 tt = np.arange(N) / SR
-music *= (np.minimum(1, tt / 0.25) * np.clip((TOTAL - tt) / 1.2, 0, 1))[:, None]
+if HYPE:  # abertura: impacto + brilho no 1º quadro, para parar a rolagem
+    n = int(0.6 * SR); x = np.arange(n) / SR
+    put((np.sin(2 * np.pi * (55 + 90 * np.exp(-x * 18)) * x) * env(n, 0.001, 0.25)).astype(np.float32), 0.0, 0.9)
+    for i, f in enumerate((1174.66, 1479.98, 1760.0)): put(tone(f, 0.6, 0.25), 0.02 + i * 0.05, 0.05)
+music *= (np.minimum(1, tt / (0.01 if HYPE else 0.25)) * np.clip((TOTAL - tt) / 1.2, 0, 1))[:, None]
 ve = np.convolve(np.abs(voice), np.ones(int(0.12 * SR)) / int(0.12 * SR), "same")
-music *= (0.85 * (1 - 0.72 * np.clip(ve / 0.035, 0, 1)))[:, None]
+# na fala a trilha abaixa (a voz sempre clara); nos trechos sem fala ela aparece com força
+music *= ((1.0 if HYPE else 0.85) * (1 - (0.62 if HYPE else 0.72) * np.clip(ve / 0.035, 0, 1)))[:, None]
 
 def swish(d=0.3):
     n = int(d * SR); x = np.convolve(rng.standard_normal(n), np.ones(50) / 50, "same").astype(np.float32); return x * np.sin(np.pi * np.arange(n) / n) ** 2 * 1.6
