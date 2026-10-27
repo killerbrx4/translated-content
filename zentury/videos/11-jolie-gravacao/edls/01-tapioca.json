@@ -188,24 +188,6 @@
    }
   },
   {
-   "id": "tH",
-   "style": "tag",
-   "k": "Hoje no lanche",
-   "t": "Tapioca",
-   "in": {
-    "g": [
-     "F",
-     0.25
-    ]
-   },
-   "out": {
-    "g": [
-     "F",
-     -0.35
-    ]
-   }
-  },
-  {
    "id": "tL",
    "style": "tag",
    "k": "Perfeita para o",
@@ -245,11 +227,10 @@
   }
  ],
  "bug": {
-  "w": [
-   0,
-   "mostrar"
-  ],
-  "d": 0.3
+  "g": [
+   "T",
+   0.3
+  ]
  },
  "end": {
   "k": "Tapioca, cuscuz, sorvete e muito mais.",
