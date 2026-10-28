@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>ZENTURY 02 · Como funciona (Notion)</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-latin-400-normal.woff2") format("woff2"); font-weight: 400; }
+      @font-face { font-family: "Montserrat"; src: url("assets/fonts/montserrat-latin-500-normal.woff2") format("woff2"); font-weight: 500; }
+      @font-face { font-family: "Montserrat"; src: url("assets/fonts/montserrat-latin-600-normal.woff2") format("woff2"); font-weight: 600; }
+      @font-face { font-family: "Montserrat"; src: url("assets/fonts/montserrat-latin-700-normal.woff2") format("woff2"); font-weight: 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("assets/fonts/jetbrains-mono-latin-400-normal.woff2") format("woff2"); font-weight: 400; }
+      :root {
+        --ink: #191918; --ink2: #37352f; --gray: #8f8d88; --line: #e9e8e4; --hover: #f1f1ef; --paper: #ffffff; --bg: #f7f6f3;
+        --black: #0b0b0c; --gold: #d4a842; --gold-soft: #e9c977; --gold-deep: #8a6a1f;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--paper); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--paper); color: var(--ink); font-family: "Montserrat", sans-serif; font-weight: 500; }
+      .ic { width: 1em; height: 1em; display: inline-block; vertical-align: -0.12em; }
+      .si { width: 1em; height: 1em; display: inline-block; vertical-align: -0.12em; }
+      .serif { font-family: "Instrument Serif", serif; font-weight: 400; letter-spacing: -0.01em; }
+
+      /* ---------- barra do Notion ---------- */
+      #topbar { position: absolute; left: 0; right: 0; top: 0; height: 300px; }
+      #crumb { position: absolute; left: 90px; top: 236px; font-size: 26px; color: var(--gray); white-space: nowrap; }
+      #crumb .zm { width: 26px; height: 28px; color: var(--ink); vertical-align: -5px; margin-right: 8px; }
+      #crumb b { color: var(--ink2); font-weight: 600; }
+
+      /* ---------- cena 1: digitação + menu "/" ---------- */
+      #s1 { position: absolute; inset: 0; }
+      #title1 { position: absolute; left: 90px; right: 60px; top: 600px; font-size: 122px; white-space: nowrap; line-height: 1.04; }
+      #ph { position: absolute; left: 90px; top: 600px; font-size: 128px; color: #d5d3cf; }
+      #line2 { position: absolute; left: 90px; right: 90px; top: 900px; font-size: 56px; color: var(--gray); line-height: 1.25; }
+      .ch { opacity: 0; } .hl { border-radius: 4px; }
+      .caret { display: inline-block; width: 5px; background: var(--ink); vertical-align: -0.08em; }
+      #caret1 { height: 112px; } #caret2 { height: 56px; opacity: 0; } #caret3 { height: 52px; opacity: 0; }
+      #slashline, #menu { opacity: 0; }
+      #slashline { position: absolute; left: 90px; top: 1040px; font-size: 52px; color: var(--ink2); }
+      #menu { position: absolute; left: 90px; top: 1130px; width: 820px; background: #fff; border-radius: 18px; border: 2px solid var(--line);
+        box-shadow: 0 30px 80px rgba(15,15,15,0.16), 0 4px 14px rgba(15,15,15,0.08); padding: 18px 14px; }
+      #menu-k { font-size: 22px; color: var(--gray); padding: 6px 16px 14px; letter-spacing: 0.02em; }
+      .mi { position: relative; height: 104px; display: flex; align-items: center; gap: 24px; padding: 0 16px; border-radius: 12px; }
+      .mi-ic { width: 74px; height: 74px; border-radius: 12px; border: 2px solid var(--line); display: flex; align-items: center; justify-content: center; font-size: 36px; color: var(--ink2); background: #fff; flex: none; }
+      .mi-t { font-size: 38px; font-weight: 600; color: var(--ink); }
+      .mi-d { font-size: 27px; color: var(--gray); margin-top: 4px; }
+      #mi-z .mi-ic { background: var(--black); border-color: var(--black); color: var(--gold); }
+      #mi-z .mi-ic svg { width: 40px; height: 44px; }
+      #sel { position: absolute; left: 14px; right: 14px; top: 70px; height: 104px; border-radius: 12px; background: var(--hover); }
+
+      /* ---------- página ZENTURY ---------- */
+      #page { position: absolute; inset: 0; }
+      #cover { position: absolute; left: 0; right: 0; top: 0; height: 600px; background: var(--black); overflow: hidden; }
+      #cover-z { position: absolute; right: -60px; top: 40px; width: 560px; height: 600px; color: var(--gold); opacity: 0.9; }
+      #cover-sheen { position: absolute; left: -400px; top: 0; width: 300px; height: 600px; background: linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(233,201,119,0.22) 50%, rgba(255,255,255,0) 100%); }
+      #pico { position: absolute; left: 90px; top: 520px; width: 160px; height: 160px; border-radius: 34px; background: var(--gold); box-shadow: 0 18px 40px rgba(0,0,0,0.25); }
+      #pico svg { position: absolute; left: 34px; top: 30px; width: 92px; height: 100px; color: var(--black); }
+      #ptitle { position: absolute; left: 90px; right: 90px; top: 715px; font-size: 76px; line-height: 1.02; }
+      .w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: 0.08em; }
+      .wi { display: inline-block; }
+      .gold { color: var(--gold-deep); }
+
+      /* ---------- quadro kanban ---------- */
+      #board { position: absolute; left: 0; top: 890px; width: 1080px; height: 730px; overflow: hidden; }
+      #bhead { position: absolute; left: 90px; top: 0; font-size: 34px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+      #bhead .ic { color: var(--gray); margin-right: 10px; }
+      #btabs { position: absolute; left: 90px; top: 60px; font-size: 24px; color: var(--gray); white-space: nowrap; }
+      #btabs b { color: var(--ink); font-weight: 600; border-bottom: 3px solid var(--ink); padding-bottom: 8px; margin-right: 34px; }
+      #bcam { position: absolute; left: 0; top: 110px; width: 2100px; height: 620px; transform-origin: 90px 0px; }
+      .col { position: absolute; top: 0; width: 440px; height: 620px; border-radius: 16px; background: var(--bg); }
+      .colh { position: absolute; left: 20px; top: 18px; font-size: 28px; font-weight: 600; white-space: nowrap; }
+      .pill { display: inline-block; padding: 6px 16px; border-radius: 10px; background: #e9e8e4; color: var(--ink2); }
+      .colh .ic { margin-right: 6px; }
+      .coln { color: var(--gray); margin-left: 10px; font-weight: 500; }
+      .addrow { position: absolute; left: 24px; bottom: 22px; font-size: 24px; color: #b5b3ae; }
+      #c0 { left: 90px; } #c1 { left: 558px; } #c2 { left: 1026px; } #c3 { left: 1494px; }
+      #card { position: absolute; left: 106px; top: 80px; width: 408px; background: #fff; border-radius: 14px; border: 2px solid var(--line);
+        box-shadow: 0 2px 6px rgba(15,15,15,0.06); padding: 22px 22px 14px; }
+      #card-t { font-size: 38px; font-weight: 700; display: flex; align-items: center; gap: 12px; }
+      #card-t .dot { width: 18px; height: 18px; border-radius: 50%; background: var(--gold); flex: none; }
+      #card-tag { display: inline-block; margin: 12px 0 8px; font-size: 26px; padding: 4px 12px; border-radius: 8px; background: var(--black); color: var(--gold-soft); font-weight: 600; white-space: nowrap; }
+      .item { position: relative; font-size: 28px; line-height: 1.15; padding: 8px 0 8px 52px; color: var(--ink2); }
+      .box { position: absolute; left: 0; top: 8px; width: 34px; height: 34px; border-radius: 8px; border: 2px solid #c9c7c2; }
+      .tick { position: absolute; left: 0; top: 8px; width: 34px; height: 34px; border-radius: 8px; background: var(--gold); color: var(--black); font-size: 26px; display: flex; align-items: center; justify-content: center; }
+      .plats { display: block; margin-top: 8px; font-size: 30px; color: var(--ink); }
+      .plats .si { margin-right: 14px; }
+      #cursor { position: absolute; left: 0; top: 0; width: 46px; height: 60px; z-index: 20; }
+
+      /* ---------- toggles ---------- */
+      #togs { position: absolute; left: 90px; right: 90px; top: 760px; }
+      #togh { font-size: 86px; line-height: 1; margin-bottom: 34px; }
+      .tg { position: relative; padding: 18px 0 18px 64px; border-top: 2px solid var(--line); }
+      .tg-c { position: absolute; left: 0; top: 22px; font-size: 44px; color: var(--ink); }
+      .tg-t { font-size: 44px; font-weight: 700; line-height: 1.2; color: var(--ink); }
+      .tg-b { font-size: 34px; line-height: 1.3; color: var(--gray); margin-top: 10px; }
+
+      /* ---------- callout ---------- */
+      #callout { position: absolute; left: 90px; right: 90px; top: 820px; border-radius: 26px; background: var(--black); padding: 56px 56px 60px 56px; }
+      .co { width: 120px; height: 130px; color: var(--gold); margin-bottom: 30px; display: block; }
+      #cover-z svg { width: 100%; height: 100%; display: block; }
+      #co-t { font-size: 72px; font-weight: 700; line-height: 1.12; color: #f5f3ee; letter-spacing: -0.02em; }
+      #co-t .gw { color: var(--gold); }
+
+      /* ---------- perfil ---------- */
+      #prof { position: absolute; left: 90px; right: 90px; top: 760px; }
+      #prof-h { font-size: 82px; line-height: 1; margin-bottom: 44px; }
+      #pcard { position: relative; border-radius: 26px; border: 2px solid var(--line); background: #fff; padding: 40px; box-shadow: 0 30px 70px rgba(15,15,15,0.10); }
+      #pav { position: absolute; left: 40px; top: 40px; width: 150px; height: 150px; border-radius: 34px; background: var(--gold); }
+      #pav svg { position: absolute; left: 32px; top: 28px; width: 86px; height: 94px; color: var(--black); }
+      #pname { margin-left: 182px; font-size: 46px; font-weight: 700; }
+      #phandle { margin-left: 182px; font-size: 30px; color: var(--gray); margin-top: 4px; }
+      #pbio { margin-top: 70px; font-size: 32px; line-height: 1.35; color: var(--ink2); }
+      #pbtn { position: relative; margin-top: 34px; height: 92px; border-radius: 18px; background: var(--gold); color: var(--black); font-size: 36px; font-weight: 700; text-align: center; line-height: 92px; overflow: hidden; }
+      #pbtn-on { position: absolute; inset: 0; background: var(--black); color: #f5f3ee; }
+      #pbtn-on .ic { color: var(--gold); margin-left: 10px; }
+      #ripple { position: absolute; width: 70px; height: 70px; border-radius: 50%; border: 4px solid var(--gold); left: 0; top: 0; }
+      #pcta { margin-top: 44px; font-size: 68px; line-height: 1.1; }
+      #pcta .gold { color: var(--gold-deep); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="22.4" data-fps="30" data-width="1080" data-height="1920">
+
+      <!-- ===== CENA 1: a dor, digitada ===== -->
+      <div id="s1" class="clip" data-start="0" data-duration="3.95" data-track-index="1">
+        <div id="ph" class="serif">Sem título</div>
+        <div id="title1" class="serif"><span id="t1"></span><span id="caret1" class="caret"></span></div>
+        <div id="line2"><span id="t2"></span><span id="caret2" class="caret"></span></div>
+        <div id="slashline"><span id="slash" class="ch">/</span><span id="caret3" class="caret"></span></div>
+        <div id="menu">
+          <div id="menu-k">BLOCOS BÁSICOS</div>
+          <div id="sel"></div>
+          <div class="mi"><div class="mi-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 5H3" />
+  <path d="M15 12H3" />
+  <path d="M17 19H3" /></svg></div><div><div class="mi-t">Texto</div><div class="mi-d">Escreva normalmente</div></div></div>
+          <div class="mi"><div class="mi-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 5h8" />
+  <path d="M13 12h8" />
+  <path d="M13 19h8" />
+  <path d="m3 17 2 2 4-4" />
+  <path d="m3 7 2 2 4-4" /></svg></div><div><div class="mi-t">Lista de tarefas</div><div class="mi-d">Acompanhe com checkboxes</div></div></div>
+          <div class="mi" id="mi-z"><div class="mi-ic"><svg class="zm" viewBox="0 0 678.739527 723.714517" aria-hidden="true"><g transform="translate(-589.760473,1177.299159) scale(0.100000,-0.100000)"
+fill="currentColor" stroke="none">
+<path d="M6944 11770 c-721 -6 -668 2 -678 -94 -10 -93 -13 -910 -4 -937 5
+-14 19 -31 31 -38 16 -8 622 -12 2423 -14 2548 -2 2434 0 2434 -46 0 -9 -75
+-119 -166 -246 -91 -126 -207 -290 -257 -364 -51 -74 -175 -254 -276 -400
+-101 -146 -238 -345 -304 -441 -66 -96 -161 -231 -212 -300 -51 -69 -144 -202
+-207 -295 -63 -94 -169 -245 -235 -335 -66 -91 -133 -185 -149 -210 -39 -61
+-190 -276 -230 -325 -40 -51 -351 -502 -428 -620 -32 -49 -84 -123 -115 -165
+-183 -242 -443 -626 -439 -649 7 -34 27 -28 466 127 62 22 122 48 134 58 11
+11 53 57 92 104 39 47 123 141 186 210 63 69 167 186 231 260 64 74 155 178
+203 230 49 52 143 163 211 245 68 83 176 209 240 280 65 72 164 186 220 255
+56 69 140 166 186 215 46 50 163 180 259 290 180 207 192 220 531 595 326 362
+359 399 464 520 54 63 165 187 245 275 80 88 188 207 240 265 329 369 420 468
+526 568 l119 112 -3 407 c-3 438 -4 446 -55 458 -30 7 -4894 11 -5683 5z"/>
+<path d="M10315 9982 c-22 -10 -105 -41 -185 -67 l-145 -49 -84 -80 c-46 -45
+-145 -151 -220 -236 -75 -85 -206 -227 -291 -315 -86 -88 -191 -200 -235 -250
+-44 -49 -136 -148 -205 -220 -69 -71 -189 -202 -267 -290 -78 -88 -169 -187
+-203 -220 -34 -33 -149 -157 -256 -275 -191 -212 -256 -283 -663 -715 -114
+-121 -256 -274 -316 -340 -60 -66 -152 -165 -205 -220 -52 -55 -140 -152 -194
+-215 -89 -105 -240 -266 -735 -785 -94 -99 -180 -198 -190 -220 -18 -37 -20
+-69 -22 -465 -3 -457 -3 -460 48 -478 38 -12 6635 -5 6669 8 52 20 53 38 51
+546 -2 497 -2 499 -50 526 -18 10 -531 13 -2586 15 -1410 1 -2575 4 -2588 8
+-36 9 -31 56 10 102 35 39 150 198 227 313 24 36 87 124 140 195 53 72 131
+182 175 245 43 63 111 158 150 210 39 52 111 154 160 225 49 72 153 218 230
+325 78 107 213 299 302 425 150 215 208 298 415 600 85 125 146 210 398 555
+318 436 421 583 630 899 91 138 140 221 138 235 -4 28 -51 32 -103 8z"/>
+</g></svg></div><div><div class="mi-t">Tráfego pago · ZENTURY</div><div class="mi-d">Faça sua empresa aparecer</div></div></div>
+        </div>
+      </div>
+
+      <!-- ===== PÁGINA ZENTURY (capa, ícone, título) ===== -->
+      <div id="page" class="clip" data-start="3.55" data-duration="18.85" data-track-index="2">
+        <div id="cover"><div id="cover-z"><svg class="cz" viewBox="0 0 678.739527 723.714517" aria-hidden="true"><g transform="translate(-589.760473,1177.299159) scale(0.100000,-0.100000)"
+fill="currentColor" stroke="none">
+<path d="M6944 11770 c-721 -6 -668 2 -678 -94 -10 -93 -13 -910 -4 -937 5
+-14 19 -31 31 -38 16 -8 622 -12 2423 -14 2548 -2 2434 0 2434 -46 0 -9 -75
+-119 -166 -246 -91 -126 -207 -290 -257 -364 -51 -74 -175 -254 -276 -400
+-101 -146 -238 -345 -304 -441 -66 -96 -161 -231 -212 -300 -51 -69 -144 -202
+-207 -295 -63 -94 -169 -245 -235 -335 -66 -91 -133 -185 -149 -210 -39 -61
+-190 -276 -230 -325 -40 -51 -351 -502 -428 -620 -32 -49 -84 -123 -115 -165
+-183 -242 -443 -626 -439 -649 7 -34 27 -28 466 127 62 22 122 48 134 58 11
+11 53 57 92 104 39 47 123 141 186 210 63 69 167 186 231 260 64 74 155 178
+203 230 49 52 143 163 211 245 68 83 176 209 240 280 65 72 164 186 220 255
+56 69 140 166 186 215 46 50 163 180 259 290 180 207 192 220 531 595 326 362
+359 399 464 520 54 63 165 187 245 275 80 88 188 207 240 265 329 369 420 468
+526 568 l119 112 -3 407 c-3 438 -4 446 -55 458 -30 7 -4894 11 -5683 5z"/>
+<path d="M10315 9982 c-22 -10 -105 -41 -185 -67 l-145 -49 -84 -80 c-46 -45
+-145 -151 -220 -236 -75 -85 -206 -227 -291 -315 -86 -88 -191 -200 -235 -250
+-44 -49 -136 -148 -205 -220 -69 -71 -189 -202 -267 -290 -78 -88 -169 -187
+-203 -220 -34 -33 -149 -157 -256 -275 -191 -212 -256 -283 -663 -715 -114
+-121 -256 -274 -316 -340 -60 -66 -152 -165 -205 -220 -52 -55 -140 -152 -194
+-215 -89 -105 -240 -266 -735 -785 -94 -99 -180 -198 -190 -220 -18 -37 -20
+-69 -22 -465 -3 -457 -3 -460 48 -478 38 -12 6635 -5 6669 8 52 20 53 38 51
+546 -2 497 -2 499 -50 526 -18 10 -531 13 -2586 15 -1410 1 -2575 4 -2588 8
+-36 9 -31 56 10 102 35 39 150 198 227 313 24 36 87 124 140 195 53 72 131
+182 175 245 43 63 111 158 150 210 39 52 111 154 160 225 49 72 153 218 230
+325 78 107 213 299 302 425 150 215 208 298 415 600 85 125 146 210 398 555
+318 436 421 583 630 899 91 138 140 221 138 235 -4 28 -51 32 -103 8z"/>
+</g></svg></div><div id="cover-sheen"></div></div>
+        <div id="pico"><svg class="pz" viewBox="0 0 678.739527 723.714517" aria-hidden="true"><g transform="translate(-589.760473,1177.299159) scale(0.100000,-0.100000)"
+fill="currentColor" stroke="none">
+<path d="M6944 11770 c-721 -6 -668 2 -678 -94 -10 -93 -13 -910 -4 -937 5
+-14 19 -31 31 -38 16 -8 622 -12 2423 -14 2548 -2 2434 0 2434 -46 0 -9 -75
+-119 -166 -246 -91 -126 -207 -290 -257 -364 -51 -74 -175 -254 -276 -400
+-101 -146 -238 -345 -304 -441 -66 -96 -161 -231 -212 -300 -51 -69 -144 -202
+-207 -295 -63 -94 -169 -245 -235 -335 -66 -91 -133 -185 -149 -210 -39 -61
+-190 -276 -230 -325 -40 -51 -351 -502 -428 -620 -32 -49 -84 -123 -115 -165
+-183 -242 -443 -626 -439 -649 7 -34 27 -28 466 127 62 22 122 48 134 58 11
+11 53 57 92 104 39 47 123 141 186 210 63 69 167 186 231 260 64 74 155 178
+203 230 49 52 143 163 211 245 68 83 176 209 240 280 65 72 164 186 220 255
+56 69 140 166 186 215 46 50 163 180 259 290 180 207 192 220 531 595 326 362
+359 399 464 520 54 63 165 187 245 275 80 88 188 207 240 265 329 369 420 468
+526 568 l119 112 -3 407 c-3 438 -4 446 -55 458 -30 7 -4894 11 -5683 5z"/>
+<path d="M10315 9982 c-22 -10 -105 -41 -185 -67 l-145 -49 -84 -80 c-46 -45
+-145 -151 -220 -236 -75 -85 -206 -227 -291 -315 -86 -88 -191 -200 -235 -250
+-44 -49 -136 -148 -205 -220 -69 -71 -189 -202 -267 -290 -78 -88 -169 -187
+-203 -220 -34 -33 -149 -157 -256 -275 -191 -212 -256 -283 -663 -715 -114
+-121 -256 -274 -316 -340 -60 -66 -152 -165 -205 -220 -52 -55 -140 -152 -194
+-215 -89 -105 -240 -266 -735 -785 -94 -99 -180 -198 -190 -220 -18 -37 -20
+-69 -22 -465 -3 -457 -3 -460 48 -478 38 -12 6635 -5 6669 8 52 20 53 38 51
+546 -2 497 -2 499 -50 526 -18 10 -531 13 -2586 15 -1410 1 -2575 4 -2588 8
+-36 9 -31 56 10 102 35 39 150 198 227 313 24 36 87 124 140 195 53 72 131
+182 175 245 43 63 111 158 150 210 39 52 111 154 160 225 49 72 153 218 230
+325 78 107 213 299 302 425 150 215 208 298 415 600 85 125 146 210 398 555
+318 436 421 583 630 899 91 138 140 221 138 235 -4 28 -51 32 -103 8z"/>
+</g></svg></div>
+        <div id="ptitle" class="serif"></div>
+      </div>
+
+      <div id="topbar"><div id="crumb"><svg class="zm" viewBox="0 0 678.739527 723.714517" aria-hidden="true"><g transform="translate(-589.760473,1177.299159) scale(0.100000,-0.100000)"
+fill="currentColor" stroke="none">
+<path d="M6944 11770 c-721 -6 -668 2 -678 -94 -10 -93 -13 -910 -4 -937 5
+-14 19 -31 31 -38 16 -8 622 -12 2423 -14 2548 -2 2434 0 2434 -46 0 -9 -75
+-119 -166 -246 -91 -126 -207 -290 -257 -364 -51 -74 -175 -254 -276 -400
+-101 -146 -238 -345 -304 -441 -66 -96 -161 -231 -212 -300 -51 -69 -144 -202
+-207 -295 -63 -94 -169 -245 -235 -335 -66 -91 -133 -185 -149 -210 -39 -61
+-190 -276 -230 -325 -40 -51 -351 -502 -428 -620 -32 -49 -84 -123 -115 -165
+-183 -242 -443 -626 -439 -649 7 -34 27 -28 466 127 62 22 122 48 134 58 11
+11 53 57 92 104 39 47 123 141 186 210 63 69 167 186 231 260 64 74 155 178
+203 230 49 52 143 163 211 245 68 83 176 209 240 280 65 72 164 186 220 255
+56 69 140 166 186 215 46 50 163 180 259 290 180 207 192 220 531 595 326 362
+359 399 464 520 54 63 165 187 245 275 80 88 188 207 240 265 329 369 420 468
+526 568 l119 112 -3 407 c-3 438 -4 446 -55 458 -30 7 -4894 11 -5683 5z"/>
+<path d="M10315 9982 c-22 -10 -105 -41 -185 -67 l-145 -49 -84 -80 c-46 -45
+-145 -151 -220 -236 -75 -85 -206 -227 -291 -315 -86 -88 -191 -200 -235 -250
+-44 -49 -136 -148 -205 -220 -69 -71 -189 -202 -267 -290 -78 -88 -169 -187
+-203 -220 -34 -33 -149 -157 -256 -275 -191 -212 -256 -283 -663 -715 -114
+-121 -256 -274 -316 -340 -60 -66 -152 -165 -205 -220 -52 -55 -140 -152 -194
+-215 -89 -105 -240 -266 -735 -785 -94 -99 -180 -198 -190 -220 -18 -37 -20
+-69 -22 -465 -3 -457 -3 -460 48 -478 38 -12 6635 -5 6669 8 52 20 53 38 51
+546 -2 497 -2 499 -50 526 -18 10 -531 13 -2586 15 -1410 1 -2575 4 -2588 8
+-36 9 -31 56 10 102 35 39 150 198 227 313 24 36 87 124 140 195 53 72 131
+182 175 245 43 63 111 158 150 210 39 52 111 154 160 225 49 72 153 218 230
+325 78 107 213 299 302 425 150 215 208 298 415 600 85 125 146 210 398 555
+318 436 421 583 630 899 91 138 140 221 138 235 -4 28 -51 32 -103 8z"/>
+</g></svg>ZENTURY  /  <b id="crumb-t">Sem título</b></div></div>
+
+      <!-- ===== QUADRO ===== -->
+      <div id="board" class="clip" data-start="4.8" data-duration="10.0" data-track-index="3">
+        <div id="bhead"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1" />
+  <rect width="7" height="5" x="14" y="3" rx="1" />
+  <rect width="7" height="9" x="14" y="12" rx="1" />
+  <rect width="7" height="5" x="3" y="16" rx="1" /></svg>Plano de crescimento</div>
+        <div id="btabs"><b>Quadro</b>Tabela   Calendário</div>
+        <div id="bcam">
+          <div id="c0" class="col"><div class="colh"><span class="pill"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10" />
+  <line x1="22" x2="18" y1="12" y2="12" />
+  <line x1="6" x2="2" y1="12" y2="12" />
+  <line x1="12" x2="12" y1="6" y2="2" />
+  <line x1="12" x2="12" y1="22" y2="18" /></svg>Diagnóstico</span></div><div class="addrow">+ Novo</div></div>
+          <div id="c1" class="col"><div class="colh"><span class="pill"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 5H3" />
+  <path d="M12 19H3" />
+  <path d="M14 3v4" />
+  <path d="M16 17v4" />
+  <path d="M21 12h-9" />
+  <path d="M21 19h-5" />
+  <path d="M21 5h-7" />
+  <path d="M8 10v4" />
+  <path d="M8 12H3" /></svg>Estratégia</span></div><div class="addrow">+ Novo</div></div>
+          <div id="c2" class="col"><div class="colh"><span class="pill"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 6a13 13 0 0 0 8.4-2.8A1 1 0 0 1 21 4v12a1 1 0 0 1-1.6.8A13 13 0 0 0 11 14H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z" />
+  <path d="M6 14a12 12 0 0 0 2.4 7.2 2 2 0 0 0 3.2-2.4A8 8 0 0 1 10 14" />
+  <path d="M8 6v8" /></svg>Anúncios no ar</span></div><div class="addrow">+ Novo</div></div>
+          <div id="c3" class="col"><div class="colh"><span class="pill"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 7h6v6" />
+  <path d="m22 7-8.5 8.5-5-5L2 17" /></svg>Otimização</span></div><div class="addrow">+ Novo</div></div>
+          <div id="card">
+            <div id="card-t"><span class="dot"></span>Sua empresa</div>
+            <div id="card-tag"><span id="tag-txt">Diagnóstico</span></div>
+            <div id="it0" class="item"><div class="box"></div><div class="tick" id="tk0"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg></div>Entender quem é o seu cliente ideal</div>
+            <div id="it1" class="item"><div class="box"></div><div class="tick" id="tk1"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg></div>Oferta e mensagem certas</div>
+            <div id="it2" class="item"><div class="box"></div><div class="tick" id="tk2"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg></div>Anúncios no ar<span class="plats"><svg class="si" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077" /></svg><svg class="si" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" /></svg><svg class="si" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.915 4.03c-1.968 0-3.683 1.28-4.871 3.113C.704 9.208 0 11.883 0 14.449c0 .706.07 1.369.21 1.973a6.624 6.624 0 0 0 .265.86 5.297 5.297 0 0 0 .371.761c.696 1.159 1.818 1.927 3.593 1.927 1.497 0 2.633-.671 3.965-2.444.76-1.012 1.144-1.626 2.663-4.32l.756-1.339.186-.325c.061.1.121.196.183.3l2.152 3.595c.724 1.21 1.665 2.556 2.47 3.314 1.046.987 1.992 1.22 3.06 1.22 1.075 0 1.876-.355 2.455-.843a3.743 3.743 0 0 0 .81-.973c.542-.939.861-2.127.861-3.745 0-2.72-.681-5.357-2.084-7.45-1.282-1.912-2.957-2.93-4.716-2.93-1.047 0-2.088.467-3.053 1.308-.652.57-1.257 1.29-1.82 2.05-.69-.875-1.335-1.547-1.958-2.056-1.182-.966-2.315-1.303-3.454-1.303zm10.16 2.053c1.147 0 2.188.758 2.992 1.999 1.132 1.748 1.647 4.195 1.647 6.4 0 1.548-.368 2.9-1.839 2.9-.58 0-1.027-.23-1.664-1.004-.496-.601-1.343-1.878-2.832-4.358l-.617-1.028a44.908 44.908 0 0 0-1.255-1.98c.07-.109.141-.224.211-.327 1.12-1.667 2.118-2.602 3.358-2.602zm-10.201.553c1.265 0 2.058.791 2.675 1.446.307.327.737.871 1.234 1.579l-1.02 1.566c-.757 1.163-1.882 3.017-2.837 4.338-1.191 1.649-1.81 1.817-2.486 1.817-.524 0-1.038-.237-1.383-.794-.263-.426-.464-1.13-.464-2.046 0-2.221.63-4.535 1.66-6.088.454-.687.964-1.226 1.533-1.533a2.264 2.264 0 0 1 1.088-.285z" /></svg></span></div>
+            <div id="it3" class="item"><div class="box"></div><div class="tick" id="tk3"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg></div>Ajustes toda semana, com dados</div>
+          </div>
+          <svg id="cursor" viewBox="0 0 46 60" aria-hidden="true"><path d="M4 3 L4 47 L15 37 L23 55 L31 51 L23 34 L38 34 Z" fill="#191918" stroke="#ffffff" stroke-width="3.5" stroke-linejoin="round" /></svg>
+        </div>
+      </div>
+
+      <!-- ===== TOGGLES ===== -->
+      <div id="togs" class="clip" data-start="14.4" data-duration="2.6" data-track-index="4">
+        <div id="togh" class="serif">O que muda pra você</div>
+        <div class="tg" id="tg0"><div class="tg-c" id="tc0"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg></div><div class="tg-t">Você aparece pra quem já quer comprar</div><div class="tg-b" id="tb0">Anúncios para quem está procurando o que você vende.</div></div>
+        <div class="tg" id="tg1"><div class="tg-c" id="tc1"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg></div><div class="tg-t">Você sabe o que cada real trouxe</div><div class="tg-b" id="tb1">Investimento e retorno medidos, sem achismo.</div></div>
+        <div class="tg" id="tg2"><div class="tg-c" id="tc2"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg></div><div class="tg-t">Você acompanha tudo, sem complicação</div><div class="tg-b" id="tb2">Um relatório simples, toda semana.</div></div>
+      </div>
+
+      <!-- ===== CALLOUT ===== -->
+      <div id="callout" class="clip" data-start="16.8" data-duration="2.5" data-track-index="5">
+        <svg class="co" viewBox="0 0 678.739527 723.714517" aria-hidden="true"><g transform="translate(-589.760473,1177.299159) scale(0.100000,-0.100000)"
+fill="currentColor" stroke="none">
+<path d="M6944 11770 c-721 -6 -668 2 -678 -94 -10 -93 -13 -910 -4 -937 5
+-14 19 -31 31 -38 16 -8 622 -12 2423 -14 2548 -2 2434 0 2434 -46 0 -9 -75
+-119 -166 -246 -91 -126 -207 -290 -257 -364 -51 -74 -175 -254 -276 -400
+-101 -146 -238 -345 -304 -441 -66 -96 -161 -231 -212 -300 -51 -69 -144 -202
+-207 -295 -63 -94 -169 -245 -235 -335 -66 -91 -133 -185 -149 -210 -39 -61
+-190 -276 -230 -325 -40 -51 -351 -502 -428 -620 -32 -49 -84 -123 -115 -165
+-183 -242 -443 -626 -439 -649 7 -34 27 -28 466 127 62 22 122 48 134 58 11
+11 53 57 92 104 39 47 123 141 186 210 63 69 167 186 231 260 64 74 155 178
+203 230 49 52 143 163 211 245 68 83 176 209 240 280 65 72 164 186 220 255
+56 69 140 166 186 215 46 50 163 180 259 290 180 207 192 220 531 595 326 362
+359 399 464 520 54 63 165 187 245 275 80 88 188 207 240 265 329 369 420 468
+526 568 l119 112 -3 407 c-3 438 -4 446 -55 458 -30 7 -4894 11 -5683 5z"/>
+<path d="M10315 9982 c-22 -10 -105 -41 -185 -67 l-145 -49 -84 -80 c-46 -45
+-145 -151 -220 -236 -75 -85 -206 -227 -291 -315 -86 -88 -191 -200 -235 -250
+-44 -49 -136 -148 -205 -220 -69 -71 -189 -202 -267 -290 -78 -88 -169 -187
+-203 -220 -34 -33 -149 -157 -256 -275 -191 -212 -256 -283 -663 -715 -114
+-121 -256 -274 -316 -340 -60 -66 -152 -165 -205 -220 -52 -55 -140 -152 -194
+-215 -89 -105 -240 -266 -735 -785 -94 -99 -180 -198 -190 -220 -18 -37 -20
+-69 -22 -465 -3 -457 -3 -460 48 -478 38 -12 6635 -5 6669 8 52 20 53 38 51
+546 -2 497 -2 499 -50 526 -18 10 -531 13 -2586 15 -1410 1 -2575 4 -2588 8
+-36 9 -31 56 10 102 35 39 150 198 227 313 24 36 87 124 140 195 53 72 131
+182 175 245 43 63 111 158 150 210 39 52 111 154 160 225 49 72 153 218 230
+325 78 107 213 299 302 425 150 215 208 298 415 600 85 125 146 210 398 555
+318 436 421 583 630 899 91 138 140 221 138 235 -4 28 -51 32 -103 8z"/>
+</g></svg>
+        <div id="co-t"></div>
+      </div>
+
+      <!-- ===== PERFIL ===== -->
+      <div id="prof" class="clip" data-start="19.2" data-duration="3.2" data-track-index="6">
+        <div id="prof-h" class="serif">Quer isso na sua empresa?</div>
+        <div id="pcard">
+          <div id="pav"><svg class="pz" viewBox="0 0 678.739527 723.714517" aria-hidden="true"><g transform="translate(-589.760473,1177.299159) scale(0.100000,-0.100000)"
+fill="currentColor" stroke="none">
+<path d="M6944 11770 c-721 -6 -668 2 -678 -94 -10 -93 -13 -910 -4 -937 5
+-14 19 -31 31 -38 16 -8 622 -12 2423 -14 2548 -2 2434 0 2434 -46 0 -9 -75
+-119 -166 -246 -91 -126 -207 -290 -257 -364 -51 -74 -175 -254 -276 -400
+-101 -146 -238 -345 -304 -441 -66 -96 -161 -231 -212 -300 -51 -69 -144 -202
+-207 -295 -63 -94 -169 -245 -235 -335 -66 -91 -133 -185 -149 -210 -39 -61
+-190 -276 -230 -325 -40 -51 -351 -502 -428 -620 -32 -49 -84 -123 -115 -165
+-183 -242 -443 -626 -439 -649 7 -34 27 -28 466 127 62 22 122 48 134 58 11
+11 53 57 92 104 39 47 123 141 186 210 63 69 167 186 231 260 64 74 155 178
+203 230 49 52 143 163 211 245 68 83 176 209 240 280 65 72 164 186 220 255
+56 69 140 166 186 215 46 50 163 180 259 290 180 207 192 220 531 595 326 362
+359 399 464 520 54 63 165 187 245 275 80 88 188 207 240 265 329 369 420 468
+526 568 l119 112 -3 407 c-3 438 -4 446 -55 458 -30 7 -4894 11 -5683 5z"/>
+<path d="M10315 9982 c-22 -10 -105 -41 -185 -67 l-145 -49 -84 -80 c-46 -45
+-145 -151 -220 -236 -75 -85 -206 -227 -291 -315 -86 -88 -191 -200 -235 -250
+-44 -49 -136 -148 -205 -220 -69 -71 -189 -202 -267 -290 -78 -88 -169 -187
+-203 -220 -34 -33 -149 -157 -256 -275 -191 -212 -256 -283 -663 -715 -114
+-121 -256 -274 -316 -340 -60 -66 -152 -165 -205 -220 -52 -55 -140 -152 -194
+-215 -89 -105 -240 -266 -735 -785 -94 -99 -180 -198 -190 -220 -18 -37 -20
+-69 -22 -465 -3 -457 -3 -460 48 -478 38 -12 6635 -5 6669 8 52 20 53 38 51
+546 -2 497 -2 499 -50 526 -18 10 -531 13 -2586 15 -1410 1 -2575 4 -2588 8
+-36 9 -31 56 10 102 35 39 150 198 227 313 24 36 87 124 140 195 53 72 131
+182 175 245 43 63 111 158 150 210 39 52 111 154 160 225 49 72 153 218 230
+325 78 107 213 299 302 425 150 215 208 298 415 600 85 125 146 210 398 555
+318 436 421 583 630 899 91 138 140 221 138 235 -4 28 -51 32 -103 8z"/>
+</g></svg></div>
+          <div id="pname">ZENTURY</div>
+          <div id="phandle"></div>
+          <div id="pbio">Gestão de tráfego pago · estratégia, posicionamento e performance.</div>
+          <div id="pbtn">Seguir<div id="pbtn-on">Seguindo<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg></div></div>
+          <div id="ripple"></div>
+        </div>
+        <div id="pcta" class="serif">Toque no perfil e <span class="gold">siga</span>.</div>
+      </div>
+
+      <svg id="cur2" viewBox="0 0 46 60" style="position:absolute;left:0;top:0;width:46px;height:60px;z-index:30" aria-hidden="true"><path d="M4 3 L4 47 L15 37 L23 55 L31 51 L23 34 L38 34 Z" fill="#191918" stroke="#ffffff" stroke-width="3.5" stroke-linejoin="round" /></svg>
+
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="22.4" data-track-index="20"></audio>
+    </div>
+
+    <script>
+      const CONFIG = { handle: "@zentury" }; // ← confirmar o @ oficial
+      document.getElementById("phandle").textContent = CONFIG.handle;
+      const tl = gsap.timeline({ paused: true });
+      const B = 0.6; // batida a 100 BPM
+
+      /* ---------- utilitário: digitação determinística ---------- */
+      function typeInto(id, text, t0, cps) {
+        const host = document.getElementById(id);
+        [...text].forEach((c, i) => {
+          const s = document.createElement("span");
+          s.className = "ch"; s.id = id + "-c" + i; s.textContent = c;
+          host.appendChild(s);
+          tl.set(s, { opacity: 1 }, t0 + i * cps);
+        });
+        return t0 + text.length * cps;
+      }
+      function blink(sel, from, to) {
+        tl.fromTo(sel, { opacity: 1 }, { opacity: 0, duration: 0.5, ease: "steps(1)", repeat: Math.max(1, Math.floor((to - from) / 0.5) - 1), yoyo: true, immediateRender: false }, from);
+      }
+      function words(id, list, t0, step) {
+        const host = document.getElementById(id);
+        const parts = list.flatMap(([txt, cls]) => txt.split(" ").map((w) => [w, cls || ""]));
+        host.innerHTML = parts.map(([w, cls], i) => `<span class="w"><span class="wi ${cls}" id="${id}-w${i}">${w}</span></span>`).join(" ");
+        parts.forEach((_, i) => tl.fromTo("#" + id + "-w" + i, { yPercent: 110, rotation: 3 }, { yPercent: 0, rotation: 0, duration: 0.5, ease: "expo.out" }, t0 + i * step));
+      }
+
+      /* ===== CENA 1 ===== */
+      blink("#caret1", 0, 0.25);
+      tl.set("#ph", { opacity: 0 }, 0.25);
+      const e1 = typeInto("t1", "Sua empresa é ótima.", 0.25, 0.052);
+      tl.set("#caret1", { opacity: 0 }, 1.42);
+      tl.set("#caret2", { opacity: 1 }, 1.42);
+      const e2 = typeInto("t2", "Mas ninguém te encontra.", 1.5, 0.035);
+      tl.set("#caret2", { opacity: 0 }, 2.42);
+      // marca-texto dourado em "ninguém" (letras 4 a 10 da linha 2)
+      for (let i = 4; i <= 10; i++) tl.to("#t2-c" + i, { backgroundColor: "rgba(212,168,66,0.38)", color: "#191918", duration: 0.12, ease: "power2.out" }, 2.1 + (i - 4) * 0.018);
+      tl.set(["#slashline", "#caret3"], { opacity: 1 }, 2.42);
+      tl.set("#slash", { opacity: 1 }, 2.55);
+      tl.fromTo("#menu", { opacity: 0, y: 16, scale: 0.98, transformOrigin: "0% 0%" }, { opacity: 1, y: 0, scale: 1, duration: 0.18, ease: "power3.out" }, 2.6);
+      tl.fromTo("#sel", { y: 0 }, { y: 104, duration: 0.12, ease: "power2.out" }, 2.95);
+      tl.to("#sel", { y: 208, duration: 0.12, ease: "power2.out" }, 3.2);
+      tl.to("#sel", { backgroundColor: "#ede4cc", duration: 0.1 }, 3.5);
+      // Enter: o item da ZENTURY vira a página
+      tl.to(["#title1", "#line2", "#slashline"], { y: -60, opacity: 0, duration: 0.3, ease: "power2.in" }, 3.55);
+      tl.to("#menu", { opacity: 0, scale: 1.04, duration: 0.25, ease: "power2.in" }, 3.6);
+      tl.set("#crumb-t", { textContent: "Como funciona" }, 3.6);
+
+      /* ===== PÁGINA ===== */
+      tl.fromTo("#cover", { yPercent: -100 }, { yPercent: 0, duration: 0.55, ease: "expo.out" }, 3.6);
+      tl.fromTo("#cover-z", { opacity: 0, x: 80 }, { opacity: 0.9, x: 0, duration: 0.8, ease: "expo.out" }, 3.75);
+      tl.fromTo("#cover-sheen", { x: 0 }, { x: 1700, duration: 1.2, ease: "power2.inOut" }, 4.0);
+      tl.fromTo("#pico", { scale: 0.3, opacity: 0, rotation: -12 }, { scale: 1, opacity: 1, rotation: 0, duration: 0.5, ease: "back.out(1.4)" }, 3.95);
+      words("ptitle", [["Como a"], ["ZENTURY", "gold"], ["faz sua empresa aparecer"]], 4.1, 0.06);
+      tl.to("#crumb", { color: "#ffffff", duration: 0.2 }, 3.6);
+      tl.to("#crumb .zm", { color: "#d4a842", duration: 0.2 }, 3.6);
+      tl.to("#crumb b", { color: "#ffffff", duration: 0.2 }, 3.6);
+
+      /* ===== QUADRO (drop em 4.8) ===== */
+      tl.fromTo("#bhead", { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 4.8);
+      tl.fromTo("#btabs", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 4.95);
+      ["#c0", "#c1", "#c2", "#c3"].forEach((c, i) => tl.fromTo(c, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.45, ease: "expo.out" }, 4.9 + i * 0.07));
+      tl.fromTo("#card", { opacity: 0, y: 30, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: "back.out(1.3)" }, 5.3);
+      ["#it1", "#it2", "#it3"].forEach((s) => tl.set(s, { display: "none" }, 0));
+      ["#tk0", "#tk1", "#tk2", "#tk3"].forEach((s) => tl.set(s, { scale: 0, opacity: 0 }, 0));
+      const tick = (i, t) => tl.fromTo("#tk" + i, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(2.4)", immediateRender: false }, t);
+      tick(0, 6.0);
+      // câmera do quadro e arraste do card
+      const colX = [0, 468, 936, 1404];
+      const camX = [0, -238, -706, -1174];
+      const tags = ["Diagnóstico", "Estratégia", "Anúncios no ar", "Otimização"];
+      tl.fromTo("#cursor", { x: 560, y: 520, opacity: 0 }, { x: 560, y: 520, opacity: 0, duration: 0.01 }, 0);
+      for (let k = 1; k <= 3; k++) {
+        const t = 7.2 + (k - 1) * 2.4;
+        // cursor chega no card
+        tl.to("#cursor", { x: 106 + colX[k - 1] + 250, y: 120, opacity: 1, duration: 0.35, ease: "power3.out" }, t - 0.45);
+        // pega (card levanta e inclina)
+        tl.to("#card", { rotation: 3, scale: 1.03, boxShadow: "0 30px 60px rgba(15,15,15,0.18)", duration: 0.12, ease: "power2.out" }, t - 0.08);
+        // arrasta
+        tl.to("#card", { x: colX[k], duration: 0.5, ease: "power3.inOut" }, t + 0.04);
+        tl.to("#cursor", { x: 106 + colX[k] + 250, duration: 0.5, ease: "power3.inOut" }, t + 0.04);
+        tl.to("#bcam", { x: camX[k], duration: 0.7, ease: "power3.inOut" }, t + 0.1);
+        // solta
+        tl.to("#card", { rotation: 0, scale: 1, boxShadow: "0 2px 6px rgba(15,15,15,0.06)", duration: 0.25, ease: "back.out(1.6)" }, t + 0.54);
+        tl.set("#tag-txt", { textContent: tags[k] }, t + 0.54);
+        tl.to("#cursor", { opacity: 0, x: 106 + colX[k] + 310, y: 200, duration: 0.3, ease: "power2.in" }, t + 0.7);
+        // novo item aparece e é marcado
+        tl.set("#it" + k, { display: "block" }, t + 0.6);
+        tl.fromTo("#it" + k, { opacity: 0, y: -8 }, { opacity: 1, y: 0, duration: 0.25, ease: "power2.out", immediateRender: false }, t + 0.6);
+        tick(k, t + 1.2);
+      }
+      // afasta e mostra o quadro inteiro
+      tl.to("#bcam", { x: 0, scale: 0.48, duration: 0.6, ease: "power3.inOut" }, 13.75);
+      tl.to("#board", { y: -260, opacity: 0, duration: 0.35, ease: "power2.in" }, 14.4);
+      tl.to("#ptitle", { y: -40, opacity: 0, duration: 0.3, ease: "power2.in" }, 14.35);
+
+      /* ===== TOGGLES ===== */
+      tl.fromTo("#togh", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: "expo.out" }, 14.45);
+      ["#tg0", "#tg1", "#tg2"].forEach((s, i) => tl.fromTo(s, { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 14.5 + i * 0.08));
+      ["#tb0", "#tb1", "#tb2"].forEach((s) => tl.set(s, { display: "none" }, 0));
+      [14.7, 15.3, 15.9].forEach((t, i) => {
+        tl.to("#tc" + i, { rotation: 90, duration: 0.2, ease: "power2.out" }, t);
+        tl.set("#tb" + i, { display: "block" }, t);
+        tl.fromTo("#tb" + i, { opacity: 0, y: -6 }, { opacity: 1, y: 0, duration: 0.25, ease: "power2.out", immediateRender: false }, t);
+      });
+      tl.to("#togs", { opacity: 0, y: -40, duration: 0.3, ease: "power2.in" }, 16.5);
+
+      /* ===== CALLOUT ===== */
+      tl.fromTo("#callout", { opacity: 0, y: 60, scale: 0.96 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "expo.out" }, 16.8);
+      tl.fromTo("#callout .co", { scale: 0.4, opacity: 0, rotation: -10 }, { scale: 1, opacity: 1, rotation: 0, duration: 0.5, ease: "back.out(1.6)" }, 16.95);
+      words("co-t", [["A ZENTURY cuida de"], ["tudo isso", "gw"], ["pra você."]], 17.15, 0.07);
+      tl.to("#callout", { scale: 1.02, duration: 1.4, ease: "sine.inOut" }, 17.8);
+      tl.to("#callout", { opacity: 0, y: -40, duration: 0.3, ease: "power2.in" }, 19.0);
+
+      /* ===== PERFIL ===== */
+      tl.fromTo("#prof-h", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "expo.out" }, 19.25);
+      tl.fromTo("#pcard", { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5, ease: "expo.out" }, 19.4);
+      tl.fromTo("#pav", { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(1.6)" }, 19.55);
+      tl.fromTo("#pbtn-on", { opacity: 0 }, { opacity: 0, duration: 0.01 }, 0);
+      tl.fromTo("#ripple", { opacity: 0, scale: 0.2 }, { opacity: 0, scale: 0.2, duration: 0.01 }, 0);
+      tl.fromTo("#cur2", { x: 900, y: 1900, opacity: 0 }, { x: 900, y: 1900, opacity: 0, duration: 0.01 }, 0);
+      tl.to("#cur2", { x: 536, y: 1258, opacity: 1, duration: 0.55, ease: "power3.out" }, 19.8);
+      tl.to("#cur2", { scale: 0.85, transformOrigin: "0% 0%", duration: 0.08, ease: "power2.in" }, 20.38);
+      tl.to("#cur2", { scale: 1, duration: 0.15, ease: "back.out(3)" }, 20.46);
+      tl.set("#ripple", { x: 415, y: 337 }, 20.4);
+      tl.to("#ripple", { opacity: 0.9, scale: 0.2, duration: 0.01 }, 20.4);
+      tl.to("#ripple", { opacity: 0, scale: 3, duration: 0.6, ease: "power2.out" }, 20.41);
+      tl.to("#pbtn-on", { opacity: 1, duration: 0.15 }, 20.42);
+      tl.to("#cur2", { opacity: 0, x: 620, y: 1380, duration: 0.4, ease: "power2.in" }, 20.9);
+      tl.fromTo("#pcta", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.45, ease: "expo.out" }, 20.7);
+      tl.to("#pcard", { y: -10, duration: 1.6, ease: "sine.inOut" }, 20.75);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

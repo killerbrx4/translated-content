@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Gamer Star · V5 O Duelo</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Bebas"; src: url("assets/fonts/bebas-neue-latin-400-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Barlow"; src: url("assets/fonts/barlow-condensed-latin-600-normal.woff2") format("woff2"); font-weight: 600; }
+      @font-face { font-family: "Barlow"; src: url("assets/fonts/barlow-condensed-latin-800-normal.woff2") format("woff2"); font-weight: 800; }
+      /* V5 "O Duelo": abertura cinematográfica com as caixas REAIS (recortadas da gravação, sem alterar o produto),
+         meio no padrão V4 (um grafismo por vez, fora do rosto) e cartão final de oferta. */
+      :root { --red: #cb2129; --red-d: #7e0f14; --ink: #0d0d0f; --white: #ffffff; --grey: #b9b9c0; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #000; font-family: "Barlow", sans-serif; color: var(--white); }
+      .ic { width: 1em; height: 1em; display: inline-block; vertical-align: -0.12em; }
+
+      #cam { position: absolute; inset: 0; transform-origin: 50% 40%; }
+      .shot { position: absolute; inset: 0; width: 1080px; height: 1920px; object-fit: cover; }
+      #end { filter: brightness(0.22) saturate(0.6) blur(14px); }
+      #shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 26%); }
+      #bug { position: absolute; left: 50%; top: 92px; width: 220px; margin-left: -110px; opacity: 0.95; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6)); }
+
+      /* ---- arena (abertura, cartão do meio e final) ---- */
+      .arena { position: absolute; inset: 0; opacity: 0; overflow: hidden; background: radial-gradient(ellipse 70% 45% at 50% 46%, #2b0b0e 0%, #0c0607 55%, #030303 100%); }
+      .arena .rim { position: absolute; left: -10%; right: -10%; top: 38%; height: 40%; background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(203,33,41,0.55), rgba(203,33,41,0) 70%); filter: blur(30px); }
+      .arena .floor { position: absolute; left: 0; right: 0; top: 65%; bottom: 0; background: linear-gradient(to bottom, rgba(255,255,255,0.06), rgba(0,0,0,0) 40%); border-top: 1px solid rgba(255,255,255,0.10); }
+      .arena .haze { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.06); filter: blur(18px); }
+      .stage { position: absolute; inset: 0; perspective: 1500px; perspective-origin: 50% 45%; }
+      .orbit { position: absolute; inset: 0; transform-style: preserve-3d; }
+      .box { position: absolute; top: 830px; width: 470px; transform-style: preserve-3d; }
+      .box img { display: block; width: 100%; border-radius: 10px; box-shadow: 0 30px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.08); }
+      .box .refl { position: absolute; left: 0; top: 100%; width: 100%; transform: scaleY(-1); margin-top: 8px; opacity: 0.22; -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0.9), transparent 45%); mask-image: linear-gradient(to top, rgba(0,0,0,0.9), transparent 45%); }
+      .box .sweep { position: absolute; inset: 0; border-radius: 10px; background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.28) 50%, transparent 65%); background-size: 300% 100%; background-position: 120% 0; mix-blend-mode: screen; }
+      .box .lbl { position: absolute; left: 0; right: 0; top: -124px; text-align: center; font-family: "Bebas"; font-size: 84px; letter-spacing: 0.02em; opacity: 0; }
+      .box .lbl small { display: block; font-family: "Barlow"; font-weight: 600; font-size: 30px; letter-spacing: 0.22em; color: var(--grey); margin-bottom: -6px; }
+      .box .price { position: absolute; left: 0; right: 0; top: calc(100% + 26px); text-align: center; opacity: 0; }
+      .box .price span { display: inline-block; padding: 12px 24px 8px; border-radius: 12px; background: rgba(13,13,15,0.85); border: 2px solid rgba(255,255,255,0.18); font-weight: 800; font-size: 40px; text-transform: uppercase; letter-spacing: 0.02em; }
+      .L { left: 50px; } .R { right: 50px; }
+      .lbl2 { position: absolute; top: 690px; width: 480px; text-align: center; font-family: "Bebas"; font-size: 84px; letter-spacing: 0.02em; opacity: 0; }
+      .lbl2 small { display: block; font-family: "Barlow"; font-weight: 600; font-size: 30px; letter-spacing: 0.22em; color: var(--grey); margin-bottom: -6px; }
+      .vsx { position: absolute; left: 0; right: 0; top: 950px; text-align: center; font-family: "Bebas"; font-size: 150px; color: var(--white); text-shadow: 0 0 40px rgba(203,33,41,0.9); opacity: 0; }
+      .kick { position: absolute; left: 0; right: 0; top: 1420px; text-align: center; opacity: 0; }
+      .kick .a { font-weight: 600; font-size: 40px; letter-spacing: 0.3em; color: var(--grey); }
+      .kick .b { font-family: "Bebas"; font-size: 150px; line-height: 0.95; }
+      .kick .b b { color: var(--red); font-weight: 400; }
+      .grain { position: absolute; inset: -50%; opacity: 0.07; background-image: radial-gradient(rgba(255,255,255,0.8) 1px, transparent 1px); background-size: 3px 3px; }
+      #wipe { position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.0) 30%, rgba(255,255,255,0.9) 50%, rgba(255,255,255,0.0) 70%, transparent); transform: translateX(-120%); pointer-events: none; }
+
+      /* ---- etiqueta padrão V4 (topo, uma por vez) ---- */
+      .tag { position: absolute; left: 0; right: 0; top: 250px; display: flex; justify-content: center; opacity: 0; }
+      .tag .in { display: flex; flex-direction: column; align-items: flex-start; padding: 16px 34px 12px 28px; border-left: 8px solid var(--red); border-radius: 6px 18px 18px 6px; background: rgba(13,13,15,0.80); backdrop-filter: blur(8px); box-shadow: 0 14px 34px rgba(0,0,0,0.35); }
+      .tag .k { font-weight: 600; font-size: 32px; letter-spacing: 0.16em; color: var(--grey); text-transform: uppercase; }
+      .tag .t { font-weight: 800; font-size: 70px; line-height: 1.02; letter-spacing: 0.01em; text-transform: uppercase; white-space: nowrap; }
+      .tag .t b { color: var(--red); font-weight: 800; }
+      .tag .ic { color: var(--red); margin-right: 12px; }
+      #hookB { top: 230px; }
+      #hookB .t { font-size: 74px; }
+
+      /* ---- final ---- */
+      #fin-top { position: absolute; left: 0; right: 0; top: 210px; display: flex; flex-direction: column; align-items: center; }
+      #fin-logo { width: 560px; filter: drop-shadow(0 12px 30px rgba(0,0,0,0.6)); }
+      #fin-k { margin-top: 30px; font-weight: 600; font-size: 50px; letter-spacing: 0.03em; }
+      #fin-bot { position: absolute; left: 0; right: 0; top: 1330px; display: flex; flex-direction: column; align-items: center; }
+      #btn { display: inline-flex; align-items: center; gap: 20px; padding: 26px 58px 22px; border-radius: 999px; background: var(--red); font-weight: 800; font-size: 64px; text-transform: uppercase; letter-spacing: 0.02em; box-shadow: 0 12px 0 var(--red-d); opacity: 0; }
+      .info { margin-top: 26px; display: flex; align-items: center; gap: 16px; font-weight: 600; font-size: 44px; opacity: 0; }
+      .info .ic { color: var(--red); font-size: 48px; }
+      .info b { font-weight: 800; }
+      #info1 { margin-top: 50px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="__TOTAL__" data-width="1080" data-height="1920">
+      <div id="cam">
+        __VIDEOS__
+      </div>
+      <div id="shade"></div>
+      __CAPTIONS__
+
+      <!-- ===== ARENA 1: o duelo (gancho A) ===== -->
+      <div class="arena" id="ar1">
+        <div class="rim"></div><div class="floor"></div>
+        <div class="stage"><div class="orbit" id="orb1">
+          <div class="box L" id="b1L"><img src="assets/img/caixa-4070.png" alt="Caixa RTX 4070" /><img class="refl" src="assets/img/caixa-4070.png" alt="" /><div class="sweep"></div><div class="lbl"><small>SÉRIE 40</small>RTX 4070</div></div>
+          <div class="box R" id="b1R"><img src="assets/img/caixa-5060ti.png" alt="Caixa RTX 5060 Ti" /><img class="refl" src="assets/img/caixa-5060ti.png" alt="" /><div class="sweep"></div><div class="lbl"><small>SÉRIE 50</small><span style="color:var(--red)">RTX 5060 Ti</span></div></div>
+        </div></div>
+        <div class="vsx" id="vs1">VS</div>
+        <div class="kick" id="k1"><div class="a">O DUELO</div><div class="b">QUAL <b>LEVAR?</b></div></div>
+        <div class="grain"></div>
+      </div>
+
+      <!-- ===== ARENA 2: cobre o efeito cinza do original ===== -->
+      <div class="arena" id="ar2">
+        <div class="rim"></div><div class="floor"></div>
+        <div class="stage"><div class="orbit" id="orb2">
+          <div class="box L" id="b2L"><img src="assets/img/caixa-5060ti.png" alt="Caixa RTX 5060 Ti" /><img class="refl" src="assets/img/caixa-5060ti.png" alt="" /><div class="sweep"></div></div>
+          <div class="box R" id="b2R"><img src="assets/img/caixa-4070.png" alt="Caixa RTX 4070" /><img class="refl" src="assets/img/caixa-4070.png" alt="" /><div class="sweep"></div></div>
+        </div></div>
+        <!-- rótulos em 2D (fora do 3D, para não serem encobertos pelas caixas) -->
+        <div class="lbl2" id="l2L" style="left:40px"><small>MAIS NOVA</small><span style="color:var(--red)">SÉRIE 50</span></div>
+        <div class="lbl2" id="l2R" style="right:40px"><small>ANTERIOR</small>SÉRIE 40</div>
+        <div class="kick" id="k2"><div class="a">SERÁ QUE A NOVA É</div><div class="b">SEMPRE <b>MELHOR?</b></div></div>
+        <div class="grain"></div>
+      </div>
+
+      <!-- ===== meio: etiquetas V4 ===== -->
+      <div class="tag" id="hookB"><div class="in"><div class="t">Não compre a <b>placa errada</b></div></div></div>
+      <div class="tag" id="t40"><div class="in"><div class="k">Série 40</div><div class="t">RTX 4070</div></div></div>
+      <div class="tag" id="t50"><div class="in"><div class="k">Série 50</div><div class="t"><b>RTX 5060 Ti</b></div></div></div>
+      <div class="tag" id="tat"><div class="in"><div class="t">{{lucide:triangle-alert}}Atenção</div></div></div>
+      <div class="tag" id="tger"><div class="in"><div class="t">Só a geração <b>não basta</b></div></div></div>
+      <div class="tag" id="tcmp"><div class="in"><div class="k">Para comparar</div><div class="t">Olhe também…</div></div></div>
+      <div class="tag" id="i1"><div class="in"><div class="k">1 de 4</div><div class="t">{{lucide:gauge}}Testes de desempenho</div></div></div>
+      <div class="tag" id="i2"><div class="in"><div class="k">2 de 4</div><div class="t">{{lucide:memory-stick}}Memória</div></div></div>
+      <div class="tag" id="i3"><div class="in"><div class="k">3 de 4</div><div class="t">{{lucide:cpu}}Recursos disponíveis</div></div></div>
+      <div class="tag" id="i4"><div class="in"><div class="k">4 de 4</div><div class="t">{{lucide:gamepad-2}}Tipo de jogo</div></div></div>
+      <div class="tag" id="tnova"><div class="in"><div class="t">Mais nova <b>≠ sempre superior</b></div></div></div>
+      <div class="tag" id="oA"><div class="in"><div class="k">Opção A</div><div class="t">A geração</div></div></div>
+      <div class="tag" id="oB"><div class="in"><div class="k">Opção B</div><div class="t"><b>O desempenho</b></div></div></div>
+      <div class="tag" id="tcmt"><div class="in"><div class="t">{{lucide:message-circle}}Comenta aqui</div></div></div>
+
+      <img id="bug" src="assets/img/logo-branco.png" alt="Gamer Star Informática" />
+
+      <!-- ===== ARENA 3: final com oferta ===== -->
+      <div class="arena" id="ar3">
+        <div class="rim"></div><div class="floor"></div>
+        <div class="stage"><div class="orbit" id="orb3">
+          <div class="box L" id="b3L" style="top:760px"><img src="assets/img/caixa-4070.png" alt="Caixa RTX 4070" /><div class="sweep"></div><div class="price"><span id="p4070">Preço no direct</span></div></div>
+          <div class="box R" id="b3R" style="top:760px"><img src="assets/img/caixa-5060ti.png" alt="Caixa RTX 5060 Ti" /><div class="sweep"></div><div class="price"><span id="p5060">Preço no direct</span></div></div>
+        </div></div>
+        <div id="fin-top"><img id="fin-logo" src="assets/img/logo-branco.png" alt="Gamer Star Informática" /><div id="fin-k">As duas estão aqui. Qual é a sua?</div></div>
+        <div id="fin-bot">
+          <div id="btn">{{lucide:message-circle}}<span id="btn-l">Enviar mensagem</span></div>
+          <div class="info" id="info1">{{lucide:truck}}<span><b>+ de 1.000 pedidos</b> enviados por mês</span></div>
+          <div class="info" id="info2">{{lucide:map-pin}}<span>CLN 406 · Bloco E · Loja 38 · <b>Asa Norte</b></span></div>
+        </div>
+        <div class="grain"></div>
+      </div>
+
+      <div id="wipe"></div>
+      <audio id="mix" src="assets/audio/mix-v5.wav" data-start="0" data-duration="__TOTAL__" data-track-index="20"></audio>
+    </div>
+
+    <script>
+      // ---- preencher quando o cliente confirmar ----
+      const CONFIG = {
+        cta: "Enviar mensagem",          // espelha o botão do anúncio
+        price4070: null,                  // ex.: "R$ 3.999 à vista" — só com preço confirmado
+        price5060: null,
+        fin: "As duas estão aqui. Qual é a sua?", // "estão aqui" = a loja vende as duas [CONFIRMAR estoque]
+      };
+      const HOOK = "__HOOK__"; // A = duelo das caixas · B = ela no 1º quadro + "Não compre a placa errada"
+      document.getElementById("btn-l").textContent = CONFIG.cta;
+      if (CONFIG.price4070) document.getElementById("p4070").textContent = CONFIG.price4070;
+      if (CONFIG.price5060) document.getElementById("p5060").textContent = CONFIG.price5060;
+      document.getElementById("fin-k").textContent = CONFIG.fin;
+
+      const T = __T__;
+      const C = T.cuts;
+      const tl = gsap.timeline({ paused: true });
+      const ir = { immediateRender: false };
+      const E0 = C.end[0];
+
+      // ---- câmera da gravação: punch-in suave ----
+      Object.entries(C).forEach(([id, [s, d, z]]) => {
+        tl.fromTo("#cam", { scale: z[0] }, { scale: z[1], duration: d, ease: "none", ...ir }, s);
+      });
+      const show = (sel, tin, tout) => {
+        tl.fromTo(sel, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", ...ir }, tin - 0.12)
+          .to(sel, { opacity: 0, y: -20, duration: 0.3, ease: "power2.in" }, tout);
+      };
+      const sweep = (sel, t) => tl.fromTo(sel, { backgroundPosition: "120% 0" }, { backgroundPosition: "-20% 0", duration: 0.9, ease: "power2.inOut", ...ir }, t);
+      const wipe = (t) => tl.fromTo("#wipe", { x: -1400 }, { x: 1400, duration: 0.32, ease: "power2.in", ...ir }, t);
+
+      // ===== GANCHO =====
+      const c1end = C.c2[0];
+      if (HOOK === "A") {
+        // duelo: caixas reais frente a frente, câmera orbitando (estilo Bullet Time), luz varrendo as caixas
+        tl.set("#ar1", { opacity: 1 }, 0)
+          .fromTo("#orb1", { rotationY: -10, z: -120 }, { rotationY: 9, z: 40, duration: c1end, ease: "sine.inOut", ...ir }, 0)
+          .fromTo("#b1L", { x: -620, rotationY: 50 }, { x: 0, rotationY: 24, duration: 0.7, ease: "expo.out", ...ir }, 0)
+          .fromTo("#b1R", { x: 620, rotationY: -50 }, { x: 0, rotationY: -24, duration: 0.7, ease: "expo.out", ...ir }, 0.12)
+          .fromTo("#k1", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out", ...ir }, 0.25)
+          // "4070": a caixa da esquerda avança e o nome acende
+          .fromTo("#b1L", { z: 0 }, { z: 90, duration: 0.45, ease: "power3.out", ...ir }, T.g4070 - 0.1)
+          .fromTo("#b1L .lbl", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.3, ...ir }, T.g4070 - 0.05)
+          .to("#b1L", { z: 0, duration: 0.5, ease: "power2.inOut" }, T.g5060 - 0.35)
+          .fromTo("#vs1", { opacity: 0, scale: 1.6 }, { opacity: 1, scale: 1, duration: 0.3, ease: "power3.out", ...ir }, T.g5060 - 0.3)
+          // "5060 Ti": a caixa da direita avança
+          .fromTo("#b1R", { z: 0 }, { z: 90, duration: 0.45, ease: "power3.out", ...ir }, T.g5060 - 0.1)
+          .fromTo("#b1R .lbl", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.3, ...ir }, T.g5060 - 0.05)
+          .to("#k1", { opacity: 0, duration: 0.25 }, T.g4070 - 0.2);
+        sweep("#b1L .sweep", 0.5); sweep("#b1R .sweep", 0.7); sweep("#b1L .sweep", T.g4070); sweep("#b1R .sweep", T.g5060);
+        wipe(c1end - 0.18);
+        tl.set("#ar1", { opacity: 0 }, c1end);
+      } else {
+        // B: ela no 1º quadro (rosto humano) + promessa forte no topo
+        show("#hookB", 0.12, T.g4070 - 0.25);
+        show("#t40", T.g4070, T.g5060 - 0.22);
+        show("#t50", T.g5060, T.e_ti + 0.2);
+      }
+
+      // ===== cartão do meio (sobre o efeito cinza do original): dolly-in nas caixas =====
+      tl.fromTo("#ar2", { opacity: 0 }, { opacity: 1, duration: 0.18, ...ir }, T.card - 0.12)
+        .fromTo("#orb2", { z: -80, rotationY: 8 }, { z: 120, rotationY: -6, duration: C.c3[0] - T.card + 0.2, ease: "sine.inOut", ...ir }, T.card - 0.12)
+        .fromTo("#b2L", { rotationY: 22 }, { rotationY: 22, duration: 0.01, ...ir }, T.card - 0.12)
+        .fromTo("#b2R", { rotationY: -22 }, { rotationY: -22, duration: 0.01, ...ir }, T.card - 0.12)
+        .fromTo("#k2", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", ...ir }, T.card)
+        .fromTo("#l2L", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.3, ...ir }, T.card + 0.1)
+        .fromTo("#l2R", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.3, ...ir }, T.serie40 - 0.1);
+      sweep("#b2L .sweep", T.card + 0.2); sweep("#b2R .sweep", T.serie40);
+      wipe(C.c3[0] - 0.18);
+      tl.set("#ar2", { opacity: 0 }, C.c3[0]);
+
+      // ===== meio: uma etiqueta por vez (V4) =====
+      show("#t40", T.rtx4070, T.e_s40 - 0.1);
+      show("#t50", T.rtx5060, T.e_s50 + 0.2);
+      show("#tat", T.atencao - 0.25, C.c5[0] + 0.15);
+      show("#tger", T.geracao, T.e_suficiente + 0.3);
+      show("#tcmp", T.comparar, C.c7[0] - 0.1);
+      show("#i1", T.testes, T.memoria - 0.22);
+      show("#i2", T.memoria, T.recursos - 0.22);
+      show("#i3", T.recursos, T.jogo - 0.22);
+      show("#i4", T.jogo, T.e_jogo + 0.6);
+      show("#tnova", T.nova, T.e_anterior - 0.3);
+      show("#oA", T.optG, T.optD - 0.22);
+      show("#oB", T.optD, T.conta - 0.22);
+      show("#tcmt", T.conta, E0 - 0.35);
+
+      // ===== final: as duas caixas + oferta + CTA =====
+      wipe(E0 - 0.16);
+      tl.to("#bug", { opacity: 0, duration: 0.2 }, E0 - 0.1)
+        .set("#ar3", { opacity: 1 }, E0)
+        .fromTo("#orb3", { z: 80, rotationY: -6 }, { z: -40, rotationY: 6, duration: C.end[1], ease: "sine.inOut", ...ir }, E0)
+        .fromTo("#b3L", { x: -520, rotationY: 30 }, { x: 0, rotationY: 14, duration: 0.6, ease: "expo.out", ...ir }, E0)
+        .fromTo("#b3R", { x: 520, rotationY: -30 }, { x: 0, rotationY: -14, duration: 0.6, ease: "expo.out", ...ir }, E0 + 0.08)
+        .fromTo("#fin-logo", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out", ...ir }, E0 + 0.1)
+        .fromTo("#fin-k", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.35, ...ir }, E0 + 0.35)
+        .fromTo(".price", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.3, stagger: 0.1, ...ir }, E0 + 0.6)
+        .fromTo("#btn", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", ...ir }, E0 + 0.85)
+        .fromTo("#info1", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.3, ...ir }, E0 + 1.1)
+        .fromTo("#info2", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.3, ...ir }, E0 + 1.25);
+      sweep("#b3L .sweep", E0 + 0.7); sweep("#b3R .sweep", E0 + 0.9);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

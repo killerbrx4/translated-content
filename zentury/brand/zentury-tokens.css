@@ -1,0 +1,10 @@
+/* ZENTURY — tokens de marca para composições HyperFrames */
+:root {
+  --z-black: #0b0b0c;      /* preto matte (fundo) */
+  --z-line: #2a2a2e;       /* bordas de cards */
+  --z-white: #f5f3ee;      /* texto principal (branco quente) */
+  --z-mute: #9a968f;       /* kickers, texto secundário */
+  --z-gold: #d4a842;       /* dourado ZENTURY: destaque, 1 por tela */
+  --z-gold-soft: #e9c977;  /* dourado sobre vídeo (contraste) */
+  --z-gold-deep: #8a6a1f;  /* bordas douradas */
+}

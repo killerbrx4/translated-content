@@ -1,0 +1,163 @@
+{
+ "name": "fim-de-tarde",
+ "title": "Jolie · Fim de tarde",
+ "groups": [
+  {
+   "id": "S1",
+   "clips": [
+    [
+     "img:assets/img/fotos/f04.jpg",
+     0,
+     2.3,
+     [
+      1.0,
+      1.08
+     ]
+    ],
+    [
+     "old/07",
+     14.0,
+     1.8,
+     [
+      1.04,
+      1.0
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "S2",
+   "clips": [
+    [
+     "img:assets/img/fotos/f09.jpg",
+     0,
+     1.7,
+     [
+      1.0,
+      1.07
+     ]
+    ],
+    [
+     "old/06",
+     29.5,
+     1.6,
+     [
+      1.04,
+      1.0
+     ]
+    ],
+    [
+     "img:assets/img/fotos/f11.jpg",
+     0,
+     1.7,
+     [
+      1.0,
+      1.07
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "S3",
+   "clips": [
+    [
+     "v29",
+     2.6,
+     2.2,
+     [
+      1.0,
+      1.05
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "END",
+   "clips": [
+    [
+     "img:assets/img/fotos/f07.jpg",
+     0,
+     4.4,
+     [
+      1.04,
+      1.12
+     ]
+    ]
+   ]
+  }
+ ],
+ "xfade": {
+  "dur": 0.35,
+  "at": [
+   "S2",
+   "S3",
+   "END"
+  ]
+ },
+ "overlays": [
+  {
+   "id": "hk",
+   "style": "hook",
+   "a": "Seu fim de tarde",
+   "b": "tem <span>endereço</span>",
+   "in": 0,
+   "out": {
+    "g": [
+     "S1",
+     2.0
+    ]
+   }
+  },
+  {
+   "id": "t1",
+   "style": "tag",
+   "k": "Na Jolie tem",
+   "t": "Sorvete, tapioca e cuscuz",
+   "in": {
+    "g": [
+     "S2",
+     0.4
+    ]
+   },
+   "out": {
+    "g": [
+     "S2",
+     -0.35
+    ]
+   }
+  }
+ ],
+ "bug": {
+  "g": [
+   "S1",
+   2.2
+  ]
+ },
+ "end": {
+  "k": "Sorvete, tapioca, cuscuz e muito mais.",
+  "c": "Venha conhecer a Jolie!",
+  "a": "CLN 407, Bloco A, Lojas 1 e 5 — Asa Norte"
+ },
+ "sync": {
+  "v23": [
+   "Pato__2",
+   1.5665
+  ],
+  "v22": [
+   "Avenida_Cln",
+   2.1068
+  ],
+  "v25": [
+   "Pato__5",
+   2.3417
+  ],
+  "v26": [
+   "Pato__6",
+   2.308
+  ],
+  "v29": [
+   "Pato__7",
+   2.078
+  ]
+ }
+}
